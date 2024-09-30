@@ -44,16 +44,16 @@ require("reflect-metadata");
 var express_1 = __importDefault(require("express"));
 var morgan_1 = __importDefault(require("morgan")); // For logging requests
 var cors_1 = __importDefault(require("cors")); // Enable Cross-Origin Resource Sharing
-//**** import routes start 
+//**** import routes start
 var item_route_1 = __importDefault(require("./routes/item.route"));
 var item_description_route_1 = __importDefault(require("./routes/item-description.route"));
 var item_images_route_1 = __importDefault(require("./routes/item-images.route"));
-//**** import routes end 
-//**** import middleware start 
+//**** import routes end
+//**** import middleware start
 var dbconfig_1 = require("./config/dbconfig");
 var middlewares_1 = require("./middlewares");
 var entities_1 = require("./entities");
-//**** import middleware end 
+//**** import middleware end
 var app = (0, express_1.default)();
 //initialize database
 dbconfig_1.appDataSource
@@ -72,8 +72,12 @@ dbconfig_1.appDataSource
 });
 // Global Middleware
 app.use((0, cors_1.default)()); // Enable CORS
-app.use(express_1.default.json()); // Parse incoming JSON requests
+app.use(express_1.default.json());
+// Parse incoming JSON requests
 app.use((0, morgan_1.default)("dev")); // Log HTTP requests in development mode
+app.get("/", function (req, res) {
+    res.send("\n    <html>\n      <head>\n        <title>Welcome to My E-commerce</title>\n        <style>\n          body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            margin-top: 50px;\n          }\n          h1 {\n            color: #2c3e50;\n          }\n        </style>\n      </head>\n      <body>\n        <h1>Welcome to KFT Foods E-commerce!</h1>\n        <p>This is the home page of your application.</p>\n        <p>Enjoy your stay!</p>\n      </body>\n    </html>\n  ");
+});
 // Route Middleware
 app.use(item_route_1.default);
 app.use(item_description_route_1.default);

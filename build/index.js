@@ -9,7 +9,7 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var path_1 = __importDefault(require("path"));
 // Load environment variables from .env file
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '.env') });
-var PORT = process.env.PORT || 3034;
+var PORT = process.env.App_Port || 3034;
 app_1.default.listen(PORT, function () {
     console.log("Server is running on port ".concat(PORT));
 });
