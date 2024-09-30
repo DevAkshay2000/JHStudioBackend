@@ -1,10 +1,12 @@
 // src/controllers/userController.ts
 import { Request, Response } from "express";
-import { appDataSource } from "../config/dbconfig";
+
 import { Item, ItemDescription, ItemImage } from "../entities";
+import { handler } from "../config/dbconfig";
 
 const find = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
         // Fetch all users from the database (example logic)
         const users = await itemRepository.find({
@@ -21,6 +23,7 @@ const find = async (req: Request, res: Response) => {
 
 const findById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
         const item = await itemRepository.findOne({
             where: {
@@ -44,6 +47,7 @@ const findById = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const data: {
             item: Item,
             itemDescriptions: ItemDescription[],
@@ -86,6 +90,7 @@ const create = async (req: Request, res: Response) => {
 
 const updateById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
         const item = await itemRepository.findOneBy({
             id: parseInt(req.params.id),
@@ -102,6 +107,7 @@ const updateById = async (req: Request, res: Response) => {
 };
 const deleteById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
         const item = await itemRepository.findOneBy({ id: parseInt(req.params.id) });
         if (!item) {

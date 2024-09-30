@@ -1,10 +1,11 @@
 // src/controllers/userController.ts
 import { Request, Response } from "express";
-import { appDataSource } from "../config/dbconfig";
 import { ItemDescription } from "../entities";
+import { handler } from "../config/dbconfig";
 
 const find = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemDescriptionRepository = appDataSource.getRepository(ItemDescription);
         // Fetch all users from the database (example logic)
         const itemDescription = await itemDescriptionRepository.find();
@@ -16,6 +17,7 @@ const find = async (req: Request, res: Response) => {
 
 const findById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemDescriptionRepository = appDataSource.getRepository(ItemDescription);
         const itemDescription = await itemDescriptionRepository.findOneBy({
             id: Number(req.params.id),
@@ -31,6 +33,7 @@ const findById = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemDescriptionRepository = appDataSource.getRepository(ItemDescription);
         const itemDescription = itemDescriptionRepository.create(req.body);
         await itemDescriptionRepository.save(itemDescription);
@@ -42,6 +45,7 @@ const create = async (req: Request, res: Response) => {
 
 const updateById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemDescriptionRepository = appDataSource.getRepository(ItemDescription);
         const itemDescription = await itemDescriptionRepository.findOneBy({
             id: parseInt(req.params.id),
@@ -58,6 +62,7 @@ const updateById = async (req: Request, res: Response) => {
 };
 const deleteById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemDescriptionRepository = appDataSource.getRepository(ItemDescription);
         const itemDescription = await itemDescriptionRepository.findOneBy({ id: parseInt(req.params.id) });
         if (!itemDescription) {

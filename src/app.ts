@@ -10,23 +10,22 @@ import itemImage from "./routes/item-images.route";
 
 //**** import routes end
 //**** import middleware start
-import { appDataSource } from "./config/dbconfig";
+// import { appDataSource } from "./config/dbconfig";
 import { errorHandler } from "./middlewares";
 import { Item } from "./entities";
+import { handler } from "./config/dbconfig";
 //**** import middleware end
 const app: Application = express();
 //initialize database
-appDataSource
-  .initialize()
-  .then(async () => {
-    const metadata = appDataSource.getMetadata(Item);
-    // console.log(metadata)
-    console.log("Data Source has been initialized!");
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization:", err);
-  });
-
+// appDataSource
+//   .initialize()
+//   .then(async () => {
+//     // console.log(metadata)
+//     console.log("Data Source has been initialized!");
+//   })
+//   .catch((err) => {
+//     console.error("Error during Data Source initialization:", err);
+//   });
 // Global Middleware
 app.use(cors()); // Enable CORS
 app.use(express.json());

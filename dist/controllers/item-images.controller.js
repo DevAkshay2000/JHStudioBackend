@@ -36,126 +36,141 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var dbconfig_1 = require("../config/dbconfig");
 var entities_1 = require("../entities");
+var dbconfig_1 = require("../config/dbconfig");
 var find = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var itemImagesRepository, itemImage, error_1;
+    var appDataSource, itemImagesRepository, itemImage, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                itemImagesRepository = dbconfig_1.appDataSource.getRepository(entities_1.ItemImage);
-                return [4 /*yield*/, itemImagesRepository.find()];
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
+                appDataSource = _a.sent();
+                itemImagesRepository = appDataSource.getRepository(entities_1.ItemImage);
+                return [4 /*yield*/, itemImagesRepository.find()];
+            case 2:
                 itemImage = _a.sent();
                 res.status(200).json(itemImage);
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 4];
+            case 3:
                 error_1 = _a.sent();
                 res.status(500).json({ message: "Error fetching users", error: error_1 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var itemImagesRepository, itemImage, error_2;
+    var appDataSource, itemImagesRepository, itemImage, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                itemImagesRepository = dbconfig_1.appDataSource.getRepository(entities_1.ItemImage);
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                appDataSource = _a.sent();
+                itemImagesRepository = appDataSource.getRepository(entities_1.ItemImage);
                 return [4 /*yield*/, itemImagesRepository.findOneBy({
                         id: Number(req.params.id),
                     })];
-            case 1:
+            case 2:
                 itemImage = _a.sent();
                 if (!itemImage) {
                     return [2 /*return*/, res.status(404).json({ message: "User not found" })];
                 }
                 res.status(200).json(itemImage);
-                return [3 /*break*/, 3];
-            case 2:
+                return [3 /*break*/, 4];
+            case 3:
                 error_2 = _a.sent();
                 res.status(500).json({ message: "Error fetching user", error: error_2 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var itemImagesRepository, itemImage, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                itemImagesRepository = dbconfig_1.appDataSource.getRepository(entities_1.ItemImage);
-                itemImage = itemImagesRepository.create(req.body);
-                return [4 /*yield*/, itemImagesRepository.save(itemImage)];
-            case 1:
-                _a.sent();
-                res.status(201).json(itemImage);
-                return [3 /*break*/, 3];
-            case 2:
-                error_3 = _a.sent();
-                res.status(500).json({ message: "Error creating user", error: error_3 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-var updateById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var itemImagesRepository, itemImage, updatedItem, error_4;
+    var appDataSource, itemImagesRepository, itemImage, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                itemImagesRepository = dbconfig_1.appDataSource.getRepository(entities_1.ItemImage);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                appDataSource = _a.sent();
+                itemImagesRepository = appDataSource.getRepository(entities_1.ItemImage);
+                itemImage = itemImagesRepository.create(req.body);
+                return [4 /*yield*/, itemImagesRepository.save(itemImage)];
+            case 2:
+                _a.sent();
+                res.status(201).json(itemImage);
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                res.status(500).json({ message: "Error creating user", error: error_3 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var updateById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var appDataSource, itemImagesRepository, itemImage, updatedItem, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 5]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                appDataSource = _a.sent();
+                itemImagesRepository = appDataSource.getRepository(entities_1.ItemImage);
                 return [4 /*yield*/, itemImagesRepository.findOneBy({
                         id: parseInt(req.params.id),
                     })];
-            case 1:
+            case 2:
                 itemImage = _a.sent();
                 if (!itemImage) {
                     return [2 /*return*/, res.status(404).json({ message: "Item not found" })];
                 }
                 updatedItem = itemImagesRepository.merge(itemImage, req.body);
                 return [4 /*yield*/, itemImagesRepository.save(updatedItem)];
-            case 2:
+            case 3:
                 _a.sent();
                 res.status(200).json(updatedItem);
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 5];
+            case 4:
                 error_4 = _a.sent();
                 res.status(500).json({ message: "Error updating item", error: error_4 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
 var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var itemImagesRepository, itemImage, error_5;
+    var appDataSource, itemImagesRepository, itemImage, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
-                itemImagesRepository = dbconfig_1.appDataSource.getRepository(entities_1.ItemImage);
-                return [4 /*yield*/, itemImagesRepository.findOneBy({ id: parseInt(req.params.id) })];
+                _a.trys.push([0, 4, , 5]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
+                appDataSource = _a.sent();
+                itemImagesRepository = appDataSource.getRepository(entities_1.ItemImage);
+                return [4 /*yield*/, itemImagesRepository.findOneBy({ id: parseInt(req.params.id) })];
+            case 2:
                 itemImage = _a.sent();
                 if (!itemImage) {
                     return [2 /*return*/, res.status(404).json({ message: 'Item not found' })];
                 }
                 return [4 /*yield*/, itemImagesRepository.remove(itemImage)];
-            case 2:
+            case 3:
                 _a.sent();
                 res.status(200).json({ message: 'Item removed successfully' });
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 5];
+            case 4:
                 error_5 = _a.sent();
                 res.status(500).json({ message: 'Error removing item', error: error_5 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

@@ -1,10 +1,11 @@
 // src/controllers/userController.ts
 import { Request, Response } from "express";
-import { appDataSource } from "../config/dbconfig";
 import { ItemImage } from "../entities";
+import { handler } from "../config/dbconfig";
 
 const find = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemImagesRepository = appDataSource.getRepository(ItemImage);
         // Fetch all users from the database (example logic)
         const itemImage = await itemImagesRepository.find();
@@ -16,6 +17,7 @@ const find = async (req: Request, res: Response) => {
 
 const findById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemImagesRepository = appDataSource.getRepository(ItemImage);
         const itemImage = await itemImagesRepository.findOneBy({
             id: Number(req.params.id),
@@ -31,6 +33,7 @@ const findById = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemImagesRepository = appDataSource.getRepository(ItemImage);
         const itemImage = itemImagesRepository.create(req.body);
         await itemImagesRepository.save(itemImage);
@@ -42,6 +45,7 @@ const create = async (req: Request, res: Response) => {
 
 const updateById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemImagesRepository = appDataSource.getRepository(ItemImage);
         const itemImage = await itemImagesRepository.findOneBy({
             id: parseInt(req.params.id),
@@ -58,6 +62,7 @@ const updateById = async (req: Request, res: Response) => {
 };
 const deleteById = async (req: Request, res: Response) => {
     try {
+        const appDataSource = await handler()
         const itemImagesRepository = appDataSource.getRepository(ItemImage);
         const itemImage = await itemImagesRepository.findOneBy({ id: parseInt(req.params.id) });
         if (!itemImage) {
