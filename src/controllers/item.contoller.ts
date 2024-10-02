@@ -28,20 +28,28 @@ const find = async (req: Request, res: Response) => {
                 rejectUnauthorized: false, // Disables SSL certificate verification
             },
         });
-        await appDataSource.initialize();
+        appDataSource.initialize()
+            .then(async (connection) => {
+              return  res.status(200).json(await connection.manager.find(Item));
 
-        // const appDataSource = await handler()
-        const itemRepository = appDataSource.getRepository(Item);
-        // Fetch all users from the database (example logic)
-        const users = await itemRepository.find({
-            relations: {
-                itemImage: true,
-            },
-        });
-        res.status(200).json(users);
+                // console.log()
+                // return await connection.manager.find(Item)
+                // console.log("Data Source has been initialized!")
+            })
+            .catch((err) => {
+                console.error("Error during Data Source initialization", err)
+            })
+        // // const appDataSource = await handler()
+        // const itemRepository = appDataSource.getRepository(Item);
+        // // Fetch all users from the database (example logic)
+        // const users = await itemRepository.find({
+        //     relations: {
+        //         itemImage: true,
+        //     },
+        // });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Error fetching items", error });
+       return res.status(500).json({ message: "Error fetching items", error });
     }
 };
 

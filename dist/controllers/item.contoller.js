@@ -47,53 +47,60 @@ var path_1 = __importDefault(require("path"));
 // Load environment variables from .env file
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "../.env") });
 var find = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, users, error_1;
+    var appDataSource;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                appDataSource = new typeorm_1.DataSource({
-                    type: "postgres",
-                    host: process.env.Host,
-                    port: Number(process.env.Port),
-                    username: process.env.User_Name,
-                    password: process.env.Password,
-                    database: process.env.Database,
-                    entities: [entities_1.Item, entities_1.ItemImage, entities_1.ItemDescription],
-                    //   entities: [
-                    //     "../../../src/entities/index/**/*.{ts,js}",
-                    //     "../../../build/entities/**/*.{ts,js}",
-                    //   ],
-                    synchronize: true,
-                    logging: false,
-                    ssl: {
-                        rejectUnauthorized: false, // Disables SSL certificate verification
-                    },
+        try {
+            appDataSource = new typeorm_1.DataSource({
+                type: "postgres",
+                host: process.env.Host,
+                port: Number(process.env.Port),
+                username: process.env.User_Name,
+                password: process.env.Password,
+                database: process.env.Database,
+                entities: [entities_1.Item, entities_1.ItemImage, entities_1.ItemDescription],
+                //   entities: [
+                //     "../../../src/entities/index/**/*.{ts,js}",
+                //     "../../../build/entities/**/*.{ts,js}",
+                //   ],
+                synchronize: true,
+                logging: false,
+                ssl: {
+                    rejectUnauthorized: false, // Disables SSL certificate verification
+                },
+            });
+            appDataSource.initialize()
+                .then(function (connection) { return __awaiter(void 0, void 0, void 0, function () {
+                var _a, _b;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            _b = (_a = res.status(200)).json;
+                            return [4 /*yield*/, connection.manager.find(entities_1.Item)];
+                        case 1: return [2 /*return*/, _b.apply(_a, [_c.sent()])];
+                    }
                 });
-                return [4 /*yield*/, appDataSource.initialize()];
-            case 1:
-                _a.sent();
-                itemRepository = appDataSource.getRepository(entities_1.Item);
-                return [4 /*yield*/, itemRepository.find({
-                        relations: {
-                            itemImage: true,
-                        },
-                    })];
-            case 2:
-                users = _a.sent();
-                res.status(200).json(users);
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.log(error_1);
-                res.status(500).json({ message: "Error fetching items", error: error_1 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+            }); })
+                .catch(function (err) {
+                console.error("Error during Data Source initialization", err);
+            });
+            // // const appDataSource = await handler()
+            // const itemRepository = appDataSource.getRepository(Item);
+            // // Fetch all users from the database (example logic)
+            // const users = await itemRepository.find({
+            //     relations: {
+            //         itemImage: true,
+            //     },
+            // });
         }
+        catch (error) {
+            console.log(error);
+            return [2 /*return*/, res.status(500).json({ message: "Error fetching items", error: error })];
+        }
+        return [2 /*return*/];
     });
 }); };
 var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, item, error_2;
+    var appDataSource, itemRepository, item, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -119,15 +126,15 @@ var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 res.status(200).json(item);
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _a.sent();
-                res.status(500).json({ message: "Error fetching item", error: error_2 });
+                error_1 = _a.sent();
+                res.status(500).json({ message: "Error fetching item", error: error_1 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, data, itemRepository, item, error_3;
+    var appDataSource, data, itemRepository, item, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -165,15 +172,15 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 // });
                 return [2 /*return*/, res.status(201).json("item created ...")];
             case 3:
-                error_3 = _a.sent();
-                console.log(error_3);
-                return [2 /*return*/, res.status(400).json({ message: "Error creating user", error: error_3 })];
+                error_2 = _a.sent();
+                console.log(error_2);
+                return [2 /*return*/, res.status(400).json({ message: "Error creating user", error: error_2 })];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var updateById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, item, updatedItem, error_4;
+    var appDataSource, itemRepository, item, updatedItem, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -197,15 +204,15 @@ var updateById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json(updatedItem);
                 return [3 /*break*/, 5];
             case 4:
-                error_4 = _a.sent();
-                res.status(500).json({ message: "Error updating item", error: error_4 });
+                error_3 = _a.sent();
+                res.status(500).json({ message: "Error updating item", error: error_3 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }
     });
 }); };
 var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, item, error_5;
+    var appDataSource, itemRepository, item, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -228,8 +235,8 @@ var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json({ message: "Item removed successfully" });
                 return [3 /*break*/, 5];
             case 4:
-                error_5 = _a.sent();
-                res.status(500).json({ message: "Error removing item", error: error_5 });
+                error_4 = _a.sent();
+                res.status(500).json({ message: "Error removing item", error: error_4 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }
