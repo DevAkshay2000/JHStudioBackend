@@ -3,68 +3,38 @@ import { Request, Response } from "express";
 
 import { Item, ItemDescription, ItemImage } from "../entities";
 import { handler } from "../config/dbconfig";
-import { DataSource } from "typeorm";
-import dotenv from "dotenv";
-import path from "path";
-// Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, "../.env") });
+
 const find = async (req: Request, res: Response) => {
     try {
-        const appDataSource = new DataSource({
-            type: "postgres",
-            host: process.env.Host,
-            port: Number(process.env.Port),
-            username: process.env.User_Name,
-            password: process.env.Password,
-            database: process.env.Database,
-            entities: [Item, ItemImage, ItemDescription],
-            //   entities: [
-            //     "../../../src/entities/index/**/*.{ts,js}",
-            //     "../../../build/entities/**/*.{ts,js}",
-            //   ],
-            synchronize: true,
-            logging: false,
-            ssl: {
-                rejectUnauthorized: false, // Disables SSL certificate verification
-            },
+        const appDataSource = await handler()
+        const itemRepository = appDataSource.getRepository(Item);
+        // Fetch all users from the database (example logic)
+        const users = await itemRepository.find({
+            relations: {
+                itemImage: true
+            }
         });
-        appDataSource.initialize()
-            .then(async (connection) => {
-              return  res.status(200).json(await connection.manager.find(Item));
-
-                // console.log()
-                // return await connection.manager.find(Item)
-                // console.log("Data Source has been initialized!")
-            })
-            .catch((err) => {
-                console.error("Error during Data Source initialization", err)
-            })
-        // // const appDataSource = await handler()
-        // const itemRepository = appDataSource.getRepository(Item);
-        // // Fetch all users from the database (example logic)
-        // const users = await itemRepository.find({
-        //     relations: {
-        //         itemImage: true,
-        //     },
-        // });
+        res.status(200).json(users);
     } catch (error) {
-        console.log(error);
-       return res.status(500).json({ message: "Error fetching items", error });
+        console.log(error)
+        res.status(500).json({ message: "Error fetching items", error });
     }
 };
 
 const findById = async (req: Request, res: Response) => {
     try {
-        const appDataSource = await handler();
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
         const item = await itemRepository.findOne({
             where: {
                 id: Number(req.params.id),
+
             },
             relations: {
                 itemDescription: true,
-                itemImage: true,
-            },
+                itemImage: true
+            }
+
         });
         if (!item) {
             return res.status(404).json({ message: "Item not found" });
@@ -77,15 +47,15 @@ const findById = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
     try {
-        const appDataSource = await handler();
+        const appDataSource = await handler()
         const data: {
-            item: Item;
-            itemDescriptions: ItemDescription[];
-            itemImages: ItemImage[];
-        } = req.body;
+            item: Item,
+            itemDescriptions: ItemDescription[],
+            itemImages: ItemImage[]
+        } = req.body
         const itemRepository = appDataSource.getRepository(Item);
         const item = itemRepository.create(data.item);
-        await itemRepository.save(item);
+        await itemRepository.save(item)
         // await appDataSource.transaction(async (transactionEntityManager) => {
         //     const item = await transactionEntityManager.save(Item, data.item);
         //     console.log(item)
@@ -113,14 +83,14 @@ const create = async (req: Request, res: Response) => {
 
         return res.status(201).json("item created ...");
     } catch (error) {
-        console.log(error);
+        console.log(error)
         return res.status(400).json({ message: "Error creating user", error });
     }
 };
 
 const updateById = async (req: Request, res: Response) => {
     try {
-        const appDataSource = await handler();
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
         const item = await itemRepository.findOneBy({
             id: parseInt(req.params.id),
@@ -137,18 +107,16 @@ const updateById = async (req: Request, res: Response) => {
 };
 const deleteById = async (req: Request, res: Response) => {
     try {
-        const appDataSource = await handler();
+        const appDataSource = await handler()
         const itemRepository = appDataSource.getRepository(Item);
-        const item = await itemRepository.findOneBy({
-            id: parseInt(req.params.id),
-        });
+        const item = await itemRepository.findOneBy({ id: parseInt(req.params.id) });
         if (!item) {
-            return res.status(404).json({ message: "Item not found" });
+            return res.status(404).json({ message: 'Item not found' });
         }
         await itemRepository.remove(item);
-        res.status(200).json({ message: "Item removed successfully" });
+        res.status(200).json({ message: 'Item removed successfully' });
     } catch (error) {
-        res.status(500).json({ message: "Error removing item", error });
+        res.status(500).json({ message: 'Error removing item', error });
     }
 };
-export default { find, findById, create, deleteById, updateById };
+export default { find, findById, create, deleteById, updateById }
