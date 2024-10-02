@@ -53,7 +53,6 @@ var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0
         switch (_a.label) {
             case 0:
                 if (!!appDataSource) return [3 /*break*/, 2];
-                console.log("connection is not created so creatig new  ..");
                 appDataSource = new typeorm_1.DataSource({
                     type: "postgres",
                     host: process.env.Host,

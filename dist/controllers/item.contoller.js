@@ -35,23 +35,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var entities_1 = require("../entities");
 var dbconfig_1 = require("../config/dbconfig");
+var typeorm_1 = require("typeorm");
+var dotenv_1 = __importDefault(require("dotenv"));
+var path_1 = __importDefault(require("path"));
+// Load environment variables from .env file
+dotenv_1.default.config({ path: path_1.default.join(__dirname, "../.env") });
 var find = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var appDataSource, itemRepository, users, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+                appDataSource = new typeorm_1.DataSource({
+                    type: "postgres",
+                    host: process.env.Host,
+                    port: Number(process.env.Port),
+                    username: process.env.User_Name,
+                    password: process.env.Password,
+                    database: process.env.Database,
+                    entities: [entities_1.Item, entities_1.ItemImage, entities_1.ItemDescription],
+                    //   entities: [
+                    //     "../../../src/entities/index/**/*.{ts,js}",
+                    //     "../../../build/entities/**/*.{ts,js}",
+                    //   ],
+                    synchronize: true,
+                    logging: false,
+                    ssl: {
+                        rejectUnauthorized: false, // Disables SSL certificate verification
+                    },
+                });
+                return [4 /*yield*/, appDataSource.initialize()];
             case 1:
-                appDataSource = _a.sent();
+                _a.sent();
                 itemRepository = appDataSource.getRepository(entities_1.Item);
                 return [4 /*yield*/, itemRepository.find({
                         relations: {
-                            itemImage: true
-                        }
+                            itemImage: true,
+                        },
                     })];
             case 2:
                 users = _a.sent();
@@ -82,8 +108,8 @@ var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         },
                         relations: {
                             itemDescription: true,
-                            itemImage: true
-                        }
+                            itemImage: true,
+                        },
                     })];
             case 2:
                 item = _a.sent();
@@ -112,30 +138,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 data = req.body;
                 itemRepository = appDataSource.getRepository(entities_1.Item);
                 item = itemRepository.create(data.item);
-                return [4 /*yield*/, itemRepository.save(item)
-                    // await appDataSource.transaction(async (transactionEntityManager) => {
-                    //     const item = await transactionEntityManager.save(Item, data.item);
-                    //     console.log(item)
-                    //     if (data.itemDescriptions && data.itemDescriptions.length) {
-                    //         const itemDescription = data.itemDescriptions.map((val) => {
-                    //             return {
-                    //                 ...val,
-                    //                 itemId: item.id
-                    //             }
-                    //         })
-                    //         transactionEntityManager.save(ItemDescription, itemDescription)
-                    //     }
-                    //     if (data.itemImages && data.itemImages.length) {
-                    //         const itemImages = data.itemImages.map((val) => {
-                    //             return {
-                    //                 ...val,
-                    //                 itemId: item.id
-                    //             }
-                    //         })
-                    //         transactionEntityManager.save(ItemImage, itemImages)
-                    //     }
-                    // });
-                ];
+                return [4 /*yield*/, itemRepository.save(item)];
             case 2:
                 _a.sent();
                 // await appDataSource.transaction(async (transactionEntityManager) => {
@@ -211,20 +214,22 @@ var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 1:
                 appDataSource = _a.sent();
                 itemRepository = appDataSource.getRepository(entities_1.Item);
-                return [4 /*yield*/, itemRepository.findOneBy({ id: parseInt(req.params.id) })];
+                return [4 /*yield*/, itemRepository.findOneBy({
+                        id: parseInt(req.params.id),
+                    })];
             case 2:
                 item = _a.sent();
                 if (!item) {
-                    return [2 /*return*/, res.status(404).json({ message: 'Item not found' })];
+                    return [2 /*return*/, res.status(404).json({ message: "Item not found" })];
                 }
                 return [4 /*yield*/, itemRepository.remove(item)];
             case 3:
                 _a.sent();
-                res.status(200).json({ message: 'Item removed successfully' });
+                res.status(200).json({ message: "Item removed successfully" });
                 return [3 /*break*/, 5];
             case 4:
                 error_5 = _a.sent();
-                res.status(500).json({ message: 'Error removing item', error: error_5 });
+                res.status(500).json({ message: "Error removing item", error: error_5 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }
