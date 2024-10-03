@@ -10,13 +10,14 @@ console.log(process.env.Host,
   Number(process.env.Port),
   process.env.User_Name,
   process.env.Password,
-  process.env.Database,)
+  process.env.Database,
+)
 const initializeDataSource = async (): Promise<DataSource> => {
   if (!appDataSource) {
     appDataSource = new DataSource({
       type: "postgres",
       host: process.env.Host,
-      port: Number(process.env.Port),
+      port: Number(process.env.port),
       username: process.env.User_Name,
       password: process.env.Password,
       database: process.env.Database,
