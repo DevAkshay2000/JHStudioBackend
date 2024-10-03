@@ -7,9 +7,6 @@ import { handler } from "../config/dbconfig";
 const find = async (req: Request, res: Response) => {
   try {
     const appDataSource = await handler();
-    if (appDataSource) {
-      console.log(appDataSource);
-    }
     const itemRepository = await appDataSource.getRepository(Item);
     // Fetch all users from the database (example logic)
     const users = await itemRepository.find({
