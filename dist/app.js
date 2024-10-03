@@ -38,35 +38,7 @@ app.use(express_1.default.json());
 // Parse incoming JSON requests
 app.use((0, morgan_1.default)("dev")); // Log HTTP requests in development mode
 app.get("/", function (req, res) {
-    res.json({
-        host: process.env.Host,
-        port: Number(process.env.port),
-        username: process.env.User_Name,
-        password: process.env.Password,
-        database: process.env.Database,
-    });
-    // res.send(`
-    //   <html>
-    //     <head>
-    //       <title>Welcome to My E-commerce</title>
-    //       <style>
-    //         body {
-    //           font-family: Arial, sans-serif;
-    //           text-align: center;
-    //           margin-top: 50px;
-    //         }
-    //         h1 {
-    //           color: #2c3e50;
-    //         }
-    //       </style>
-    //     </head>
-    //     <body>
-    //       <h1>Welcome to KFT Foods E-commerce!</h1>
-    //       <p>This is the home page of your application.</p>
-    //       <p>Enjoy your stay!</p>
-    //     </body>
-    //   </html>
-    // `);
+    res.send("\n    <html>\n      <head>\n        <title>Welcome to My E-commerce</title>\n        <style>\n          body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            margin-top: 50px;\n          }\n          h1 {\n            color: #2c3e50;\n          }\n        </style>\n      </head>\n      <body>\n        <h1>Welcome to KFT Foods E-commerce!</h1>\n        <p>This is the home page of your application.</p>\n        <p>Enjoy your stay!</p>\n      </body>\n    </html>\n  ");
 });
 // Route Middleware
 app.use(item_route_1.default);

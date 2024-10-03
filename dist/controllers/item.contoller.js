@@ -43,26 +43,29 @@ var find = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 4, , 5]);
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 appDataSource = _a.sent();
-                itemRepository = appDataSource.getRepository(entities_1.Item);
+                if (appDataSource) {
+                    console.log(appDataSource);
+                }
+                return [4 /*yield*/, appDataSource.getRepository(entities_1.Item)];
+            case 2:
+                itemRepository = _a.sent();
                 return [4 /*yield*/, itemRepository.find({
                         relations: {
-                            itemImage: true
-                        }
+                            itemImage: true,
+                        },
                     })];
-            case 2:
-                users = _a.sent();
-                res.status(200).json(users);
-                return [3 /*break*/, 4];
             case 3:
+                users = _a.sent();
+                return [2 /*return*/, res.status(200).json(users)];
+            case 4:
                 error_1 = _a.sent();
                 console.log(error_1);
-                res.status(500).json({ message: "Error fetching items", error: error_1 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [2 /*return*/, res.status(500).json({ message: "Error fetching items", error: error_1 })];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -82,8 +85,8 @@ var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         },
                         relations: {
                             itemDescription: true,
-                            itemImage: true
-                        }
+                            itemImage: true,
+                        },
                     })];
             case 2:
                 item = _a.sent();
@@ -112,30 +115,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 data = req.body;
                 itemRepository = appDataSource.getRepository(entities_1.Item);
                 item = itemRepository.create(data.item);
-                return [4 /*yield*/, itemRepository.save(item)
-                    // await appDataSource.transaction(async (transactionEntityManager) => {
-                    //     const item = await transactionEntityManager.save(Item, data.item);
-                    //     console.log(item)
-                    //     if (data.itemDescriptions && data.itemDescriptions.length) {
-                    //         const itemDescription = data.itemDescriptions.map((val) => {
-                    //             return {
-                    //                 ...val,
-                    //                 itemId: item.id
-                    //             }
-                    //         })
-                    //         transactionEntityManager.save(ItemDescription, itemDescription)
-                    //     }
-                    //     if (data.itemImages && data.itemImages.length) {
-                    //         const itemImages = data.itemImages.map((val) => {
-                    //             return {
-                    //                 ...val,
-                    //                 itemId: item.id
-                    //             }
-                    //         })
-                    //         transactionEntityManager.save(ItemImage, itemImages)
-                    //     }
-                    // });
-                ];
+                return [4 /*yield*/, itemRepository.save(item)];
             case 2:
                 _a.sent();
                 // await appDataSource.transaction(async (transactionEntityManager) => {
@@ -211,20 +191,22 @@ var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 1:
                 appDataSource = _a.sent();
                 itemRepository = appDataSource.getRepository(entities_1.Item);
-                return [4 /*yield*/, itemRepository.findOneBy({ id: parseInt(req.params.id) })];
+                return [4 /*yield*/, itemRepository.findOneBy({
+                        id: parseInt(req.params.id),
+                    })];
             case 2:
                 item = _a.sent();
                 if (!item) {
-                    return [2 /*return*/, res.status(404).json({ message: 'Item not found' })];
+                    return [2 /*return*/, res.status(404).json({ message: "Item not found" })];
                 }
                 return [4 /*yield*/, itemRepository.remove(item)];
             case 3:
                 _a.sent();
-                res.status(200).json({ message: 'Item removed successfully' });
+                res.status(200).json({ message: "Item removed successfully" });
                 return [3 /*break*/, 5];
             case 4:
                 error_5 = _a.sent();
-                res.status(500).json({ message: 'Error removing item', error: error_5 });
+                res.status(500).json({ message: "Error removing item", error: error_5 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }
