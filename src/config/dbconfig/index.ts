@@ -6,6 +6,11 @@ import path from "path";
 // Load environment variables from .env file
 dotenv.config({ path: path.join(__dirname, "../../.env") });
 let appDataSource: DataSource;
+console.log(process.env.Host,
+  Number(process.env.Port),
+  process.env.User_Name,
+  process.env.Password,
+  process.env.Database,)
 const initializeDataSource = async (): Promise<DataSource> => {
   if (!appDataSource) {
     appDataSource = new DataSource({
