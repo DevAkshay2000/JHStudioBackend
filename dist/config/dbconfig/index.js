@@ -69,7 +69,7 @@ var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0
                     synchronize: true,
                     logging: false,
                     ssl: {
-                        rejectUnauthorized: true, // Disables SSL certificate verification
+                        rejectUnauthorized: false, // Disables SSL certificate verification
                     },
                 });
                 return [4 /*yield*/, appDataSource.initialize()];

@@ -29,7 +29,7 @@ const initializeDataSource = async (): Promise<DataSource> => {
       synchronize: true,
       logging: false,
       ssl: {
-        rejectUnauthorized: true, // Disables SSL certificate verification
+        rejectUnauthorized: false, // Disables SSL certificate verification
       },
     });
     await appDataSource.initialize();
