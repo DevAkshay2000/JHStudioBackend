@@ -48,6 +48,7 @@ var path_1 = __importDefault(require("path"));
 // Load environment variables from .env file
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "../../.env") });
 var appDataSource;
+console.log(process.env.Host, Number(process.env.Port), process.env.User_Name, process.env.Password, process.env.Database);
 var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -56,7 +57,7 @@ var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0
                 appDataSource = new typeorm_1.DataSource({
                     type: "postgres",
                     host: process.env.Host,
-                    port: Number(process.env.Port),
+                    port: Number(process.env.port),
                     username: process.env.User_Name,
                     password: process.env.Password,
                     database: process.env.Database,
@@ -68,7 +69,7 @@ var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0
                     synchronize: true,
                     logging: false,
                     ssl: {
-                        rejectUnauthorized: false, // Disables SSL certificate verification
+                        rejectUnauthorized: true, // Disables SSL certificate verification
                     },
                 });
                 return [4 /*yield*/, appDataSource.initialize()];
