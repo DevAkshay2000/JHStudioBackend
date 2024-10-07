@@ -7,11 +7,15 @@ import cors from "cors"; // Enable Cross-Origin Resource Sharing
 import itemsRoute from "./routes/item.route";
 import itemDescription from "./routes/item-description.route";
 import itemImage from "./routes/item-images.route";
-import dotenv from 'dotenv'
-import path from 'path'
+import descriptionType from "./routes/description-type.route";
+import mailSender from "./routes/emails.route";
+
+import dotenv from "dotenv";
+import path from "path";
 // Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config({ path: path.join(__dirname, ".env") });
 //**** import routes end
+
 //**** import middleware start
 // import { appDataSource } from "./config/dbconfig";
 import { errorHandler } from "./middlewares";
@@ -60,6 +64,8 @@ app.get("/", (req, res) => {
 app.use(itemsRoute);
 app.use(itemDescription);
 app.use(itemImage);
+app.use(descriptionType);
+app.use(mailSender);
 // Error Handling Middleware
 app.use(errorHandler); // Custom error handling
 

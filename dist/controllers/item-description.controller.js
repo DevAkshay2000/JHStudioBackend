@@ -107,6 +107,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
+                console.log(error_3);
                 res.status(500).json({ message: "Error creating user", error: error_3 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];

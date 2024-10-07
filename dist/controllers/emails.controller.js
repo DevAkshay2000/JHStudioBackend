@@ -39,55 +39,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
-require("reflect-metadata");
-var typeorm_1 = require("typeorm");
-var entities_1 = require("../../entities");
-var dotenv_1 = __importDefault(require("dotenv"));
-var path_1 = __importDefault(require("path"));
-// Load environment variables from .env file
-dotenv_1.default.config({ path: path_1.default.join(__dirname, "../../.env") });
-var appDataSource;
-var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0, function () {
+var send_mail_services_1 = __importDefault(require("../services/send-mail.services"));
+var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var payload, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!!appDataSource) return [3 /*break*/, 2];
-                appDataSource = new typeorm_1.DataSource({
-                    type: "postgres",
-                    host: process.env.Host,
-                    port: Number(process.env.port),
-                    username: process.env.User_Name,
-                    password: process.env.Password,
-                    database: process.env.Database,
-                    entities: [entities_1.Item, entities_1.ItemImage, entities_1.ItemDescription, entities_1.DescriptionType],
-                    //   entities: [
-                    //     "../../../src/entities/index/**/*.{ts,js}",
-                    //     "../../../build/entities/**/*.{ts,js}",
-                    //   ],
-                    synchronize: true,
-                    logging: false,
-                    ssl: {
-                        rejectUnauthorized: false, // Disables SSL certificate verification
-                    },
-                });
-                return [4 /*yield*/, appDataSource.initialize()];
+                _a.trys.push([0, 2, , 3]);
+                payload = req.body;
+                //1. compile ejs template as per data
+                return [4 /*yield*/, (0, send_mail_services_1.default)(payload)];
             case 1:
+                //1. compile ejs template as per data
                 _a.sent();
-                _a.label = 2;
-            case 2: return [2 /*return*/, appDataSource];
+                return [2 /*return*/, res.status(200).json({
+                        message: "Enquiry received, we will get back to you soon!",
+                    })];
+            case 2:
+                error_1 = _a.sent();
+                return [2 /*return*/, res.status(500).json({ message: "Error while sending enquiry", error: error_1 })];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-var handler = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var dataSource;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, initializeDataSource()];
-            case 1:
-                dataSource = _a.sent();
-                return [2 /*return*/, dataSource];
-        }
-    });
-}); };
-exports.handler = handler;
+exports.default = { create: create };

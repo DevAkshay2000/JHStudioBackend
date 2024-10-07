@@ -17,7 +17,7 @@ var Item = /** @class */ (function () {
     function Item() {
     }
     __decorate([
-        (0, typeorm_1.PrimaryGeneratedColumn)(),
+        (0, typeorm_1.PrimaryGeneratedColumn)({ type: "int" }),
         __metadata("design:type", Number)
     ], Item.prototype, "id", void 0);
     __decorate([
@@ -25,7 +25,7 @@ var Item = /** @class */ (function () {
         __metadata("design:type", String)
     ], Item.prototype, "code", void 0);
     __decorate([
-        (0, typeorm_1.Column)({ type: "varchar", length: 255 }),
+        (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: false }),
         __metadata("design:type", String)
     ], Item.prototype, "name", void 0);
     __decorate([
@@ -37,7 +37,7 @@ var Item = /** @class */ (function () {
         __metadata("design:type", Number)
     ], Item.prototype, "isInactive", void 0);
     __decorate([
-        (0, typeorm_1.Column)({ type: "int" }),
+        (0, typeorm_1.Column)({ type: "int", nullable: false }),
         __metadata("design:type", Number)
     ], Item.prototype, "salePrice", void 0);
     __decorate([
@@ -45,15 +45,15 @@ var Item = /** @class */ (function () {
         __metadata("design:type", Number)
     ], Item.prototype, "discount", void 0);
     __decorate([
-        (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: true }),
+        (0, typeorm_1.Column)({ type: "varchar", length: 255, nullable: true, }),
         __metadata("design:type", String)
     ], Item.prototype, "dimension", void 0);
     __decorate([
-        (0, typeorm_1.CreateDateColumn)({ type: "varchar" }),
+        (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], Item.prototype, "createdDate", void 0);
     __decorate([
-        (0, typeorm_1.UpdateDateColumn)({ type: "varchar" }),
+        (0, typeorm_1.UpdateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], Item.prototype, "modifiedDate", void 0);
     __decorate([

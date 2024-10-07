@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Item, ItemDescription, ItemImage } from "../../entities";
+import { DescriptionType, Item, ItemDescription, ItemImage } from "../../entities";
 import dotenv from "dotenv";
 import path from "path";
 // Load environment variables from .env file
@@ -16,7 +16,7 @@ const initializeDataSource = async (): Promise<DataSource> => {
       username: process.env.User_Name,
       password: process.env.Password,
       database: process.env.Database,
-      entities: [Item, ItemImage, ItemDescription],
+      entities: [Item, ItemImage, ItemDescription,DescriptionType],
       //   entities: [
       //     "../../../src/entities/index/**/*.{ts,js}",
       //     "../../../build/entities/**/*.{ts,js}",

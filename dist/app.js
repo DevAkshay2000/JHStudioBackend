@@ -12,10 +12,12 @@ var cors_1 = __importDefault(require("cors")); // Enable Cross-Origin Resource S
 var item_route_1 = __importDefault(require("./routes/item.route"));
 var item_description_route_1 = __importDefault(require("./routes/item-description.route"));
 var item_images_route_1 = __importDefault(require("./routes/item-images.route"));
+var description_type_route_1 = __importDefault(require("./routes/description-type.route"));
+var emails_route_1 = __importDefault(require("./routes/emails.route"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var path_1 = __importDefault(require("path"));
 // Load environment variables from .env file
-dotenv_1.default.config({ path: path_1.default.join(__dirname, '.env') });
+dotenv_1.default.config({ path: path_1.default.join(__dirname, ".env") });
 //**** import routes end
 //**** import middleware start
 // import { appDataSource } from "./config/dbconfig";
@@ -44,6 +46,8 @@ app.get("/", function (req, res) {
 app.use(item_route_1.default);
 app.use(item_description_route_1.default);
 app.use(item_images_route_1.default);
+app.use(description_type_route_1.default);
+app.use(emails_route_1.default);
 // Error Handling Middleware
 app.use(middlewares_1.errorHandler); // Custom error handling
 exports.default = app;

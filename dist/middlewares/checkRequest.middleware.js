@@ -13,8 +13,6 @@ var checkRequest = function (schema) {
         try {
             var validate = ajv.compile(schema);
             var valid = validate(req.body);
-            if (!valid)
-                console.log(validate.errors);
             if (!valid) {
                 throw validate.errors;
             }
@@ -22,7 +20,7 @@ var checkRequest = function (schema) {
         }
         catch (error) {
             console.log(error);
-            res.status(401).json(error);
+            res.status(422).json(error);
         }
     };
 };

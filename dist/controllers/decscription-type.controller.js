@@ -39,36 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var entities_1 = require("../entities");
 var dbconfig_1 = require("../config/dbconfig");
 var find = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, items, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 4, , 5]);
-                return [4 /*yield*/, (0, dbconfig_1.handler)()];
-            case 1:
-                appDataSource = _a.sent();
-                return [4 /*yield*/, appDataSource.getRepository(entities_1.Item)];
-            case 2:
-                itemRepository = _a.sent();
-                return [4 /*yield*/, itemRepository.find({
-                        relations: {
-                            itemImage: true,
-                            itemDescription: true
-                        }
-                    })];
-            case 3:
-                items = _a.sent();
-                return [2 /*return*/, res.status(200).json(items)];
-            case 4:
-                error_1 = _a.sent();
-                console.log(error_1);
-                return [2 /*return*/, res.status(500).json({ message: "Error fetching items", error: error_1 })];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); };
-var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, item, error_2;
+    var appDataSource, descriptionTypeRepository, descriptionType, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -76,33 +47,50 @@ var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 appDataSource = _a.sent();
-                itemRepository = appDataSource.getRepository(entities_1.Item);
-                return [4 /*yield*/, itemRepository.findOne({
-                        where: {
-                            id: Number(req.params.id),
-                        },
-                        relations: {
-                            itemDescription: true,
-                            itemImage: true,
-                        },
+                descriptionTypeRepository = appDataSource.getRepository(entities_1.DescriptionType);
+                return [4 /*yield*/, descriptionTypeRepository.find()];
+            case 2:
+                descriptionType = _a.sent();
+                res.status(200).json(descriptionType);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                res.status(500).json({ message: "Error fetching DescriptionType", error: error_1 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var findById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var appDataSource, descriptionTypeRepository, descriptionType, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                appDataSource = _a.sent();
+                descriptionTypeRepository = appDataSource.getRepository(entities_1.DescriptionType);
+                return [4 /*yield*/, descriptionTypeRepository.findOneBy({
+                        id: Number(req.params.id),
                     })];
             case 2:
-                item = _a.sent();
-                if (!item) {
-                    return [2 /*return*/, res.status(404).json({ message: "Item not found" })];
+                descriptionType = _a.sent();
+                if (!descriptionType) {
+                    return [2 /*return*/, res.status(404).json({ message: "DescriptionType not found" })];
                 }
-                res.status(200).json(item);
+                res.status(200).json(descriptionType);
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();
-                res.status(500).json({ message: "Error fetching item", error: error_2 });
+                res.status(500).json({ message: "Error fetching DescriptionType", error: error_2 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, data, itemRepository, item, error_3;
+    var appDataSource, descriptionTypeRepository, descriptionType, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -110,45 +98,23 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 appDataSource = _a.sent();
-                data = req.body;
-                itemRepository = appDataSource.getRepository(entities_1.Item);
-                item = itemRepository.create(data.item);
-                return [4 /*yield*/, itemRepository.save(item)];
+                descriptionTypeRepository = appDataSource.getRepository(entities_1.DescriptionType);
+                descriptionType = descriptionTypeRepository.create(req.body);
+                return [4 /*yield*/, descriptionTypeRepository.save(descriptionType)];
             case 2:
                 _a.sent();
-                // await appDataSource.transaction(async (transactionEntityManager) => {
-                //     const item = await transactionEntityManager.save(Item, data.item);
-                //     console.log(item)
-                //     if (data.itemDescriptions && data.itemDescriptions.length) {
-                //         const itemDescription = data.itemDescriptions.map((val) => {
-                //             return {
-                //                 ...val,
-                //                 itemId: item.id
-                //             }
-                //         })
-                //         transactionEntityManager.save(ItemDescription, itemDescription)
-                //     }
-                //     if (data.itemImages && data.itemImages.length) {
-                //         const itemImages = data.itemImages.map((val) => {
-                //             return {
-                //                 ...val,
-                //                 itemId: item.id
-                //             }
-                //         })
-                //         transactionEntityManager.save(ItemImage, itemImages)
-                //     }
-                // });
-                return [2 /*return*/, res.status(201).json("item created ...")];
+                res.status(201).json(descriptionType);
+                return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
-                console.log(error_3);
-                return [2 /*return*/, res.status(400).json({ message: "Error creating user", error: error_3 })];
+                res.status(500).json({ message: "Error creating DescriptionType", error: error_3 });
+                return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 var updateById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, item, updatedItem, error_4;
+    var appDataSource, descriptionTypeRepository, descriptionType, updatedItem, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -156,31 +122,31 @@ var updateById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 appDataSource = _a.sent();
-                itemRepository = appDataSource.getRepository(entities_1.Item);
-                return [4 /*yield*/, itemRepository.findOneBy({
+                descriptionTypeRepository = appDataSource.getRepository(entities_1.DescriptionType);
+                return [4 /*yield*/, descriptionTypeRepository.findOneBy({
                         id: parseInt(req.params.id),
                     })];
             case 2:
-                item = _a.sent();
-                if (!item) {
-                    return [2 /*return*/, res.status(404).json({ message: "Item not found" })];
+                descriptionType = _a.sent();
+                if (!descriptionType) {
+                    return [2 /*return*/, res.status(404).json({ message: "DescriptionType not found" })];
                 }
-                updatedItem = itemRepository.merge(item, req.body);
-                return [4 /*yield*/, itemRepository.save(updatedItem)];
+                updatedItem = descriptionTypeRepository.merge(descriptionType, req.body);
+                return [4 /*yield*/, descriptionTypeRepository.save(updatedItem)];
             case 3:
                 _a.sent();
                 res.status(200).json(updatedItem);
                 return [3 /*break*/, 5];
             case 4:
                 error_4 = _a.sent();
-                res.status(500).json({ message: "Error updating item", error: error_4 });
+                res.status(500).json({ message: "Error updating DescriptionType", error: error_4 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }
     });
 }); };
 var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, itemRepository, item, error_5;
+    var appDataSource, descriptionTypeRepository, descriptionType, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -188,23 +154,21 @@ var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 appDataSource = _a.sent();
-                itemRepository = appDataSource.getRepository(entities_1.Item);
-                return [4 /*yield*/, itemRepository.findOneBy({
-                        id: parseInt(req.params.id),
-                    })];
+                descriptionTypeRepository = appDataSource.getRepository(entities_1.DescriptionType);
+                return [4 /*yield*/, descriptionTypeRepository.findOneBy({ id: parseInt(req.params.id) })];
             case 2:
-                item = _a.sent();
-                if (!item) {
-                    return [2 /*return*/, res.status(404).json({ message: "Item not found" })];
+                descriptionType = _a.sent();
+                if (!descriptionType) {
+                    return [2 /*return*/, res.status(404).json({ message: 'Item not found' })];
                 }
-                return [4 /*yield*/, itemRepository.remove(item)];
+                return [4 /*yield*/, descriptionTypeRepository.remove(descriptionType)];
             case 3:
                 _a.sent();
-                res.status(200).json({ message: "Item removed successfully" });
+                res.status(200).json({ message: 'DescriptionType removed successfully' });
                 return [3 /*break*/, 5];
             case 4:
                 error_5 = _a.sent();
-                res.status(500).json({ message: "Error removing item", error: error_5 });
+                res.status(500).json({ message: 'Error removing DescriptionType', error: error_5 });
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
         }

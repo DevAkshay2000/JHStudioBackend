@@ -10,7 +10,8 @@ export const ItemDescriptions: JSONSchemaType<Omit<ItemDescription, "item">> = {
     createdDate: { type: "string", format: "date-time" },
     revisionNumber: { type: "number" },
     itemId: { type: "number", nullable: true },
+    descriptionTypeId: { type: "number" }
   },
-  required: ["label"],
+  required: ["label","descriptionTypeId"],
   additionalProperties: false,
 };

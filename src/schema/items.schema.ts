@@ -18,6 +18,6 @@ export const Items: JSONSchemaType<
     revisionNumber: { type: "number" },
     // itemImages:{type:"arra}
   },
-  required: ["name"],
+  required: ["name","code","salePrice","dimension"],
   additionalProperties: false,
 };

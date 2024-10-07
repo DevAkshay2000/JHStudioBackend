@@ -2,6 +2,8 @@
 import { Router } from 'express';
 import { authMiddleware } from '../middlewares/authMiddleware.middleware';
 import itemDescriptionController from '../controllers/item-description.controller';
+import { checkRequest } from '../middlewares';
+import { ItemDescriptions } from '../schema';
 
 const router = Router();
 
@@ -12,7 +14,7 @@ router.get('/item-descriptions', itemDescriptionController.find);
 router.get('/item-descriptions/:id', itemDescriptionController.findById);
 
 // Create new user
-router.post('/item-descriptions', itemDescriptionController.create);
+router.post('/item-descriptions',checkRequest(ItemDescriptions), itemDescriptionController.create);
 
 // Update user
 router.put('/item-descriptions/:id', itemDescriptionController.updateById);

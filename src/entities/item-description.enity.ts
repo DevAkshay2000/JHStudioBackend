@@ -14,11 +14,14 @@ export class ItemDescription {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 500 ,nullable:true})
   label: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 1000 ,nullable:true})
   value: string;
+
+  @Column({ type: "int", default: 1 })
+  descriptionTypeId: number;
 
   @CreateDateColumn({ type: "timestamp" })
   createdDate: string;
@@ -29,8 +32,8 @@ export class ItemDescription {
   @Column({ type: "int", default: 1 })
   revisionNumber: number;
 
-//   @Column({ type: "int" })
-//   itemId?: number;
+  //   @Column({ type: "int" })
+  //   itemId?: number;
   // Foreign key relationship to the 'items' table
   @ManyToOne(() => Item, (item) => item.id, { onDelete: "CASCADE" })
   @JoinColumn({ name: "itemId" })

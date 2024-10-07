@@ -20,13 +20,17 @@ var ItemDescription = /** @class */ (function () {
         __metadata("design:type", Number)
     ], ItemDescription.prototype, "id", void 0);
     __decorate([
-        (0, typeorm_1.Column)({ type: "varchar", length: 255 }),
+        (0, typeorm_1.Column)({ type: "varchar", length: 500, nullable: true }),
         __metadata("design:type", String)
     ], ItemDescription.prototype, "label", void 0);
     __decorate([
-        (0, typeorm_1.Column)({ type: "varchar", length: 255 }),
+        (0, typeorm_1.Column)({ type: "varchar", length: 1000, nullable: true }),
         __metadata("design:type", String)
     ], ItemDescription.prototype, "value", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "int", default: 1 }),
+        __metadata("design:type", Number)
+    ], ItemDescription.prototype, "descriptionTypeId", void 0);
     __decorate([
         (0, typeorm_1.CreateDateColumn)({ type: "timestamp" }),
         __metadata("design:type", String)

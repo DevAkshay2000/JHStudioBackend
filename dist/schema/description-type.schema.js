@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ItemDescriptions = void 0;
-exports.ItemDescriptions = {
+exports.DescriptionTypes = void 0;
+exports.DescriptionTypes = {
     type: "object",
     properties: {
         id: { type: "number" },
-        label: { type: "string" },
-        value: { type: "string" },
+        name: { type: "string" },
+        description: { type: "string" },
         modifiedDate: { type: "string", format: "date-time" },
         createdDate: { type: "string", format: "date-time" },
         revisionNumber: { type: "number" },
-        itemId: { type: "number", nullable: true },
-        descriptionTypeId: { type: "number" }
     },
-    required: ["label", "descriptionTypeId"],
+    required: ["name"],
     additionalProperties: false,
 };

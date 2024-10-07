@@ -9,12 +9,13 @@ const find = async (req: Request, res: Response) => {
     const appDataSource = await handler();
     const itemRepository = await appDataSource.getRepository(Item);
     // Fetch all users from the database (example logic)
-    const users = await itemRepository.find({
+    const items = await itemRepository.find({
       relations: {
         itemImage: true,
-      },
+        itemDescription: true
+      }
     });
-    return res.status(200).json(users);
+    return res.status(200).json(items);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Error fetching items", error });

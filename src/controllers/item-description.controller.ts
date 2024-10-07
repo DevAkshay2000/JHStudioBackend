@@ -39,6 +39,7 @@ const create = async (req: Request, res: Response) => {
         await itemDescriptionRepository.save(itemDescription);
         res.status(201).json(itemDescription);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error creating user", error });
     }
 };

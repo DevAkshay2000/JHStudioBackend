@@ -11,13 +11,13 @@ import { ItemDescription } from "./item-description.enity";
 
 @Entity("items")
 export class Item {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
   @Column({ type: "varchar", length: 255 })
   code: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 255, nullable: false })
   name: string;
 
   @Column({ type: "varchar", length: 255, nullable: true })
@@ -26,19 +26,19 @@ export class Item {
   @Column({ type: "int", default: 0 })
   isInactive: number;
 
-  @Column({ type: "int" })
+  @Column({ type: "int", nullable: false })
   salePrice: number;
 
   @Column({ type: "int", nullable: true })
   discount: number;
 
-  @Column({ type: "varchar", length: 255, nullable: true })
+  @Column({ type: "varchar", length: 255, nullable: true, })
   dimension: string;
 
-  @CreateDateColumn({ type: "varchar" })
+  @CreateDateColumn({ type: "varchar", nullable: false })
   createdDate: string;
 
-  @UpdateDateColumn({ type: "varchar" })
+  @UpdateDateColumn({ type: "varchar", nullable: false })
   modifiedDate: string;
 
   @Column({ type: "int", default: 1 })
