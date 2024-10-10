@@ -95,7 +95,6 @@ function mailer(data) {
                             _c)])];
                 case 2:
                     info = _d.sent();
-                    console.log(info);
                     return [3 /*break*/, 4];
                 case 3:
                     e_1 = _d.sent();

@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 
 import { Item, ItemDescription, ItemImage } from "../entities";
 import { handler } from "../config/dbconfig";
-
 const find = async (req: Request, res: Response) => {
   try {
     const appDataSource = await handler();

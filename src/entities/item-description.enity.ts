@@ -14,10 +14,10 @@ export class ItemDescription {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 500 ,nullable:true})
+  @Column({ type: "varchar", length: 500, nullable: true })
   label: string;
 
-  @Column({ type: "varchar", length: 1000 ,nullable:true})
+  @Column({ type: "varchar", length: 1000, nullable: true })
   value: string;
 
   @Column({ type: "int", default: 1 })

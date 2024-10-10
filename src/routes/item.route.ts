@@ -5,14 +5,19 @@ import { authMiddleware } from "../middlewares/authMiddleware.middleware";
 import { checkRequest } from "../middlewares";
 import { Items } from "../schema";
 import { BulkItems } from "../schema/schema.bulk";
+import {
+  getModelSchema,
+  validateRequestBody,
+} from "../utils/getModelSchema.util";
+import { Item } from "../entities";
 
 const router = Router();
 
 // Public route
-router.get("/items", itemController.find);
+router.get("/items", validateRequestBody(Item), itemController.find);
 
 // Protected route (requires authentication)
-router.get("/items/:id", itemController.findById);
+router.get("/items/:id", validateRequestBody(Item), itemController.findById);
 
 // Create new user
 router.post("/items", checkRequest(BulkItems), itemController.create);

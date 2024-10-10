@@ -3,15 +3,9 @@ import "reflect-metadata";
 import express, { Application } from "express";
 import morgan from "morgan"; // For logging requests
 import cors from "cors"; // Enable Cross-Origin Resource Sharing
-//**** import routes start
-import itemsRoute from "./routes/item.route";
-import itemDescription from "./routes/item-description.route";
-import itemImage from "./routes/item-images.route";
-import descriptionType from "./routes/description-type.route";
-import mailSender from "./routes/emails.route";
-
 import dotenv from "dotenv";
 import path from "path";
+import routes from "./routes"
 // Load environment variables from .env file
 dotenv.config({ path: path.join(__dirname, ".env") });
 //**** import routes end
@@ -21,16 +15,6 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 import { errorHandler } from "./middlewares";
 //**** import middleware end
 const app: Application = express();
-//initialize database
-// appDataSource
-//   .initialize()
-//   .then(async () => {
-//     // console.log(metadata)
-//     console.log("Data Source has been initialized!");
-//   })
-//   .catch((err) => {
-//     console.error("Error during Data Source initialization:", err);
-//   });
 // Global Middleware
 app.use(cors()); // Enable CORS
 app.use(express.json());
@@ -60,12 +44,8 @@ app.get("/", (req, res) => {
     </html>
   `);
 });
-// Route Middleware
-app.use(itemsRoute);
-app.use(itemDescription);
-app.use(itemImage);
-app.use(descriptionType);
-app.use(mailSender);
+
+app.use(routes);
 // Error Handling Middleware
 app.use(errorHandler); // Custom error handling
 
