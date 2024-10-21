@@ -95,15 +95,17 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
 
       //3. loop through relations and crate a scheama for each relation entity
       for (const relation of relations) {
-        //a. get the scheama oject for that entity
-        const relativeModelSchema = await getModelSchema(relation.className);
-        schemaObject["properties"][relation.propertyName] = {
-          type: "array",
-          //b. assign to properties
-          items: relativeModelSchema,
-        };
-        //b. make it required
-        schemaObject.required.push(relation.propertyName);
+        if (relation.relationType === "one-to-many") {
+          //a. get the scheama oject for that entity
+          const relativeModelSchema = await getModelSchema(relation.className);
+          schemaObject["properties"][relation.propertyName] = {
+            type: "array",
+            //b. assign to properties
+            items: relativeModelSchema,
+          };
+          //b. make it required
+          schemaObject.required.push(relation.propertyName);
+        }
       }
       const validate = ajv.compile(schemaObject);
       const valid = validate(req.body);

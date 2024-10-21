@@ -10,11 +10,13 @@ import {
   validateRequestBody,
 } from "../utils/getModelSchema.util";
 import { Item } from "../entities";
+import { getFilterSchema } from "../utils/getFilterSchema.util";
+import { validateRelationFilter, validateRequestBodyFilter } from "../utils";
 
 const router = Router();
 
 // Public route
-router.get("/items", validateRequestBody(Item), itemController.find);
+router.get("/items", validateRelationFilter(Item), itemController.find);
 
 // Protected route (requires authentication)
 router.get("/items/:id", validateRequestBody(Item), itemController.findById);

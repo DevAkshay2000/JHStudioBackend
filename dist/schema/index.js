@@ -18,3 +18,4 @@ __exportStar(require("./items.schema"), exports);
 __exportStar(require("./items-description.schema"), exports);
 __exportStar(require("./items-images.schema"), exports);
 __exportStar(require("./user-inquiry.schema"), exports);
+__exportStar(require("./filter.schema"), exports);

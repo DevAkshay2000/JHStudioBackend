@@ -10,9 +10,10 @@ var middlewares_1 = require("../middlewares");
 var schema_bulk_1 = require("../schema/schema.bulk");
 var getModelSchema_util_1 = require("../utils/getModelSchema.util");
 var entities_1 = require("../entities");
+var utils_1 = require("../utils");
 var router = (0, express_1.Router)();
 // Public route
-router.get("/items", (0, getModelSchema_util_1.validateRequestBody)(entities_1.Item), item_contoller_1.default.find);
+router.get("/items", (0, utils_1.validateRelationFilter)(entities_1.Item), item_contoller_1.default.find);
 // Protected route (requires authentication)
 router.get("/items/:id", (0, getModelSchema_util_1.validateRequestBody)(entities_1.Item), item_contoller_1.default.findById);
 // Create new user
