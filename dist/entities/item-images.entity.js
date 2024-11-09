@@ -46,3 +46,4 @@ var ItemImage = /** @class */ (function () {
     return ItemImage;
 }());
 exports.ItemImage = ItemImage;
+//# sourceMappingURL=item-images.entity.js.map

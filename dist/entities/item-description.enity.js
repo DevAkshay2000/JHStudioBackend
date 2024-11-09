@@ -54,3 +54,4 @@ var ItemDescription = /** @class */ (function () {
     return ItemDescription;
 }());
 exports.ItemDescription = ItemDescription;
+//# sourceMappingURL=item-description.enity.js.map

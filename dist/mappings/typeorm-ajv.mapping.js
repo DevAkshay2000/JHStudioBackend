@@ -117,3 +117,4 @@ exports.typeOrmToAjvTypesMapping = {
     cube: { type: "string" },
     ltree: { type: "string" },
 };
+//# sourceMappingURL=typeorm-ajv.mapping.js.map

@@ -47,3 +47,4 @@ var authMiddleware = function (req, res, next) {
     }
 };
 exports.authMiddleware = authMiddleware;
+//# sourceMappingURL=authMiddleware.middleware.js.map

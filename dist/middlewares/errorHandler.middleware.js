@@ -6,3 +6,4 @@ var errorHandler = function (err, req, res, next) {
     res.status(500).json({ message: 'Something went wrong!', error: err.message });
 };
 exports.errorHandler = errorHandler;
+//# sourceMappingURL=errorHandler.middleware.js.map

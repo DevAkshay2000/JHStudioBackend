@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import { handler } from "../config/dbconfig";
+
 import { EntityTarget } from "typeorm";
 import { typeOrmToAjvTypesMapping } from "../mappings";
+import { handler } from "../config/dbconfig";
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 

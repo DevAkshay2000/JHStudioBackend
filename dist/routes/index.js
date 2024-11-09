@@ -18,3 +18,4 @@ router.use(item_images_route_1.default);
 router.use(description_type_route_1.default);
 router.use(emails_route_1.default);
 exports.default = router;
+//# sourceMappingURL=index.js.map

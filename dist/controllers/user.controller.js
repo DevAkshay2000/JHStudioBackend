@@ -52,3 +52,4 @@
 //     res.status(500).json({ message: 'Error deleting user', error });
 //   }
 // };
+//# sourceMappingURL=user.controller.js.map

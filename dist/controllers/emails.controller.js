@@ -63,3 +63,4 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 exports.default = { create: create };
+//# sourceMappingURL=emails.controller.js.map

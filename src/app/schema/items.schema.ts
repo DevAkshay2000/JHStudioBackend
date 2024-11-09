@@ -1,5 +1,5 @@
 import { JSONSchemaType } from "ajv";
-import { Item } from "../entities";
+import { Item } from "../modules/items/entities/items.entity";
 export const Items: JSONSchemaType<
   Omit<Item, "itemImage" | "itemDescription">
 > = {

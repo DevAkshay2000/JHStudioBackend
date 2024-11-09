@@ -20,3 +20,4 @@ router.post("/user-enquiries", (0, middlewares_1.checkRequest)(schema_1.UserInqu
 // // Delete user
 // router.delete("/item-images/:id", itemController.deleteById);
 exports.default = router;
+//# sourceMappingURL=emails.route.js.map

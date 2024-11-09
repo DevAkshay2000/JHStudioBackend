@@ -20,5 +20,6 @@ exports.FilterSchema = {
         },
     },
     required: [],
-    additionalProperties: false,
+    // additionalProperties: false,
 };
+//# sourceMappingURL=filter.schema.js.map

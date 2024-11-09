@@ -1,33 +1,50 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-// src/app.ts
-require("reflect-metadata");
-var express_1 = __importDefault(require("express"));
-var morgan_1 = __importDefault(require("morgan")); // For logging requests
-var cors_1 = __importDefault(require("cors")); // Enable Cross-Origin Resource Sharing
-var dotenv_1 = __importDefault(require("dotenv"));
-var path_1 = __importDefault(require("path"));
-var routes_1 = __importDefault(require("./routes"));
-// Load environment variables from .env file
-dotenv_1.default.config({ path: path_1.default.join(__dirname, ".env") });
-//**** import routes end
-//**** import middleware start
-// import { appDataSource } from "./config/dbconfig";
-var middlewares_1 = require("./middlewares");
-//**** import middleware end
-var app = (0, express_1.default)();
-// Global Middleware
-app.use((0, cors_1.default)()); // Enable CORS
-app.use(express_1.default.json());
-// Parse incoming JSON requests
-app.use((0, morgan_1.default)("dev")); // Log HTTP requests in development mode
-app.get("/", function (req, res) {
-    res.send("\n    <html>\n      <head>\n        <title>Welcome to My E-commerce</title>\n        <style>\n          body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            margin-top: 50px;\n          }\n          h1 {\n            color: #2c3e50;\n          }\n        </style>\n      </head>\n      <body>\n        <h1>Welcome to KFT Foods E-commerce!</h1>\n        <p>This is the home page of your application.</p>\n        <p>Enjoy your stay!</p>\n      </body>\n    </html>\n  ");
-});
-app.use(routes_1.default);
-// Error Handling Middleware
-app.use(middlewares_1.errorHandler); // Custom error handling
-exports.default = app;
+// // src/app.ts
+// import "reflect-metadata";
+// import express, { Application } from "express";
+// import morgan from "morgan"; // For logging requests
+// import cors from "cors"; // Enable Cross-Origin Resource Sharing
+// import dotenv from "dotenv";
+// import path from "path";
+// import routes from "./routes"
+// // Load environment variables from .env file
+// dotenv.config({ path: path.join(__dirname, ".env") });
+// //**** import routes end
+// //**** import middleware start
+// // import { appDataSource } from "./config/dbconfig";
+// import { errorHandler } from "./middlewares";
+// //**** import middleware end
+// const app: Application = express();
+// // Global Middleware
+// app.use(cors()); // Enable CORS
+// app.use(express.json());
+// // Parse incoming JSON requests
+// app.use(morgan("dev")); // Log HTTP requests in development mode
+// app.get("/", (req, res) => {
+//   res.send(`
+//     <html>
+//       <head>
+//         <title>Welcome to My E-commerce</title>
+//         <style>
+//           body {
+//             font-family: Arial, sans-serif;
+//             text-align: center;
+//             margin-top: 50px;
+//           }
+//           h1 {
+//             color: #2c3e50;
+//           }
+//         </style>
+//       </head>
+//       <body>
+//         <h1>Welcome to KFT Foods E-commerce!</h1>
+//         <p>This is the home page of your application.</p>
+//         <p>Enjoy your stay!</p>
+//       </body>
+//     </html>
+//   `);
+// });
+// app.use(routes);
+// // Error Handling Middleware
+// app.use(errorHandler); // Custom error handling
+// export default app;
+//# sourceMappingURL=app.js.map

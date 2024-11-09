@@ -20,3 +20,4 @@ router.put('/descriptions-types/:id', decscription_type_controller_1.default.upd
 // Delete user
 router.delete('/descriptions-types/:id', decscription_type_controller_1.default.deleteById);
 exports.default = router;
+//# sourceMappingURL=description-type.route.js.map

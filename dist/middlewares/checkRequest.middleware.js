@@ -25,3 +25,4 @@ var checkRequest = function (schema) {
     };
 };
 exports.checkRequest = checkRequest;
+//# sourceMappingURL=checkRequest.middleware.js.map

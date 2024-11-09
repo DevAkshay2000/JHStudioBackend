@@ -20,11 +20,9 @@ exports.RelationsFilter = {
             type: "array",
             nullable: true,
             items: { $ref: "#" },
-            // items: {} as JSONSchemaType<RelationType>,
         },
     },
-    required: [], // No required properties
-    additionalProperties: false,
+    required: [],
+    // additionalProperties: true,
 };
-// Now update the relations.items to reference RelationsFilter
-// Add a type assertion to confirm properties is defined
+//# sourceMappingURL=relations-filter.schema.js.map

@@ -74,3 +74,4 @@ var Item = /** @class */ (function () {
     return Item;
 }());
 exports.Item = Item;
+//# sourceMappingURL=item.entity.js.map

@@ -16,3 +16,4 @@ exports.BulkItems = {
     required: ["item", "itemDescriptions", "itemImages"],
     additionalProperties: false,
 };
+//# sourceMappingURL=bulk-item.schema.js.map

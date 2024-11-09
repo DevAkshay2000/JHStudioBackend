@@ -12,3 +12,4 @@ exports.UserInquiry = {
     required: ["name", "email", "mobile", "message"],
     additionalProperties: false,
 };
+//# sourceMappingURL=user-inquiry.schema.js.map

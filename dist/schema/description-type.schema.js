@@ -14,3 +14,4 @@ exports.DescriptionTypes = {
     required: ["name"],
     additionalProperties: false,
 };
+//# sourceMappingURL=description-type.schema.js.map

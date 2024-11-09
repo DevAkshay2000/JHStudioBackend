@@ -14,3 +14,4 @@ exports.ItemImages = {
     required: ["url"],
     additionalProperties: false,
 };
+//# sourceMappingURL=items-images.schema.js.map

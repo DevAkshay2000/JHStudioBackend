@@ -23,3 +23,4 @@ router.put("/items/:id", item_contoller_1.default.updateById);
 // Delete user
 router.delete("/items/:id", item_contoller_1.default.deleteById);
 exports.default = router;
+//# sourceMappingURL=item.route.js.map

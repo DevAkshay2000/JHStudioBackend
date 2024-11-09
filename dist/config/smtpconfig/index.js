@@ -18,3 +18,4 @@ exports.transporter = nodemailer_1.default.createTransport({
         pass: process.env.Mailer_Password,
     },
 });
+//# sourceMappingURL=index.js.map

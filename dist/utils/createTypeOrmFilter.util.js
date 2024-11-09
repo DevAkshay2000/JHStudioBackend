@@ -76,6 +76,7 @@ var createFieldsScheama = function (model) { return __awaiter(void 0, void 0, vo
                 return [2 /*return*/, schemaObject_1];
             case 2:
                 error_1 = _a.sent();
+                console.log(error_1);
                 return [2 /*return*/, error_1];
             case 3: return [2 /*return*/];
         }
@@ -106,6 +107,7 @@ var validateRequestBodyFilter = function (model) {
                     return [3 /*break*/, 4];
                 case 3:
                     error_2 = _a.sent();
+                    console.log(error_2);
                     res.status(422).json(error_2);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
@@ -114,3 +116,4 @@ var validateRequestBodyFilter = function (model) {
     }); };
 };
 exports.validateRequestBodyFilter = validateRequestBodyFilter;
+//# sourceMappingURL=createTypeOrmFilter.util.js.map

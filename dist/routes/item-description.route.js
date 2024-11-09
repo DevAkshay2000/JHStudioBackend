@@ -20,3 +20,4 @@ router.put('/item-descriptions/:id', item_description_controller_1.default.updat
 // Delete user
 router.delete('/item-descriptions/:id', item_description_controller_1.default.deleteById);
 exports.default = router;
+//# sourceMappingURL=item-description.route.js.map

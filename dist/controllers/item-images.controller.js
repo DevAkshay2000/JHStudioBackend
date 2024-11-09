@@ -175,3 +175,4 @@ var deleteById = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.default = { find: find, findById: findById, create: create, deleteById: deleteById, updateById: updateById };
+//# sourceMappingURL=item-images.controller.js.map

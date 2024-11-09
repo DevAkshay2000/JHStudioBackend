@@ -178,3 +178,4 @@ var validateRequestBody = function (model) {
     }); };
 };
 exports.validateRequestBody = validateRequestBody;
+//# sourceMappingURL=getModelSchema.util.js.map

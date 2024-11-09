@@ -16,3 +16,4 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./request.interface"), exports);
 __exportStar(require("./relation-type-filter.interface"), exports);
+//# sourceMappingURL=index.js.map

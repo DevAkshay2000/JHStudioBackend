@@ -20,3 +20,4 @@ exports.Items = {
     required: ["name", "code", "salePrice", "dimension"],
     additionalProperties: false,
 };
+//# sourceMappingURL=items.schema.js.map

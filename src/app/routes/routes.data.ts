@@ -1,5 +1,3 @@
 import { Routes } from "./routes.types";
-
-export const routes: Routes=[
-    
-]
+import itemRoute from "../modules/items/items.routes";
+export const routes: Routes = [itemRoute];

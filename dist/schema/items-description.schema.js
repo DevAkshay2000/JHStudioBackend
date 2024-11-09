@@ -16,3 +16,4 @@ exports.ItemDescriptions = {
     required: ["label", "descriptionTypeId"],
     additionalProperties: false,
 };
+//# sourceMappingURL=items-description.schema.js.map

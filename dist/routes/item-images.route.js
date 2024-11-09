@@ -18,3 +18,4 @@ router.put("/item-images/:id", item_images_controller_1.default.updateById);
 // Delete user
 router.delete("/item-images/:id", item_images_controller_1.default.deleteById);
 exports.default = router;
+//# sourceMappingURL=item-images.route.js.map

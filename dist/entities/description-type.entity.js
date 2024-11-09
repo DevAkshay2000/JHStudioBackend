@@ -44,3 +44,4 @@ var DescriptionType = /** @class */ (function () {
     return DescriptionType;
 }());
 exports.DescriptionType = DescriptionType;
+//# sourceMappingURL=description-type.entity.js.map
