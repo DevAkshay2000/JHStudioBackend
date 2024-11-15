@@ -21,6 +21,7 @@ export const getModelSchema = async <T extends EntityTarget<T>>(
   type: "object";
   properties: object;
   required: string[];
+  additionalProperties: boolean;
 }> => {
   try {
     //1. get the datasource object
@@ -28,9 +29,14 @@ export const getModelSchema = async <T extends EntityTarget<T>>(
     const entityMetadata = appDataSource.getMetadata(model);
     //2. get model properties
     const modelProperties = entityMetadata.ownColumns.map((column) => {
+      // console.log(column.relationMetadata?.isOneToOne);
+
       return {
         type: column.type,
-        name: column.propertyName,
+        // name: column?.relationMetadata?.isOneToOne
+        //   ? column?.givenDatabaseName
+        //   : column?.propertyName,
+        name: column?.propertyName,
         required: !column.isNullable,
       };
     });
@@ -39,19 +45,21 @@ export const getModelSchema = async <T extends EntityTarget<T>>(
       type: "object";
       properties: object;
       required: string[];
+      additionalProperties: boolean;
     } = {
       type: "object",
       properties: {},
       required: [],
+      additionalProperties: false,
     };
     //4. loop through properties
     modelProperties.forEach((value) => {
       //1. get the type according to the name
       if (typeOrmToAjvTypesMapping[`${value.type}`]) {
-        schemaObject["properties"][value.name] = {
+        schemaObject["properties"][`${value.name}`] = {
           type: typeOrmToAjvTypesMapping[`${value.type}`]?.type,
           ...(typeOrmToAjvTypesMapping[`${value.type}`]?.format ||
-          dateColumns.includes(value.name)
+          dateColumns.includes(`${value?.name}`)
             ? {
                 format: "date-time",
                 // format: typeOrmToAjvTypesMapping[`${value.type}`]?.format
@@ -61,13 +69,13 @@ export const getModelSchema = async <T extends EntityTarget<T>>(
       }
       //2. else assign the string value
       else {
-        schemaObject["properties"][value.name] = {
+        schemaObject["properties"][`${value?.name}`] = {
           type: "string",
         };
       }
       //e. check if value is required
-      if (value.required && !ignoreRequiredCheck.includes(value.name)) {
-        schemaObject.required.push(value.name);
+      if (value.required && !ignoreRequiredCheck.includes(`${value.name}`)) {
+        schemaObject.required.push(`${value.name}`);
       }
     });
     return schemaObject;
@@ -104,6 +112,16 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
             //b. assign to properties
             items: relativeModelSchema,
           };
+          //b. make it required
+          schemaObject.required.push(relation.propertyName);
+        }
+        if (relation.relationType === "many-to-one") {
+          //a. get the scheama oject for that entity
+          const relativeModelSchema = await getModelSchema(relation.className);
+          // set only id as required
+          relativeModelSchema.required = ["id"];
+          schemaObject["properties"][relation.propertyName] =
+            relativeModelSchema;
           //b. make it required
           schemaObject.required.push(relation.propertyName);
         }

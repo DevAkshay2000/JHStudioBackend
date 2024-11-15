@@ -28,7 +28,6 @@ const convertWhereObject = (where: object): object => {
           for (let [level3Key, level3Value] of Object.entries(
             where["$a"][key1]
           )) {
-            console.log(level3Value);
             level3Value ? (result[level3Key] = Not(level3Value)) : null;
           }
         }
@@ -187,6 +186,8 @@ export const queryBuilder = async <T extends EntityTarget<T>>(
     fields?: object;
     where?: object;
     relations?: RelationType[];
+    skip?: number;
+    limit?: number;
   },
   model: T
 ): Promise<FindManyOptions<any>> => {
@@ -206,11 +207,12 @@ export const queryBuilder = async <T extends EntityTarget<T>>(
   //d. create object from filter
   //consist for three things
   const [select, relations, where] = createSelectObject(finalFilter);
-  console.log(JSON.stringify(where));
   return {
     ...(Object.keys(select).length ? { select } : {}),
     ...(Object.keys(relations).length ? { relations } : {}),
     ...(Object.keys(where).length ? { where } : {}),
+    ...(query.skip ? { skip: query.skip } : {}),
+    ...(query.limit ? { take: query.limit } : {}),
   };
 };
 

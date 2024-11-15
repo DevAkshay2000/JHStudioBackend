@@ -111,5 +111,5 @@ export let RelationsFilter: JSONSchemaType<RelationType> = {
     },
   },
   required: [],
-  // additionalProperties: true,
+  additionalProperties: true,
 };

@@ -113,5 +113,5 @@ export const FilterSchema: JSONSchemaType<{
     },
   },
   required: [],
-  // additionalProperties: false,
+  additionalProperties: false,
 };

@@ -1,3 +1,14 @@
 import { Request } from "express";
+import { JwtPayload } from "jsonwebtoken";
 
-export interface NewRequestInterface extends Request { user?: any }
+export interface AuthenticatedRequest extends Request {
+    user?: {
+        userName: string;
+        userId: number,
+        email: string;
+        userType: {
+            id: number;
+            name: string;
+        };
+    } | JwtPayload | string;
+}

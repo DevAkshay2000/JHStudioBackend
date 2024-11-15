@@ -59,14 +59,16 @@ const repository = async () => {
   //4. update single records
   const updateById = async (id: number, data: Item) => {
     try {
-      const item = await itemRepository.findOneBy({
+      const respo = await itemRepository.findOneBy({
         id: id,
       });
-      if (!item) {
+      if (!respo) {
         throw { message: "Record not found with id: " + id, statusCode: 404 };
       }
-      const updatedItem = itemRepository.merge(item, data);
-      await itemRepository.save(updatedItem);
+      await itemRepository.save({
+        ...respo,
+        ...data,
+      });
     } catch (error) {
       throw error;
     }
