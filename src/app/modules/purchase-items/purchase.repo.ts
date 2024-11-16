@@ -1,14 +1,14 @@
 import { FindManyOptions, FindOneOptions } from "typeorm";
 
 import { handler } from "../../../app/config/dbconfig";
-import { SaleHeaders } from "./entities/sale-header.entity";
+import { PurchaseHeaders } from "./entities/purchase-headers.entity";
 
 
 const repository = async () => {
   const dataSource = await handler();
-  const repo = dataSource.getRepository(SaleHeaders);
+  const repo = dataSource.getRepository(PurchaseHeaders);
   //1. find all records
-  const find = async (option?: FindManyOptions<SaleHeaders>) => {
+  const find = async (option?: FindManyOptions<PurchaseHeaders>) => {
     try {
       return await repo.find(option);
     } catch (error) {
@@ -17,7 +17,7 @@ const repository = async () => {
   };
 
   //2. find single record with options
-  const findOne = async (option?: FindOneOptions<SaleHeaders>) => {
+  const findOne = async (option?: FindOneOptions<PurchaseHeaders>) => {
     try {
       return await repo.find(option);
     } catch (error) {
@@ -26,7 +26,7 @@ const repository = async () => {
   };
 
   //3. find single records by id
-  const findOneById = async (id: number, filter?: FindOneOptions<SaleHeaders>) => {
+  const findOneById = async (id: number, filter?: FindOneOptions<PurchaseHeaders>) => {
     try {
       const item = await repo.findOne({
         select: {
@@ -50,19 +50,18 @@ const repository = async () => {
   };
 
   //4. create single record
-  const create = async (data: SaleHeaders) => {
+  const create = async (data: PurchaseHeaders) => {
     try {
       const respo = repo.create(data);
       await repo.save(respo);
       return respo;
     } catch (error) {
-      console.log(error)
       throw error;
     }
   };
 
   //4. update single records
-  const updateById = async (id: number, data: SaleHeaders) => {
+  const updateById = async (id: number, data: PurchaseHeaders) => {
     try {
       const respo = await repo.findOneBy({
         id: id,
@@ -75,7 +74,6 @@ const repository = async () => {
         ...data,
       });
     } catch (error) {
-      console.log(error)
       throw error;
     }
   };
@@ -96,7 +94,7 @@ const repository = async () => {
   };
 
   //6. create multiple records
-  const createAll = async (data: SaleHeaders[]) => {
+  const createAll = async (data: PurchaseHeaders[]) => {
     try {
       const respo = repo.create(data);
       await repo.save(respo);
@@ -106,7 +104,7 @@ const repository = async () => {
     }
   };
   //6. create multiple records
-  const createBulk = async (data: SaleHeaders[]) => {
+  const createBulk = async (data: PurchaseHeaders[]) => {
     try {
       const respo = repo.create(data);
       await repo.save(respo);

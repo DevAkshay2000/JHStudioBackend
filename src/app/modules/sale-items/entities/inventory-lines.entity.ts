@@ -10,40 +10,31 @@ import {
 import { SaleHeaders } from "./sale-header.entity";
 import { Services } from "../../services/entities/services.entity";
 import { Taxes } from "../../taxes/entities/taxes.entity";
+import { PurchaseHeaders } from "../../purchase-items/entities/purchase-headers.entity";
 
-@Entity("sale_lines")
-export class SaleLines {
+@Entity("inventory_lines")
+export class InventoryLines {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
-  @ManyToOne(() => SaleHeaders, {
-    onDelete: "CASCADE", // Automatically remove this line when the sale header is deleted
+  @ManyToOne(() => PurchaseHeaders, {
+    onDelete: "CASCADE",
   })
   @JoinColumn()
-  txnHeader: SaleHeaders;
+  purchase: PurchaseHeaders;
 
   @ManyToOne(() => Services)
   @JoinColumn()
   service: Services;
 
-  @ManyToOne(() => Taxes)
+  @ManyToOne(() => SaleHeaders, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
+  sale: SaleHeaders;
 
-  tax: Taxes;
   @Column({ type: "int", nullable: false })
   quantity: number;
-
-  @Column({ type: "int", nullable: false })
-  rate: number;
-
-  @Column({ type: "int", nullable: false })
-  amount: number;
-
-  @Column({ type: "int", nullable: true })
-  discountAmount: number;
-
-  @Column({ type: "int", nullable: true })
-  taxAmount: number;
 
   @CreateDateColumn({ type: "varchar", nullable: false })
   createdDate: string;

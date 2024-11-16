@@ -7,6 +7,9 @@ import userRoutes from "../modules/auth/user.routes";
 import servicesRoutes from "../modules/services/services.routes";
 import saleHeaderRoutes from "../modules/sale-items/sale-header.routes";
 import serviceSessionRoutes from "../modules/service-session/service-session.routes";
+import taxesRoutes from "../modules/taxes/taxes.routes";
+import purchaseRoutes from "../modules/purchase-items/purchase.routes";
+import supplierRoutes from "../modules/suppliers/supplier.routes";
 
 export const routes: Routes = [
   itemRoute,
@@ -16,5 +19,8 @@ export const routes: Routes = [
   userRoutes,
   servicesRoutes,
   saleHeaderRoutes,
-  serviceSessionRoutes
+  serviceSessionRoutes,
+  taxesRoutes,
+  purchaseRoutes,
+  supplierRoutes
 ];

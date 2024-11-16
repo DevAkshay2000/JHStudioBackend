@@ -9,10 +9,10 @@ import {
   OneToOne,
   ManyToOne,
 } from "typeorm";
-import { City, Country, States } from "../../general-data/entities";
+import { Country } from "../../general-data/entities";
 
-@Entity("customers")
-export class Customer {
+@Entity("taxes")
+export class Taxes {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
@@ -22,26 +22,12 @@ export class Customer {
   @Column({ type: "varchar", length: 255, nullable: false })
   name: string;
 
-  @ManyToOne(() => States)
-  @JoinColumn()
-  state: States;
-
   @ManyToOne(() => Country)
   @JoinColumn()
   country: Country;
 
-  @ManyToOne(() => City)
-  @JoinColumn()
-  city: City;
-
-  @CreateDateColumn({ type: "varchar", nullable: true })
-  birthDate: string;
-
-  @CreateDateColumn({ type: "varchar", nullable: false })
-  mobile: string;
-
-  @CreateDateColumn({ type: "varchar", nullable: true })
-  email: string;
+  @Column({ type: "int", nullable: false })
+  percentage: number;
 
   @Column({ type: "int", default: 0 })
   isInactive: number;

@@ -3,14 +3,12 @@ import { FindManyOptions, FindOneOptions } from "typeorm";
 import { generateCode } from "../../utils/get-object-code.util";
 import { handler } from "../../config/dbconfig";
 import { City, Country, States } from "../general-data/entities";
-import { SaleHeaders } from "./entities/sale-header.entity";
-import repository from "./sale-header.repo";
-import { InventoryLines } from "./entities/inventory-lines.entity";
-import invoiceMailer from "../../services/send-invoice-mail.service";
-import customerService from "../customer/customer.service";
+import repository from "./purchase.repo";
+import { PurchaseHeaders } from "./entities/purchase-headers.entity";
+import { InventoryLines } from "../sale-items/entities/inventory-lines.entity";
 
 //1. find multiple records
-const find = async (filter?: FindManyOptions<SaleHeaders>) => {
+const find = async (filter?: FindManyOptions<PurchaseHeaders>) => {
   try {
     const repo = await repository();
     return repo.find(filter);
@@ -21,7 +19,7 @@ const find = async (filter?: FindManyOptions<SaleHeaders>) => {
 //2. find single records
 const findById = async (
   id: number,
-  filter?: FindOneOptions<SaleHeaders> | FindManyOptions<SaleHeaders>
+  filter?: FindOneOptions<PurchaseHeaders> | FindManyOptions<PurchaseHeaders>
 ) => {
   try {
     const repo = await repository();
@@ -33,56 +31,24 @@ const findById = async (
 };
 
 //3. create single record
-const create = async (data: SaleHeaders, isService: boolean = false) => {
+const create = async (data: PurchaseHeaders, isService: boolean = false) => {
   try {
     const repo = await repository();
-    data = await generateCode(19, data);
+    data = await generateCode(20, data);
     const inventory: InventoryLines[] = [];
-    const invoiceItems: {
-      name: string;
-      quantity: number;
-      unitPrice: number;
-      total: number;
-      tax: number;
-      taxName: string
-    }[] = [];
     if (!isService) {
-      data.saleLines.forEach((value) => {
+      data.purchaseLines.forEach((value) => {
         const il = new InventoryLines();
         (il.service = value.service),
-          (il.quantity = value.quantity),
+          (il.quantity = -Number(value.quantity)),
           (il.createdDate = value.createdDate),
           (il.modifiedDate = value.modifiedDate);
         inventory.push(il);
-
-        invoiceItems.push({
-          name: value.service.name,
-          quantity: value.quantity,
-          unitPrice: value.rate,
-          total: Number(value.amount + value.taxAmount),
-          tax: value.taxAmount,
-          taxName: value.tax.name,
-        });
       });
       data.inventoryLines = inventory;
     }
-
-    const respo = await repo.create({
+    const respo = repo.create({
       ...data,
-    });
-    //get customer data custo
-    const customer = await customerService.findById(data.customer.id);
-
-    await invoiceMailer({
-      customer: customer.name,
-      txnDate: new Date(data.txnDate).toLocaleDateString(),
-      txnId: data.code,
-      mobile: customer.mobile,
-      subTotal: data.totalAmount,
-      tax: data.totalTax,
-      discount: data.totalDiscount,
-      email: customer.email,
-      itemData: invoiceItems,
     });
     return respo;
   } catch (error) {
@@ -93,25 +59,25 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
 //4. update single record by id
 const updateById = async (
   id: number,
-  data: SaleHeaders,
+  data: PurchaseHeaders,
   isService: boolean = false
 ) => {
   try {
     const repo = await repository();
-    data = await generateCode(19, data);
+    data = await generateCode(20, data);
     const inventory: InventoryLines[] = [];
     if (!isService) {
-      data.saleLines.forEach((value) => {
+      data.purchaseLines.forEach((value) => {
         const il = new InventoryLines();
         (il.service = value.service),
-          (il.quantity = value.quantity),
+          (il.quantity = -Number(value.quantity)),
           (il.createdDate = value.createdDate),
           (il.modifiedDate = value.modifiedDate);
         inventory.push(il);
       });
       data.inventoryLines = inventory;
     }
-    const respo = await repo.updateById(id, {
+    const respo = repo.updateById(id, {
       ...data,
     });
     return respo;

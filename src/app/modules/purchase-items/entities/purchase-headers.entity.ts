@@ -17,11 +17,13 @@ import {
   DPaymentType,
   States,
 } from "../../general-data/entities";
-import { SaleLines } from "./sale-lines.enity";
-import { InventoryLines } from "./inventory-lines.entity";
 
-@Entity("sale_headers")
-export class SaleHeaders {
+import { PurchaseLines } from "./purchase-lines.entity";
+import { InventoryLines } from "../../sale-items/entities/inventory-lines.entity";
+import { Supplier } from "../../suppliers/entities/supplier.entity";
+
+@Entity("purchase_headers")
+export class PurchaseHeaders {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
@@ -31,9 +33,9 @@ export class SaleHeaders {
   @CreateDateColumn({ type: "varchar", nullable: false })
   txnDate: string;
 
-  @ManyToOne(() => Customer)
+  @ManyToOne(() => Supplier)
   @JoinColumn()
-  customer: Country;
+  supplier: Supplier;
 
   @ManyToOne(() => Users)
   @JoinColumn()
@@ -58,15 +60,15 @@ export class SaleHeaders {
   @UpdateDateColumn({ type: "varchar", nullable: false })
   modifiedDate: string;
 
-  @OneToMany(() => SaleLines, (line) => line.txnHeader, {
-    cascade: true, 
-    onDelete: "CASCADE", 
+  @OneToMany(() => PurchaseLines, (line) => line.txnHeader, {
+    cascade: true,
+    onDelete: "CASCADE",
   })
-  saleLines: SaleLines[];
+  purchaseLines: PurchaseLines[];
 
-  @OneToMany(() => InventoryLines, (line) => line.sale, {
-    cascade: true, 
-    onDelete: "CASCADE", 
+  @OneToMany(() => InventoryLines, (line) => line.purchase, {
+    cascade: true,
+    onDelete: "CASCADE",
   })
   inventoryLines: InventoryLines[];
 }

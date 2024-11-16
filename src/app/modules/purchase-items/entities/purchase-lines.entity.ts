@@ -7,31 +7,40 @@ import {
   JoinColumn,
   ManyToOne,
 } from "typeorm";
+import { Services } from "../../services/entities/services.entity";
 import { Taxes } from "../../taxes/entities/taxes.entity";
+import { PurchaseHeaders } from "./purchase-headers.entity";
 
-@Entity("services")
-export class Services {
+@Entity("purchase_lines")
+export class PurchaseLines {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
-  @Column({ type: "varchar", length: 255, nullable: true, unique: true })
-  code: string;
+  @ManyToOne(() => PurchaseHeaders, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
+  txnHeader: PurchaseHeaders;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
-  name: string;
+  @ManyToOne(() => Services)
+  @JoinColumn()
+  service: Services;
 
   @ManyToOne(() => Taxes)
   @JoinColumn()
   tax: Taxes;
 
   @Column({ type: "int", nullable: false })
-  taxAmount: number;
+  quantity: number;
 
   @Column({ type: "int", nullable: false })
   amount: number;
 
-  @Column({ type: "int", default: 0 })
-  isInactive: number;
+  @Column({ type: "int", nullable: true })
+  discountAmount: number;
+
+  @Column({ type: "int", nullable: true })
+  taxAmount: number;
 
   @CreateDateColumn({ type: "varchar", nullable: false })
   createdDate: string;

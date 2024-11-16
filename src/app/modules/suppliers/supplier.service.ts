@@ -1,13 +1,13 @@
 import { FindManyOptions, FindOneOptions } from "typeorm";
 
-import repository from "./customer.repo";
-import { Customer } from "./entities/customer.entity";
 import { generateCode } from "../../utils/get-object-code.util";
 import { handler } from "../../config/dbconfig";
 import { City, Country, States } from "../general-data/entities";
+import { Supplier } from "./entities/supplier.entity";
+import repository from "./supplier.repo";
 
 //1. find multiple records
-const find = async (filter?: FindManyOptions<Customer>) => {
+const find = async (filter?: FindManyOptions<Supplier>) => {
   try {
     const repo = await repository();
     return repo.find(filter);
@@ -18,7 +18,7 @@ const find = async (filter?: FindManyOptions<Customer>) => {
 //2. find single records
 const findById = async (
   id: number,
-  filter?: FindOneOptions<Customer> | FindManyOptions<Customer>
+  filter?: FindOneOptions<Supplier> | FindManyOptions<Supplier>
 ) => {
   try {
     const repo = await repository();
@@ -30,7 +30,7 @@ const findById = async (
 };
 
 //3. create single record
-const create = async (data: Customer) => {
+const create = async (data: Supplier) => {
   try {
     const dataSource = await handler();
     const countryRepo = dataSource.getRepository(Country);
@@ -72,7 +72,7 @@ const create = async (data: Customer) => {
       };
     }
     const repo = await repository();
-    data = await generateCode(14, data);
+    data = await generateCode(21, data);
     const respo = repo.create({
       ...data,
       city: city,
@@ -86,7 +86,7 @@ const create = async (data: Customer) => {
 };
 
 //4. update single record by id
-const updateById = async (id: number, data: Customer) => {
+const updateById = async (id: number, data: Supplier) => {
   try {
     const dataSource = await handler();
     const countryRepo = dataSource.getRepository(Country);
@@ -128,8 +128,8 @@ const updateById = async (id: number, data: Customer) => {
       };
     }
     const repo = await repository();
-    data = await generateCode(14, data);
-    const respo = repo.updateById(id, {
+    data = await generateCode(21, data);
+    const respo = await repo.updateById(id, {
       ...data,
       city: city,
       state: state,

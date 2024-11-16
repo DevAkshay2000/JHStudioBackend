@@ -4,20 +4,16 @@ import { validateFilter } from "../../utils/validate-filter.util";
 import getQuery from "../../utils/get-query.util";
 
 import { validateRequestBody } from "../../utils/get-model-schema.util";
-import saleHeaderService from "./sale-header.service";
-import { SaleHeaders } from "./entities/sale-header.entity";
-import { validateBodyManual } from "../../utils/validate-req-body.util";
-import { SaleHeadersSchema } from "../../schema/sale-header.schema";
+import taxesService from "./taxes.service";
+import { Taxes } from "./entities/taxes.entity";
 const router = Router();
 
 router.get(
   "/",
-  validateFilter(SaleHeaders),
+  validateFilter(Taxes),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await saleHeaderService.find(
-        await getQuery(req, SaleHeaders)
-      );
+      const result = await taxesService.find(await getQuery(req, Taxes));
       res.send(result);
     } catch (error) {
       next(error);
@@ -27,10 +23,10 @@ router.get(
 
 router.post(
   "/",
-  validateBodyManual(SaleHeadersSchema),
+  validateRequestBody(Taxes),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await saleHeaderService.create(req.body);
+      const result = await taxesService.create(req.body);
       res.send(result);
     } catch (error) {
       next(error);
@@ -40,13 +36,13 @@ router.post(
 
 router.get(
   "/:id",
-  validateFilter(SaleHeaders),
+  validateFilter(Taxes),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      const result = await saleHeaderService.findById(
+      const result = await taxesService.findById(
         id,
-        await getQuery(req, SaleHeaders)
+        await getQuery(req, Taxes)
       );
       res.send(result);
     } catch (error) {
@@ -57,11 +53,11 @@ router.get(
 
 router.put(
   "/:id",
-  validateBodyManual(SaleHeadersSchema),
+  validateRequestBody(Taxes),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await saleHeaderService.updateById(id, req.body);
+      await taxesService.updateById(id, req.body);
       res.send();
     } catch (error) {
       next(error);
@@ -74,11 +70,11 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await saleHeaderService.deleteById(id);
+      await taxesService.deleteById(id);
       res.send();
     } catch (error) {
       next(error);
     }
   }
 );
-export default new Route("/sale-headers", router);
+export default new Route("/taxes", router);

@@ -4,20 +4,18 @@ import { validateFilter } from "../../utils/validate-filter.util";
 import getQuery from "../../utils/get-query.util";
 
 import { validateRequestBody } from "../../utils/get-model-schema.util";
-import saleHeaderService from "./sale-header.service";
-import { SaleHeaders } from "./entities/sale-header.entity";
+import purchaseService from "./purchase.service";
+import { PurchaseHeaders } from "./entities/purchase-headers.entity";
 import { validateBodyManual } from "../../utils/validate-req-body.util";
-import { SaleHeadersSchema } from "../../schema/sale-header.schema";
+import { PurchaseHeadersSchema } from "../../schema";
 const router = Router();
 
 router.get(
   "/",
-  validateFilter(SaleHeaders),
+  validateFilter(PurchaseHeaders),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await saleHeaderService.find(
-        await getQuery(req, SaleHeaders)
-      );
+      const result = await purchaseService.find(await getQuery(req, PurchaseHeaders));
       res.send(result);
     } catch (error) {
       next(error);
@@ -27,10 +25,10 @@ router.get(
 
 router.post(
   "/",
-  validateBodyManual(SaleHeadersSchema),
+  validateBodyManual(PurchaseHeadersSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await saleHeaderService.create(req.body);
+      const result = await purchaseService.create(req.body);
       res.send(result);
     } catch (error) {
       next(error);
@@ -40,13 +38,13 @@ router.post(
 
 router.get(
   "/:id",
-  validateFilter(SaleHeaders),
+  validateFilter(PurchaseHeaders),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      const result = await saleHeaderService.findById(
+      const result = await purchaseService.findById(
         id,
-        await getQuery(req, SaleHeaders)
+        await getQuery(req, PurchaseHeaders)
       );
       res.send(result);
     } catch (error) {
@@ -57,11 +55,11 @@ router.get(
 
 router.put(
   "/:id",
-  validateBodyManual(SaleHeadersSchema),
+  validateBodyManual(PurchaseHeadersSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await saleHeaderService.updateById(id, req.body);
+      await purchaseService.updateById(id, req.body);
       res.send();
     } catch (error) {
       next(error);
@@ -74,11 +72,11 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await saleHeaderService.deleteById(id);
+      await purchaseService.deleteById(id);
       res.send();
     } catch (error) {
       next(error);
     }
   }
 );
-export default new Route("/sale-headers", router);
+export default new Route("/purchase-headers", router);

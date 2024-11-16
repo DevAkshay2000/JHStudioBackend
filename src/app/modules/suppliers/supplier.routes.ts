@@ -2,17 +2,18 @@ import { NextFunction, Request, Response, Router } from "express";
 import { Route } from "../../routes/routes.types";
 import { validateFilter } from "../../utils/validate-filter.util";
 import getQuery from "../../utils/get-query.util";
-import { Customer } from "./entities/customer.entity";
-import customerService from "./customer.service";
+
 import { validateRequestBody } from "../../utils/get-model-schema.util";
+import { Supplier } from "./entities/supplier.entity";
+import supplierService from "./supplier.service";
 const router = Router();
 
 router.get(
   "/",
-  validateFilter(Customer),
+  validateFilter(Supplier),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await customerService.find(await getQuery(req, Customer));
+      const result = await supplierService.find(await getQuery(req, Supplier));
       res.send(result);
     } catch (error) {
       next(error);
@@ -22,10 +23,10 @@ router.get(
 
 router.post(
   "/",
-  validateRequestBody(Customer),
+  validateRequestBody(Supplier),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await customerService.create(req.body);
+      const result = await supplierService.create(req.body);
       res.send(result);
     } catch (error) {
       next(error);
@@ -35,13 +36,13 @@ router.post(
 
 router.get(
   "/:id",
-  validateFilter(Customer),
+  validateFilter(Supplier),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      const result = await customerService.findById(
+      const result = await supplierService.findById(
         id,
-        await getQuery(req, Customer)
+        await getQuery(req, Supplier)
       );
       res.send(result);
     } catch (error) {
@@ -52,11 +53,11 @@ router.get(
 
 router.put(
   "/:id",
-  validateRequestBody(Customer),
+  validateRequestBody(Supplier),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await customerService.updateById(id, req.body);
+      await supplierService.updateById(id, req.body);
       res.send();
     } catch (error) {
       next(error);
@@ -69,11 +70,11 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await customerService.deleteById(id);
+      await supplierService.deleteById(id);
       res.send();
     } catch (error) {
       next(error);
     }
   }
 );
-export default new Route("/customers", router);
+export default new Route("/Suppliers", router);

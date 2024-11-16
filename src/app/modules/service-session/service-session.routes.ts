@@ -1,32 +1,30 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { Route } from "../../routes/routes.types";
 
-
-import { validateRequestBody } from "../../utils/get-model-schema.util";
-import { SaleHeaders } from "../sale-items/entities/sale-header.entity";
-import saleHeaderService from "../sale-items/sale-header.service";
+import { validateBodyManual } from "../../utils/validate-req-body.util";
+import { SaleHeadersSchema } from "../../schema/sale-header.schema";
+import serviceSessionService from "./service-session.service";
 const router = Router();
 
 router.post(
   "/",
-  validateRequestBody(SaleHeaders),
+  validateBodyManual(SaleHeadersSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await saleHeaderService.create(req.body);
+      const result = await serviceSessionService.create(req.body);
       res.send(result);
     } catch (error) {
       next(error);
     }
   }
 );
-
 router.put(
   "/:id",
-  validateRequestBody(SaleHeaders),
+  validateBodyManual(SaleHeadersSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      await saleHeaderService.updateById(id, req.body);
+      await serviceSessionService.updateById(id, req.body);
       res.send();
     } catch (error) {
       next(error);

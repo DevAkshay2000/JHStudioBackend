@@ -1,15 +1,12 @@
-import { FindManyOptions, FindOneOptions } from "typeorm";
-
-import { generateCode } from "../../utils/get-object-code.util";
-import { handler } from "../../config/dbconfig";
-import { City, Country, States } from "../general-data/entities";
 import { SaleHeaders } from "../sale-items/entities/sale-header.entity";
 
+import saleHeaderService from "../sale-items/sale-header.service";
 //3. create single record
 const create = async (data: SaleHeaders) => {
   try {
-    //use sale service here 
-    return {};
+    const respo = await saleHeaderService.create(data, true);
+    //use sale service here
+    return respo;
   } catch (error) {
     throw error;
   }
@@ -18,8 +15,8 @@ const create = async (data: SaleHeaders) => {
 //4. update single record by id
 const updateById = async (id: number, data: SaleHeaders) => {
   try {
-    //user sale service here
-    return {};
+    const respo = await saleHeaderService.updateById(id, data);
+    return respo;
   } catch (error) {
     throw error;
   }

@@ -4,13 +4,15 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
   JoinColumn,
+  OneToOne,
   ManyToOne,
 } from "typeorm";
-import { Taxes } from "../../taxes/entities/taxes.entity";
+import { City, Country, States } from "../../general-data/entities";
 
-@Entity("services")
-export class Services {
+@Entity("suppliers")
+export class Supplier {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
@@ -20,15 +22,26 @@ export class Services {
   @Column({ type: "varchar", length: 255, nullable: false })
   name: string;
 
-  @ManyToOne(() => Taxes)
+  @ManyToOne(() => States)
   @JoinColumn()
-  tax: Taxes;
+  state: States;
 
-  @Column({ type: "int", nullable: false })
-  taxAmount: number;
+  @ManyToOne(() => Country)
+  @JoinColumn()
+  country: Country;
 
-  @Column({ type: "int", nullable: false })
-  amount: number;
+  @ManyToOne(() => City)
+  @JoinColumn()
+  city: City;
+
+  @CreateDateColumn({ type: "varchar", nullable: true })
+  birthDate: string;
+
+  @CreateDateColumn({ type: "varchar", nullable: false })
+  mobile: string;
+
+  @CreateDateColumn({ type: "varchar", nullable: true })
+  email: string;
 
   @Column({ type: "int", default: 0 })
   isInactive: number;
