@@ -6,7 +6,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-console.log(err)
+
   // Default to 500 Internal Server Error if no status code is provided
   const statusCode = err.statusCode || err.status || 500;
   const message = err.message || "Something went wrong!";

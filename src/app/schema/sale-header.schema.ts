@@ -102,7 +102,7 @@ export const SaleHeadersSchema: any = {
             type: "integer",
           },
           amount: {
-            type: "integer",
+            type: "integer", 
           },
           quantity: {
             type: "integer",

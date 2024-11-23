@@ -262,7 +262,7 @@ export const validateFilter = <T extends EntityTarget<T>>(model: T) => {
         }
         //b. validate relation names
         const appDataSource = await handler();
-        const entityMetadata = appDataSource.getMetadata(model);
+         const entityMetadata = appDataSource.getMetadata(model);
         const relationList = await getRelationNames(
           model,
           entityMetadata.targetName
@@ -273,7 +273,6 @@ export const validateFilter = <T extends EntityTarget<T>>(model: T) => {
 
       next();
     } catch (error) {
-      // console.log(error);
       res.status(422).json(error);
     }
   };

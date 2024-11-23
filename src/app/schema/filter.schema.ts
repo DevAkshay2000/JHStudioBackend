@@ -111,6 +111,12 @@ export const FilterSchema: JSONSchemaType<{
       items: RelationsFilter,
       nullable: true,
     },
+    limit: {
+      type: "number",
+    },
+    skip: {
+      type: "number",
+    },
   },
   required: [],
   additionalProperties: false,

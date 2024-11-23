@@ -33,7 +33,7 @@ export class SaleHeaders {
 
   @ManyToOne(() => Customer)
   @JoinColumn()
-  customer: Country;
+  customer: Customer;
 
   @ManyToOne(() => Users)
   @JoinColumn()

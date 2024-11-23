@@ -16,7 +16,6 @@ import { FeatureSettings } from "../modules/fetaure-settings/entities/feature-se
 import { FeatureCodes } from "../modules/fetaure-settings/entities/feature-codes.entity";
 import { UserSessions } from "../modules/auth/entities/user-sessions.entity";
 import { Users } from "../modules/auth/entities/user.entity";
-import { Services } from "../modules/services/entities/services.entity";
 import { SaleHeaders } from "../modules/sale-items/entities/sale-header.entity";
 import { SaleLines } from "../modules/sale-items/entities/sale-lines.enity";
 import { Taxes } from "../modules/taxes/entities/taxes.entity";
@@ -24,6 +23,8 @@ import { PurchaseHeaders } from "../modules/purchase-items/entities/purchase-hea
 import { PurchaseLines } from "../modules/purchase-items/entities/purchase-lines.entity";
 import { InventoryLines } from "../modules/sale-items/entities/inventory-lines.entity";
 import { Supplier } from "../modules/suppliers/entities/supplier.entity";
+import { ItemStocks } from "../modules/sale-items/entities/item-stocks.entity";
+import { Services } from "../modules/services/entities/services.entity";
 
 export const entities:
   | MixedList<string | Function | EntitySchema<any>>
@@ -50,5 +51,6 @@ export const entities:
   PurchaseHeaders,
   PurchaseLines,
   InventoryLines,
-  Supplier
+  Supplier,
+  ItemStocks
 ];

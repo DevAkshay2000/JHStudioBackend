@@ -7,6 +7,7 @@ import { registerRoutes } from "./routes/routes";
 import { DataSource } from "typeorm";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { API_BASE } from "./utils/constant";
+import { handler } from "./config/dbconfig";
 // import { initializeDataSource } from "./config/dbconfig";
 /**
  * Start logic

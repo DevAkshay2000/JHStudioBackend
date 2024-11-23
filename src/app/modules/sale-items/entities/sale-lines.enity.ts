@@ -28,8 +28,8 @@ export class SaleLines {
 
   @ManyToOne(() => Taxes)
   @JoinColumn()
-
   tax: Taxes;
+  
   @Column({ type: "int", nullable: false })
   quantity: number;
 

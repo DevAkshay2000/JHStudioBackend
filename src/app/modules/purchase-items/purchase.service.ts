@@ -6,6 +6,8 @@ import { City, Country, States } from "../general-data/entities";
 import repository from "./purchase.repo";
 import { PurchaseHeaders } from "./entities/purchase-headers.entity";
 import { InventoryLines } from "../sale-items/entities/inventory-lines.entity";
+import { ItemStocks } from "../sale-items/entities/item-stocks.entity";
+import itemStocksService from "../sale-items/item-stocks.service";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<PurchaseHeaders>) => {
@@ -34,7 +36,10 @@ const findById = async (
 const create = async (data: PurchaseHeaders, isService: boolean = false) => {
   try {
     const repo = await repository();
+    const dataSource = await handler();
+    const itemStocksRepo = dataSource.getRepository(ItemStocks);
     data = await generateCode(20, data);
+    const itemIds: number[] = [];
     const inventory: InventoryLines[] = [];
     if (!isService) {
       data.purchaseLines.forEach((value) => {
@@ -43,9 +48,14 @@ const create = async (data: PurchaseHeaders, isService: boolean = false) => {
           (il.quantity = -Number(value.quantity)),
           (il.createdDate = value.createdDate),
           (il.modifiedDate = value.modifiedDate);
+        itemIds.push(value.service.id);
         inventory.push(il);
       });
       data.inventoryLines = inventory;
+      // create stock elements
+      const resultItemStock = await itemStocksService.create(inventory, itemIds);
+      const itemStockResponse = itemStocksRepo.create(resultItemStock);
+      await itemStocksRepo.save(itemStockResponse);
     }
     const respo = repo.create({
       ...data,

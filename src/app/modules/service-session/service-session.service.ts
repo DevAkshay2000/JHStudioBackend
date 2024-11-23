@@ -1,6 +1,18 @@
+import { FindManyOptions } from "typeorm";
 import { SaleHeaders } from "../sale-items/entities/sale-header.entity";
 
 import saleHeaderService from "../sale-items/sale-header.service";
+import { response } from "express";
+//1. find multiple records
+const find = async (filter?: FindManyOptions<SaleHeaders>) => {
+  try {
+    const respo = await saleHeaderService.find(filter);
+    console.log("inside thus 3")
+    return respo;
+  } catch (error) {
+    throw error;
+  }
+};
 //3. create single record
 const create = async (data: SaleHeaders) => {
   try {
@@ -22,4 +34,4 @@ const updateById = async (id: number, data: SaleHeaders) => {
   }
 };
 
-export default { create, updateById };
+export default { create, updateById ,find};
