@@ -7,7 +7,6 @@ import { response } from "express";
 const find = async (filter?: FindManyOptions<SaleHeaders>) => {
   try {
     const respo = await saleHeaderService.find(filter);
-    console.log("inside thus 3")
     return respo;
   } catch (error) {
     throw error;

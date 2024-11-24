@@ -14,7 +14,6 @@ import itemStocksService from "./item-stocks.service";
 //1. find multiple records
 const find = async (filter?: FindManyOptions<SaleHeaders>) => {
   try {
-    console.log("inside thus 3")
     const repo = await repository();
     return repo.find(filter);
   } catch (error) {
@@ -96,7 +95,6 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
     });
     return respo;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

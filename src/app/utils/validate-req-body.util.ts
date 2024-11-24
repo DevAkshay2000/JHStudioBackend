@@ -14,7 +14,6 @@ export const validateBodyManual = <T>(scheama: JSONSchemaType<T>) => {
       }
       next();
     } catch (error) {
-      console.log(error);
       res.status(422).json(error);
     }
   };

@@ -51,12 +51,6 @@ export const getModelSchema = async <T extends EntityTarget<T>>(
     });
     //3. loop through relations and crate a scheama for each relation entity
     for (const relation of relations) {
-      console.log(
-        level,
-        relation.propertyName,
-        relation.relationType,
-        relation.className
-      );
       // if (relation.relationType === "one-to-many") {
       //   //a. get the scheama oject for that entity
       //   const relativeModelSchema = await getModelSchema(relation.className);
@@ -74,7 +68,6 @@ export const getModelSchema = async <T extends EntityTarget<T>>(
         entityMetadata.targetName != baseModel
       ) {
         //a. get the scheama oject for that entity
-        console.log(relation.propertyName);
 
         const relativeModelSchema = await getModelSchema(
           relation.className,
@@ -181,7 +174,9 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
           schemaObject.required.push(relation.propertyName);
         }
       }
-      console.log(JSON.stringify(schemaObject));
+
+      
+      
       const validate = ajv.compile(schemaObject);
       const valid = validate(req.body);
       if (!valid) {

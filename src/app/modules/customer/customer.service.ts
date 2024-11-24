@@ -9,7 +9,6 @@ import { City, Country, States } from "../general-data/entities";
 //1. find multiple records
 const find = async (filter?: FindManyOptions<Customer>) => {
   try {
-    console.log(filter)
     const repo = await repository();
     return repo.find(filter);
   } catch (error) {
