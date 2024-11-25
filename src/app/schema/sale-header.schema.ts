@@ -10,13 +10,19 @@ export const SaleHeadersSchema: any = {
     txnDate: {
       type: "string",
     },
-    totalAmount: {
+    subTotal: {
+      type: "integer",
+    },
+    grandTotal: {
       type: "integer",
     },
     totalDiscount: {
       type: "integer",
     },
     totalTax: {
+      type: "integer",
+    },
+    isInactive: {
       type: "integer",
     },
     createdDate: {
@@ -93,6 +99,9 @@ export const SaleHeadersSchema: any = {
               },
               name: {
                 type: "string",
+              },
+              percentage: {
+                type: "integer",
               }
             },
             required: ["id", "name"],
@@ -132,7 +141,7 @@ export const SaleHeadersSchema: any = {
   },
   required: [
     "txnDate",
-    "totalAmount",
+    "grandTotal",
     "createdDate",
     "modifiedDate",
     "customer",

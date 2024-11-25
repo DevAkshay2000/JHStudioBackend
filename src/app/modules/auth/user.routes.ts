@@ -10,6 +10,7 @@ import Ajv from "ajv";
 import { LoginSchema } from "../../schema";
 import { validateBodyManual } from "../../utils/validate-req-body.util";
 import { NewRefreshToken } from "../../schema/new-refresh-token.schema";
+import { verifyToken } from "../../services";
 const router = Router();
 
 router.get(
@@ -119,6 +120,34 @@ router.post(
       res.send(result);
       next();
     } catch (error) {
+      next(error);
+    }
+  }
+);
+router.get(
+  "/me/data",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // const result = await userService.find(await getQuery(req, Users));
+      const authHeader = req.headers["authorization"];
+      const token = authHeader && authHeader.split(" ")[1];
+      if (!token) {
+        return res.status(401).json({ message: "Access Token Required" });
+      }
+      // res.send(result);
+      const userData: {
+        userId: number;
+        userName: string;
+        email: string;
+        userType: {
+          id: number;
+          name: string;
+        };
+      } = await verifyToken(token);
+      res.send(userData);
+      next();
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }

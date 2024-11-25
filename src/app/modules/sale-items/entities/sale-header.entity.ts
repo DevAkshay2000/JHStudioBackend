@@ -43,8 +43,11 @@ export class SaleHeaders {
   @JoinColumn()
   paymentType: DPaymentType;
 
-  @Column({ type: "int", nullable: false })
-  totalAmount: number;
+  @Column({ type: "int", nullable: true })
+  subTotal: number;
+
+  @Column({ type: "int", nullable: true })
+  grandTotal: number;
 
   @Column({ type: "int", nullable: true })
   totalDiscount: number;
@@ -58,15 +61,18 @@ export class SaleHeaders {
   @UpdateDateColumn({ type: "varchar", nullable: false })
   modifiedDate: string;
 
+  @Column({ type: "int", default: 0 })
+  isInactive: number;
+
   @OneToMany(() => SaleLines, (line) => line.txnHeader, {
-    cascade: true, 
-    onDelete: "CASCADE", 
+    cascade: true,
+    onDelete: "CASCADE",
   })
   saleLines: SaleLines[];
 
   @OneToMany(() => InventoryLines, (line) => line.sale, {
-    cascade: true, 
-    onDelete: "CASCADE", 
+    cascade: true,
+    onDelete: "CASCADE",
   })
   inventoryLines: InventoryLines[];
 }

@@ -29,7 +29,7 @@ export class SaleLines {
   @ManyToOne(() => Taxes)
   @JoinColumn()
   tax: Taxes;
-  
+
   @Column({ type: "int", nullable: false })
   quantity: number;
 
@@ -51,3 +51,17 @@ export class SaleLines {
   @UpdateDateColumn({ type: "varchar", nullable: false })
   modifiedDate: string;
 }
+
+// const data: SaleLines = {
+//   amount: 11,
+//   createdDate: "",
+//   discountAmount: 3,
+//   id: "new1732509039842ci28gux",
+//   modifiedDate: "",
+//   quantity: 1,
+//   rate: 12,
+//   service: { id: 5, name: "Trimming" },
+//   tax: { id: 1, percentage: 18 },
+//   taxAmount: 2,
+//   txnHeader: { id: 0 },
+// };

@@ -87,7 +87,7 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
       txnDate: new Date(data.txnDate).toLocaleDateString(),
       txnId: data.code,
       mobile: customer.mobile,
-      subTotal: data.totalAmount,
+      subTotal: data.grandTotal,
       tax: data.totalTax,
       discount: data.totalDiscount,
       email: customer.email,
