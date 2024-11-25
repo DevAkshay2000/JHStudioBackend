@@ -43,6 +43,11 @@ router.get(
           relations: {
             features: true,
           },
+          where: {
+            features: {
+              isInactive: 0,
+            },
+          },
         });
         const respo: {
           title: string;
