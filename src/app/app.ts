@@ -55,31 +55,30 @@ export const startServer = async () => {
 
     registerRoutes(app);
     app.use(errorHandler);
-    if (NODE_ENV === "production") {
-      const privateKey = fs.readFileSync(
-        path.join(__dirname, "..", "ssl", "private_key.pem"),
-        "utf8"
-      );
-      const certificate = fs.readFileSync(
-        path.join(__dirname, "..", "ssl", "cert.pem"),
-        "utf8"
-      );
+    // if (NODE_ENV === "production") {
+    //   const privateKey = fs.readFileSync(
+    //     path.join(__dirname, "..", "ssl", "private_key.pem"),
+    //     "utf8"
+    //   );
+    //   const certificate = fs.readFileSync(
+    //     path.join(__dirname, "..", "ssl", "cert.pem"),
+    //     "utf8"
+    //   );
 
-      const credentials = {
-        key: privateKey,
-        cert: certificate,
-      };
-      const httpsServer = https.createServer(credentials, app);
+    //   const credentials = {
+    //     key: privateKey,
+    //     cert: certificate,
+    //   };
+    //   const httpsServer = https.createServer(credentials, app);
 
-      httpsServer.listen(App_Port || 3000, () => {
-        console.log(`HTTPS SERVER STARTED ON PORT: ${App_Port || 3000}`);
-      });
-    } else {
-      const httpServer = http.createServer(app);
-      httpServer.listen(App_Port || 3000, () => {
-        console.log(`HTTP SERVER STARTED ON PORT: ${App_Port || 3000}`);
-      });
-    }
+    //   httpsServer.listen(App_Port || 3000, () => {
+    //     console.log(`HTTPS SERVER STARTED ON PORT: ${App_Port || 3000}`);
+    //   });
+    // } else {
+    const httpServer = http.createServer(app);
+    httpServer.listen(App_Port || 3000, () => {
+      console.log(`HTTP SERVER STARTED ON PORT: ${App_Port || 3000}`);
+    });
   } catch (error) {
     /**
      * Any error during startup process

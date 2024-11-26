@@ -41,10 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dataSource = exports.startServer = void 0;
 var express_1 = __importDefault(require("express"));
-var fs_1 = __importDefault(require("fs"));
 var http_1 = __importDefault(require("http"));
-var https_1 = __importDefault(require("https"));
-var path_1 = __importDefault(require("path"));
 var routes_1 = require("./routes/routes");
 var errorHandler_middleware_1 = require("./middlewares/errorHandler.middleware");
 var constant_1 = require("./utils/constant");
@@ -54,7 +51,7 @@ var constant_1 = require("./utils/constant");
  */
 var dataSource;
 var startServer = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var app, _a, App_Port_1, NODE_ENV, privateKey, certificate, credentials, httpsServer, httpServer;
+    var app, _a, App_Port_1, NODE_ENV, httpServer;
     return __generator(this, function (_b) {
         try {
             app = (0, express_1.default)();
@@ -71,24 +68,10 @@ var startServer = function () { return __awaiter(void 0, void 0, void 0, functio
             });
             (0, routes_1.registerRoutes)(app);
             app.use(errorHandler_middleware_1.errorHandler);
-            if (NODE_ENV === "production") {
-                privateKey = fs_1.default.readFileSync(path_1.default.join(__dirname, "..", "ssl", "private_key.pem"), "utf8");
-                certificate = fs_1.default.readFileSync(path_1.default.join(__dirname, "..", "ssl", "cert.pem"), "utf8");
-                credentials = {
-                    key: privateKey,
-                    cert: certificate,
-                };
-                httpsServer = https_1.default.createServer(credentials, app);
-                httpsServer.listen(App_Port_1 || 3000, function () {
-                    console.log("HTTPS SERVER STARTED ON PORT: ".concat(App_Port_1 || 3000));
-                });
-            }
-            else {
-                httpServer = http_1.default.createServer(app);
-                httpServer.listen(App_Port_1 || 3000, function () {
-                    console.log("HTTP SERVER STARTED ON PORT: ".concat(App_Port_1 || 3000));
-                });
-            }
+            httpServer = http_1.default.createServer(app);
+            httpServer.listen(App_Port_1 || 3000, function () {
+                console.log("HTTP SERVER STARTED ON PORT: ".concat(App_Port_1 || 3000));
+            });
         }
         catch (error) {
             /**
