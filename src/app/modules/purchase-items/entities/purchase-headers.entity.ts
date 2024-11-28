@@ -33,6 +33,9 @@ export class PurchaseHeaders {
   @CreateDateColumn({ type: "varchar", nullable: false })
   txnDate: string;
 
+  @CreateDateColumn({ type: "varchar", nullable: true })
+  saleInvoiceNumber: string;
+
   @ManyToOne(() => Supplier)
   @JoinColumn()
   supplier: Supplier;
