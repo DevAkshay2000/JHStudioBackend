@@ -59,12 +59,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var typeorm_1 = require("typeorm");
 var get_object_code_util_1 = require("../../utils/get-object-code.util");
 var dbconfig_1 = require("../../config/dbconfig");
 var purchase_repo_1 = __importDefault(require("./purchase.repo"));
+var purchase_headers_entity_1 = require("./entities/purchase-headers.entity");
 var inventory_lines_entity_1 = require("../sale-items/entities/inventory-lines.entity");
 var item_stocks_entity_1 = require("../sale-items/entities/item-stocks.entity");
 var item_stocks_service_1 = __importDefault(require("../sale-items/item-stocks.service"));
+var services_entity_1 = require("../services/entities/services.entity");
+var item_stock_track_entity_1 = require("./entities/item-stock-track.entity");
 //1. find multiple records
 var find = function (filter) { return __awaiter(void 0, void 0, void 0, function () {
     var repo, error_1;
@@ -123,12 +127,15 @@ var create = function (data_1) {
                     return [4 /*yield*/, (0, dbconfig_1.handler)()];
                 case 2:
                     dataSource = _a.sent();
-                    itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemStocks);
+                    itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
                     return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(20, data)];
                 case 3:
                     data = _a.sent();
                     itemIds_1 = [];
                     inventory_1 = [];
+                    // check if lenght applicable
+                    if (data.purchaseLines.length) {
+                    }
                     if (!!isService) return [3 /*break*/, 6];
                     data.purchaseLines.forEach(function (value) {
                         var il = new inventory_lines_entity_1.InventoryLines();
@@ -221,5 +228,117 @@ var deleteById = function (id) { return __awaiter(void 0, void 0, void 0, functi
         }
     });
 }); };
-exports.default = { find: find, findById: findById, create: create, deleteById: deleteById, updateById: updateById };
+//3. create single record
+var createBulk = function (data_1) {
+    var args_1 = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args_1[_i - 1] = arguments[_i];
+    }
+    return __awaiter(void 0, __spreadArray([data_1], args_1, true), void 0, function (data, isService) {
+        var dataSource, itemIds_2, inventory_3, itemRepo, skuMap_1, relatedItems, error_6;
+        if (isService === void 0) { isService = false; }
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 5, , 6]);
+                    return [4 /*yield*/, (0, dbconfig_1.handler)()];
+                case 1:
+                    dataSource = _a.sent();
+                    return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(20, data)];
+                case 2:
+                    data = _a.sent();
+                    itemIds_2 = [];
+                    inventory_3 = [];
+                    itemRepo = dataSource.getRepository(services_entity_1.Services);
+                    skuMap_1 = {};
+                    return [4 /*yield*/, itemRepo.find({
+                            where: {
+                                id: (0, typeorm_1.In)(itemIds_2),
+                            },
+                            select: {
+                                sku: true,
+                                id: true,
+                            },
+                        })];
+                case 3:
+                    relatedItems = _a.sent();
+                    //3. create sku mapping for future
+                    relatedItems.forEach(function (val) {
+                        skuMap_1[val.id] = val.sku + "-" + Date.now();
+                    });
+                    //3. start transaction
+                    return [4 /*yield*/, dataSource.manager.transaction("SERIALIZABLE", function (transactionalEntityManager) { return __awaiter(void 0, void 0, void 0, function () {
+                            var headerEntry, stockEntries, itemIdStockMap, stockTrackEntry, stockTrackResult, resultItemAvailable, itemAvailableEntry, headerEntryResult;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        headerEntry = transactionalEntityManager.create(purchase_headers_entity_1.PurchaseHeaders, data);
+                                        stockEntries = [];
+                                        //1. create Stock and save stock
+                                        data.purchaseLines.forEach(function (value) {
+                                            var stockInstance = new item_stock_track_entity_1.ItemsStockTrack();
+                                            stockInstance.createdDate = value.createdDate;
+                                            stockInstance.modifiedDate = value.modifiedDate;
+                                            stockInstance.quantityAdded = value.quantity;
+                                            stockInstance.service = value.service;
+                                            stockInstance.quantityUvailable = value.quantity;
+                                            stockInstance.stockNumber = skuMap_1[value.service.id];
+                                            stockEntries.push(stockInstance);
+                                        });
+                                        itemIdStockMap = {};
+                                        stockTrackEntry = transactionalEntityManager.create(item_stock_track_entity_1.ItemsStockTrack, stockEntries);
+                                        return [4 /*yield*/, transactionalEntityManager.save(item_stock_track_entity_1.ItemsStockTrack, stockTrackEntry)];
+                                    case 1:
+                                        stockTrackResult = _a.sent();
+                                        // add entries into mapping object
+                                        stockTrackResult.forEach(function (val) {
+                                            itemIdStockMap[val.service.id] = val;
+                                        });
+                                        //************** stock logic end ***********************************************************************/
+                                        //**************** B) inventory lodic start **********************************************************
+                                        //2. create inventory
+                                        data.purchaseLines.forEach(function (value) {
+                                            var il = new inventory_lines_entity_1.InventoryLines();
+                                            il.service = value.service;
+                                            il.quantity = Number(value.quantity);
+                                            il.createdDate = value.createdDate;
+                                            il.modifiedDate = value.modifiedDate;
+                                            il.stock = itemIdStockMap[value.service.id];
+                                            itemIds_2.push(value.service.id);
+                                            inventory_3.push(il);
+                                        });
+                                        //attch the object to inventory
+                                        headerEntry.inventoryLines = inventory_3;
+                                        return [4 /*yield*/, item_stocks_service_1.default.create(inventory_3, itemIds_2)];
+                                    case 2:
+                                        resultItemAvailable = _a.sent();
+                                        itemAvailableEntry = transactionalEntityManager.create(item_stocks_entity_1.ItemAvailable, resultItemAvailable);
+                                        //2. update items availability
+                                        return [4 /*yield*/, transactionalEntityManager.save(item_stocks_entity_1.ItemAvailable, itemAvailableEntry)];
+                                    case 3:
+                                        //2. update items availability
+                                        _a.sent();
+                                        return [4 /*yield*/, transactionalEntityManager.save(purchase_headers_entity_1.PurchaseHeaders, headerEntry)];
+                                    case 4:
+                                        headerEntryResult = _a.sent();
+                                        //********** header entry save end *********************************************************************/
+                                        data = headerEntryResult;
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); })];
+                case 4:
+                    //3. start transaction
+                    _a.sent();
+                    return [2 /*return*/, data];
+                case 5:
+                    error_6 = _a.sent();
+                    console.log(error_6);
+                    throw error_6;
+                case 6: return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.default = { find: find, findById: findById, create: create, deleteById: deleteById, updateById: updateById, createBulk: createBulk };
 //# sourceMappingURL=purchase.service.js.map

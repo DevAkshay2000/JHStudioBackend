@@ -14,6 +14,7 @@ var typeorm_1 = require("typeorm");
 var sale_header_entity_1 = require("./sale-header.entity");
 var services_entity_1 = require("../../services/entities/services.entity");
 var purchase_headers_entity_1 = require("../../purchase-items/entities/purchase-headers.entity");
+var item_stock_track_entity_1 = require("../../purchase-items/entities/item-stock-track.entity");
 var InventoryLines = /** @class */ (function () {
     function InventoryLines() {
     }
@@ -28,6 +29,11 @@ var InventoryLines = /** @class */ (function () {
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", purchase_headers_entity_1.PurchaseHeaders)
     ], InventoryLines.prototype, "purchase", void 0);
+    __decorate([
+        (0, typeorm_1.ManyToOne)(function () { return item_stock_track_entity_1.ItemsStockTrack; }),
+        (0, typeorm_1.JoinColumn)(),
+        __metadata("design:type", item_stock_track_entity_1.ItemsStockTrack)
+    ], InventoryLines.prototype, "stock", void 0);
     __decorate([
         (0, typeorm_1.ManyToOne)(function () { return services_entity_1.Services; }),
         (0, typeorm_1.JoinColumn)(),

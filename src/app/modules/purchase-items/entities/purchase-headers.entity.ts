@@ -48,8 +48,11 @@ export class PurchaseHeaders {
   @JoinColumn()
   paymentType: DPaymentType;
 
-  @Column({ type: "int", nullable: false })
-  totalAmount: number;
+  @Column({ type: "int", nullable: true })
+  subTotal: number;
+
+  @Column({ type: "int", nullable: true })
+  grandTotal: number;
 
   @Column({ type: "int", nullable: true })
   totalDiscount: number;

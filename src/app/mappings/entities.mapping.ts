@@ -4,6 +4,7 @@ import {
   City,
   Country,
   DFeatureType,
+  DItemType,
   DPaymentType,
   DUserType,
   Menus,
@@ -23,8 +24,9 @@ import { PurchaseHeaders } from "../modules/purchase-items/entities/purchase-hea
 import { PurchaseLines } from "../modules/purchase-items/entities/purchase-lines.entity";
 import { InventoryLines } from "../modules/sale-items/entities/inventory-lines.entity";
 import { Supplier } from "../modules/suppliers/entities/supplier.entity";
-import { ItemStocks } from "../modules/sale-items/entities/item-stocks.entity";
+import { ItemAvailable } from "../modules/sale-items/entities/item-stocks.entity";
 import { Services } from "../modules/services/entities/services.entity";
+import { ItemsStockTrack } from "../modules/purchase-items/entities/item-stock-track.entity";
 
 export const entities:
   | MixedList<string | Function | EntitySchema<any>>
@@ -52,5 +54,7 @@ export const entities:
   PurchaseLines,
   InventoryLines,
   Supplier,
-  ItemStocks
+  ItemAvailable,
+  DItemType,
+  ItemsStockTrack
 ];

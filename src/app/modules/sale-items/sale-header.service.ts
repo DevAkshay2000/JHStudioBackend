@@ -8,7 +8,7 @@ import repository from "./sale-header.repo";
 import { InventoryLines } from "./entities/inventory-lines.entity";
 import invoiceMailer from "../../services/send-invoice-mail.service";
 import customerService from "../customer/customer.service";
-import { ItemStocks } from "./entities/item-stocks.entity";
+import { ItemAvailable } from "./entities/item-stocks.entity";
 import itemStocksService from "./item-stocks.service";
 
 //1. find multiple records
@@ -39,7 +39,7 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
   try {
     const repo = await repository();
     const dataSource = await handler();
-    const itemStocksRepo = dataSource.getRepository(ItemStocks);
+    const itemStocksRepo = dataSource.getRepository(ItemAvailable);
     data = await generateCode(19, data);
     const inventory: InventoryLines[] = [];
     const itemIds: number[] = [];

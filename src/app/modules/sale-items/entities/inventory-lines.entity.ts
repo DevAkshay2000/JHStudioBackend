@@ -11,6 +11,7 @@ import { SaleHeaders } from "./sale-header.entity";
 import { Services } from "../../services/entities/services.entity";
 import { Taxes } from "../../taxes/entities/taxes.entity";
 import { PurchaseHeaders } from "../../purchase-items/entities/purchase-headers.entity";
+import { ItemsStockTrack } from "../../purchase-items/entities/item-stock-track.entity";
 
 @Entity("inventory_lines")
 export class InventoryLines {
@@ -22,6 +23,10 @@ export class InventoryLines {
   })
   @JoinColumn()
   purchase: PurchaseHeaders;
+
+  @ManyToOne(() => ItemsStockTrack)
+  @JoinColumn()
+  stock: ItemsStockTrack;
 
   @ManyToOne(() => Services)
   @JoinColumn()

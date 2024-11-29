@@ -9,6 +9,7 @@ exports.routeToEntityMap = {
     "/cities": entities_1.City,
     "/states": entities_1.States,
     "/countries": entities_1.Country,
-    "/menus": entities_1.Menus
+    "/menus": entities_1.Menus,
+    "/item-types": entities_1.DItemType,
 };
 //# sourceMappingURL=modeltoroutemapping.mapping.js.map

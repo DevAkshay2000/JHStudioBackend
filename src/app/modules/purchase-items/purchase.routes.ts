@@ -15,7 +15,9 @@ router.get(
   validateFilter(PurchaseHeaders),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await purchaseService.find(await getQuery(req, PurchaseHeaders));
+      const result = await purchaseService.find(
+        await getQuery(req, PurchaseHeaders)
+      );
       res.send(result);
     } catch (error) {
       next(error);
@@ -74,6 +76,19 @@ router.delete(
       const id = Number(req.params.id);
       await purchaseService.deleteById(id);
       res.send();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  "/bulk",
+  validateBodyManual(PurchaseHeadersSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await purchaseService.createBulk(req.body);
+      res.send(result);
     } catch (error) {
       next(error);
     }

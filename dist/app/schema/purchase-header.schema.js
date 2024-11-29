@@ -13,7 +13,10 @@ exports.PurchaseHeadersSchema = {
         txnDate: {
             type: "string",
         },
-        totalAmount: {
+        subTotal: {
+            type: "integer",
+        },
+        grandTotal: {
             type: "integer",
         },
         totalDiscount: {
@@ -29,6 +32,9 @@ exports.PurchaseHeadersSchema = {
         modifiedDate: {
             type: "string",
             format: "date-time",
+        },
+        saleInvoiceNumber: {
+            type: "string",
         },
         supplier: {
             type: "object",
@@ -119,20 +125,31 @@ exports.PurchaseHeadersSchema = {
                         format: "date-time",
                     },
                 },
-                required: ["service", "amount", "createdDate", "modifiedDate", "tax", "quantity"],
+                required: [
+                    "service",
+                    "amount",
+                    "createdDate",
+                    "modifiedDate",
+                    "tax",
+                    "quantity",
+                ],
                 additionalProperties: false,
             },
         },
     },
     required: [
         "txnDate",
-        "totalAmount",
+        "grandTotal",
         "createdDate",
         "modifiedDate",
         "supplier",
         "user",
         "paymentType",
         "purchaseLines",
+        "subTotal",
+        "grandTotal",
+        "totalDiscount",
+        "totalTax",
     ],
     additionalProperties: false,
 };

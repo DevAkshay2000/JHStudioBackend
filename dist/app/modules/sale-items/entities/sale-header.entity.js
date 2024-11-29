@@ -75,6 +75,10 @@ var SaleHeaders = /** @class */ (function () {
         __metadata("design:type", Number)
     ], SaleHeaders.prototype, "isInactive", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "int", default: 0, nullable: true }),
+        __metadata("design:type", Number)
+    ], SaleHeaders.prototype, "isService", void 0);
+    __decorate([
         (0, typeorm_1.OneToMany)(function () { return sale_lines_enity_1.SaleLines; }, function (line) { return line.txnHeader; }, {
             cascade: true,
             onDelete: "CASCADE",

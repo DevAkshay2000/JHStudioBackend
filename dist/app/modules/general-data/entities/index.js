@@ -21,4 +21,5 @@ __exportStar(require("./d-feature-types.entity"), exports);
 __exportStar(require("./d-payment-types.entity"), exports);
 __exportStar(require("./d-user-types.entity"), exports);
 __exportStar(require("./menus.entity"), exports);
+__exportStar(require("./d-item-types.entity"), exports);
 //# sourceMappingURL=index.js.map

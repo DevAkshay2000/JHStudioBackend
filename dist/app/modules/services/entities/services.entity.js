@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Services = void 0;
 var typeorm_1 = require("typeorm");
 var taxes_entity_1 = require("../../taxes/entities/taxes.entity");
+var entities_1 = require("../../general-data/entities");
 var Services = /** @class */ (function () {
     function Services() {
     }
@@ -33,6 +34,11 @@ var Services = /** @class */ (function () {
         __metadata("design:type", taxes_entity_1.Taxes)
     ], Services.prototype, "tax", void 0);
     __decorate([
+        (0, typeorm_1.ManyToOne)(function () { return entities_1.DItemType; }),
+        (0, typeorm_1.JoinColumn)(),
+        __metadata("design:type", entities_1.DItemType)
+    ], Services.prototype, "itemType", void 0);
+    __decorate([
         (0, typeorm_1.Column)({ type: "int", nullable: false }),
         __metadata("design:type", Number)
     ], Services.prototype, "taxAmount", void 0);
@@ -45,6 +51,10 @@ var Services = /** @class */ (function () {
         __metadata("design:type", Number)
     ], Services.prototype, "isInactive", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "int", default: 0, nullable: true }),
+        __metadata("design:type", Number)
+    ], Services.prototype, "isService", void 0);
+    __decorate([
         (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], Services.prototype, "createdDate", void 0);
@@ -52,6 +62,58 @@ var Services = /** @class */ (function () {
         (0, typeorm_1.UpdateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], Services.prototype, "modifiedDate", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "text", nullable: true }),
+        __metadata("design:type", String)
+    ], Services.prototype, "description", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({
+            type: "decimal",
+            precision: 5,
+            scale: 2,
+            default: 0,
+            nullable: true,
+        }),
+        __metadata("design:type", Number)
+    ], Services.prototype, "discount", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: true }),
+        __metadata("design:type", String)
+    ], Services.prototype, "category", void 0);
+    __decorate([
+        (0, typeorm_1.Column)("simple-array", { nullable: true }),
+        __metadata("design:type", Array)
+    ], Services.prototype, "tags", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "varchar", length: 100, nullable: true }),
+        __metadata("design:type", String)
+    ], Services.prototype, "brand", void 0);
+    __decorate([
+        (0, typeorm_1.Column)("simple-array", { nullable: true }),
+        __metadata("design:type", Array)
+    ], Services.prototype, "imageUrls", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "boolean", default: false, nullable: true }),
+        __metadata("design:type", Boolean)
+    ], Services.prototype, "isFeatured", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "varchar", length: 100, unique: true, nullable: true }),
+        __metadata("design:type", String)
+    ], Services.prototype, "sku", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "decimal", precision: 10, scale: 2, nullable: true }),
+        __metadata("design:type", Number)
+    ], Services.prototype, "costPrice", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({
+            type: "decimal",
+            precision: 3,
+            scale: 2,
+            default: 0,
+            nullable: true,
+        }),
+        __metadata("design:type", Number)
+    ], Services.prototype, "rating", void 0);
     Services = __decorate([
         (0, typeorm_1.Entity)("services")
     ], Services);

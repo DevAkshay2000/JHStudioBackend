@@ -64,6 +64,9 @@ export class SaleHeaders {
   @Column({ type: "int", default: 0 })
   isInactive: number;
 
+  @Column({ type: "int", default: 0, nullable: true })
+  isService: number;
+
   @OneToMany(() => SaleLines, (line) => line.txnHeader, {
     cascade: true,
     onDelete: "CASCADE",

@@ -32,6 +32,10 @@ var PurchaseHeaders = /** @class */ (function () {
         __metadata("design:type", String)
     ], PurchaseHeaders.prototype, "txnDate", void 0);
     __decorate([
+        (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: true }),
+        __metadata("design:type", String)
+    ], PurchaseHeaders.prototype, "saleInvoiceNumber", void 0);
+    __decorate([
         (0, typeorm_1.ManyToOne)(function () { return supplier_entity_1.Supplier; }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", supplier_entity_1.Supplier)
@@ -47,9 +51,13 @@ var PurchaseHeaders = /** @class */ (function () {
         __metadata("design:type", entities_1.DPaymentType)
     ], PurchaseHeaders.prototype, "paymentType", void 0);
     __decorate([
-        (0, typeorm_1.Column)({ type: "int", nullable: false }),
+        (0, typeorm_1.Column)({ type: "int", nullable: true }),
         __metadata("design:type", Number)
-    ], PurchaseHeaders.prototype, "totalAmount", void 0);
+    ], PurchaseHeaders.prototype, "subTotal", void 0);
+    __decorate([
+        (0, typeorm_1.Column)({ type: "int", nullable: true }),
+        __metadata("design:type", Number)
+    ], PurchaseHeaders.prototype, "grandTotal", void 0);
     __decorate([
         (0, typeorm_1.Column)({ type: "int", nullable: true }),
         __metadata("design:type", Number)

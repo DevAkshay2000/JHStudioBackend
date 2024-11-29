@@ -60,7 +60,7 @@ var create = function (inventory, itemIds) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 dataSource = _a.sent();
-                itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemStocks);
+                itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
                 resultItemStock_1 = [];
                 return [4 /*yield*/, itemStocksRepo.find({
                         where: {
@@ -98,5 +98,53 @@ var create = function (inventory, itemIds) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
-exports.default = { create: create };
+//3. create single record
+var createBulk = function (inventory, itemIds) { return __awaiter(void 0, void 0, void 0, function () {
+    var dataSource, itemStocksRepo, resultItemStock_2, itemStocks_2, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                dataSource = _a.sent();
+                itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
+                resultItemStock_2 = [];
+                return [4 /*yield*/, itemStocksRepo.find({
+                        where: {
+                            service: {
+                                id: (0, typeorm_1.In)(itemIds),
+                            },
+                        },
+                        relations: {
+                            service: true,
+                        },
+                    })];
+            case 2:
+                itemStocks_2 = _a.sent();
+                inventory.forEach(function (element) {
+                    //check if element item present in stock
+                    var foundStockRecord = itemStocks_2.find(function (data) { return data.service.id === element.service.id; });
+                    //if present then update the stock to new stock increament
+                    if (foundStockRecord) {
+                        resultItemStock_2.push(__assign(__assign({}, foundStockRecord), { quantity: Number(foundStockRecord.quantity + element.quantity) }));
+                    }
+                    // if not then add new record in itemStocks and assign vlue
+                    else {
+                        resultItemStock_2.push({
+                            quantity: element.quantity,
+                            modifiedDate: element.modifiedDate,
+                            service: element.service,
+                        });
+                    }
+                });
+                return [2 /*return*/, resultItemStock_2];
+            case 3:
+                error_2 = _a.sent();
+                throw error_2;
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.default = { create: create, createBulk: createBulk };
 //# sourceMappingURL=item-stocks.service.js.map

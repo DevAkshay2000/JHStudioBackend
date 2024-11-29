@@ -125,7 +125,7 @@ var create = function (data_1) {
                     return [4 /*yield*/, (0, dbconfig_1.handler)()];
                 case 2:
                     dataSource = _a.sent();
-                    itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemStocks);
+                    itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
                     return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(19, data)];
                 case 3:
                     data = _a.sent();

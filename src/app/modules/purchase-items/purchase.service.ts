@@ -1,4 +1,4 @@
-import { FindManyOptions, FindOneOptions } from "typeorm";
+import { FindManyOptions, FindOneOptions, In } from "typeorm";
 
 import { generateCode } from "../../utils/get-object-code.util";
 import { handler } from "../../config/dbconfig";
@@ -6,8 +6,10 @@ import { City, Country, States } from "../general-data/entities";
 import repository from "./purchase.repo";
 import { PurchaseHeaders } from "./entities/purchase-headers.entity";
 import { InventoryLines } from "../sale-items/entities/inventory-lines.entity";
-import { ItemStocks } from "../sale-items/entities/item-stocks.entity";
+import { ItemAvailable } from "../sale-items/entities/item-stocks.entity";
 import itemStocksService from "../sale-items/item-stocks.service";
+import { Services } from "../services/entities/services.entity";
+import { ItemsStockTrack } from "./entities/item-stock-track.entity";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<PurchaseHeaders>) => {
@@ -37,10 +39,14 @@ const create = async (data: PurchaseHeaders, isService: boolean = false) => {
   try {
     const repo = await repository();
     const dataSource = await handler();
-    const itemStocksRepo = dataSource.getRepository(ItemStocks);
+    const itemStocksRepo = dataSource.getRepository(ItemAvailable);
     data = await generateCode(20, data);
     const itemIds: number[] = [];
     const inventory: InventoryLines[] = [];
+
+    // check if lenght applicable
+    if (data.purchaseLines.length) {
+    }
     if (!isService) {
       data.purchaseLines.forEach((value) => {
         const il = new InventoryLines();
@@ -53,7 +59,10 @@ const create = async (data: PurchaseHeaders, isService: boolean = false) => {
       });
       data.inventoryLines = inventory;
       // create stock elements
-      const resultItemStock = await itemStocksService.create(inventory, itemIds);
+      const resultItemStock = await itemStocksService.create(
+        inventory,
+        itemIds
+      );
       const itemStockResponse = itemStocksRepo.create(resultItemStock);
       await itemStocksRepo.save(itemStockResponse);
     }
@@ -105,5 +114,121 @@ const deleteById = async (id: number) => {
     throw error;
   }
 };
+//3. create single record
+const createBulk = async (
+  data: PurchaseHeaders,
+  isService: boolean = false
+) => {
+  try {
+    const dataSource = await handler();
+    data = await generateCode(20, data);
+    const itemIds: number[] = [];
+    const inventory: InventoryLines[] = [];
+    const itemRepo = dataSource.getRepository(Services);
 
-export default { find, findById, create, deleteById, updateById };
+    //. 1.create itemId and sku mapping
+    const skuMap: {
+      [key: number]: string;
+    } = {};
+    //2. get related items only
+    const relatedItems = await itemRepo.find({
+      where: {
+        id: In(itemIds),
+      },
+      select: {
+        sku: true,
+        id: true,
+      },
+    });
+    //3. create sku mapping for future
+    relatedItems.forEach((val) => {
+      skuMap[val.id] = val.sku + "-" + Date.now();
+    });
+    //3. start transaction
+    await dataSource.manager.transaction(
+      "SERIALIZABLE",
+      async (transactionalEntityManager) => {
+        const headerEntry = transactionalEntityManager.create(
+          PurchaseHeaders,
+          data
+        );
+        // ************** A) stock logic start ************************************************************
+        const stockEntries: ItemsStockTrack[] = [];
+        //1. create Stock and save stock
+        data.purchaseLines.forEach((value) => {
+          const stockInstance = new ItemsStockTrack();
+          stockInstance.createdDate = value.createdDate;
+          stockInstance.modifiedDate = value.modifiedDate;
+          stockInstance.quantityAdded = value.quantity;
+          stockInstance.service = value.service;
+          stockInstance.quantityUvailable = value.quantity;
+          stockInstance.stockNumber = skuMap[value.service.id];
+          stockEntries.push(stockInstance);
+        });
+        const itemIdStockMap: {
+          [key: number]: ItemsStockTrack;
+        } = {};
+        const stockTrackEntry = transactionalEntityManager.create(
+          ItemsStockTrack,
+          stockEntries
+        );
+        //2. update items availability
+        const stockTrackResult = await transactionalEntityManager.save(
+          ItemsStockTrack,
+          stockTrackEntry
+        );
+        // add entries into mapping object
+        stockTrackResult.forEach((val) => {
+          itemIdStockMap[val.service.id] = val;
+        });
+        //************** stock logic end ***********************************************************************/
+
+        //**************** B) inventory lodic start **********************************************************
+        //2. create inventory
+        data.purchaseLines.forEach((value) => {
+          const il = new InventoryLines();
+          il.service = value.service;
+          il.quantity = Number(value.quantity);
+          il.createdDate = value.createdDate;
+          il.modifiedDate = value.modifiedDate;
+          il.stock = itemIdStockMap[value.service.id];
+          itemIds.push(value.service.id);
+          inventory.push(il);
+        });
+        //attch the object to inventory
+        headerEntry.inventoryLines = inventory;
+        // *************** inventory lodic end  *********************************************************
+
+        // *************** C) item available start ********************************************************
+        //1. create stock elements
+        const resultItemAvailable = await itemStocksService.create(
+          inventory,
+          itemIds
+        );
+        const itemAvailableEntry = transactionalEntityManager.create(
+          ItemAvailable,
+          resultItemAvailable
+        );
+        //2. update items availability
+        await transactionalEntityManager.save(
+          ItemAvailable,
+          itemAvailableEntry
+        );
+        // *************** item available end ********************************************************
+
+        //********** D) header entry save start ***************/
+        const headerEntryResult = await transactionalEntityManager.save(
+          PurchaseHeaders,
+          headerEntry
+        );
+        //********** header entry save end *********************************************************************/
+        data = headerEntryResult;
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+export default { find, findById, create, deleteById, updateById, createBulk };

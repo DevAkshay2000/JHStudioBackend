@@ -3,6 +3,7 @@ import {
   City,
   Country,
   DFeatureType,
+  DItemType,
   DPaymentType,
   DUserType,
   Menus,
@@ -18,5 +19,6 @@ export const routeToEntityMap: {
   "/cities": City,
   "/states": States,
   "/countries": Country,
-  "/menus":Menus
+  "/menus": Menus,
+  "/item-types": DItemType,
 };
