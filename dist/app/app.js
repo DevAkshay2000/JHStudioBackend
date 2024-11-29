@@ -45,44 +45,51 @@ var http_1 = __importDefault(require("http"));
 var routes_1 = require("./routes/routes");
 var errorHandler_middleware_1 = require("./middlewares/errorHandler.middleware");
 var constant_1 = require("./utils/constant");
+var dbconfig_1 = require("./config/dbconfig");
 // import { initializeDataSource } from "./config/dbconfig";
 /**
  * Start logic
  */
 var dataSource;
 var startServer = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var app, _a, App_Port_1, NODE_ENV, httpServer;
+    var app, _a, App_Port_1, NODE_ENV, httpServer, error_1;
     return __generator(this, function (_b) {
-        try {
-            app = (0, express_1.default)();
-            _a = process.env, App_Port_1 = _a.App_Port, NODE_ENV = _a.NODE_ENV;
-            /**
-             * Establish DB connections here
-             */
-            // dataSource = await initializeDataSource();
-            /**
-             * Register All the routes here
-             */
-            app.get(constant_1.API_BASE, function (req, res) {
-                res.send("\n    <html>\n      <head>\n        <title>Welcome to My E-commerce</title>\n        <style>\n          body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            margin-top: 50px;\n          }\n          h1 {\n            color: #2c3e50;\n          }\n        </style>\n      </head>\n      <body>\n        <h1>Welcome to KFT Foods E-commerce!</h1>\n        <p>This is the home page of your application.</p>\n        <p>Enjoy your stay!</p>\n      </body>\n    </html>\n  ");
-            });
-            (0, routes_1.registerRoutes)(app);
-            app.use(errorHandler_middleware_1.errorHandler);
-            httpServer = http_1.default.createServer(app);
-            httpServer.listen(App_Port_1 || 3000, function () {
-                console.log("HTTP SERVER STARTED ON PORT: ".concat(App_Port_1 || 3000));
-            });
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                app = (0, express_1.default)();
+                _a = process.env, App_Port_1 = _a.App_Port, NODE_ENV = _a.NODE_ENV;
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                /**
+                 * Establish DB connections here
+                 */
+                exports.dataSource = dataSource = _b.sent();
+                /**
+                 * Register All the routes here
+                 */
+                app.get(constant_1.API_BASE, function (req, res) {
+                    res.send("\n    <html>\n      <head>\n        <title>Welcome to My E-commerce</title>\n        <style>\n          body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            margin-top: 50px;\n          }\n          h1 {\n            color: #2c3e50;\n          }\n        </style>\n      </head>\n      <body>\n        <h1>Welcome to KFT Foods E-commerce!</h1>\n        <p>This is the home page of your application.</p>\n        <p>Enjoy your stay!</p>\n      </body>\n    </html>\n  ");
+                });
+                (0, routes_1.registerRoutes)(app);
+                app.use(errorHandler_middleware_1.errorHandler);
+                httpServer = http_1.default.createServer(app);
+                httpServer.listen(App_Port_1 || 3000, function () {
+                    console.log("HTTP SERVER STARTED ON PORT: ".concat(App_Port_1 || 3000));
+                });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _b.sent();
+                /**
+                 * Any error during startup process
+                 * leads to exit of the program
+                 */
+                console.log(error_1);
+                console.log("Couldn't start the server");
+                process.exit(-1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
-        catch (error) {
-            /**
-             * Any error during startup process
-             * leads to exit of the program
-             */
-            console.log(error);
-            console.log("Couldn't start the server");
-            process.exit(-1);
-        }
-        return [2 /*return*/];
     });
 }); };
 exports.startServer = startServer;

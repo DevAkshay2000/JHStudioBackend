@@ -23,7 +23,7 @@ export const startServer = async () => {
     /**
      * Establish DB connections here
      */
-    // dataSource = await initializeDataSource();
+    dataSource = await handler();
 
     /**
      * Register All the routes here
