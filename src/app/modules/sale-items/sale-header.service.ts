@@ -12,6 +12,7 @@ import { ItemAvailable } from "./entities/item-stocks.entity";
 import itemStocksService from "./item-stocks.service";
 import { Services } from "../services/entities/services.entity";
 import { ItemsStockTrack } from "../purchase-items/entities/item-stock-track.entity";
+import { Customer } from "../customer/entities/customer.entity";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<SaleHeaders>) => {
@@ -39,7 +40,9 @@ const findById = async (
 //3. create single record
 const create = async (data: SaleHeaders, isService: boolean = false) => {
   try {
+    const dataSource = await handler();
     const repo = await repository();
+    const customerRepo = dataSource.getRepository(Customer);
     data = await generateCode(19, data);
     const invoiceItems: {
       name: string;
@@ -61,13 +64,13 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
         });
       });
     }
-
     const respo = await repo.create({
       ...data,
     });
     //get customer data custo
-    const customer = await customerService.findById(data.customer.id);
-
+    let customer = await customerService.findById(data.customer.id);
+    customer.lastVisitedDate = new Date().toISOString();
+    await customerService.updateById(data.customer.id, customer);
     await invoiceMailer({
       customer: customer.name,
       txnDate: new Date(data.txnDate).toLocaleDateString(),

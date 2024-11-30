@@ -46,6 +46,9 @@ export class Customer {
   @Column({ type: "int", default: 0 })
   isInactive: number;
 
+  @UpdateDateColumn({ type: "varchar", nullable: true })
+  lastVisitedDate: string;
+
   @CreateDateColumn({ type: "varchar", nullable: false })
   createdDate: string;
 
