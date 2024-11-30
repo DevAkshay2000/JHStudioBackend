@@ -7,6 +7,9 @@ export const SaleHeadersSchema: any = {
     code: {
       type: "string",
     },
+    description: {
+      type: "string",
+    },
     txnDate: {
       type: "string",
     },
@@ -86,7 +89,7 @@ export const SaleHeadersSchema: any = {
               },
               name: {
                 type: "string",
-              }
+              },
             },
             required: ["id", "name"],
             additionalProperties: false,
@@ -102,7 +105,7 @@ export const SaleHeadersSchema: any = {
               },
               percentage: {
                 type: "integer",
-              }
+              },
             },
             required: ["id", "name"],
             additionalProperties: false,
@@ -111,7 +114,7 @@ export const SaleHeadersSchema: any = {
             type: "integer",
           },
           amount: {
-            type: "integer", 
+            type: "integer",
           },
           quantity: {
             type: "integer",
@@ -122,7 +125,7 @@ export const SaleHeadersSchema: any = {
           taxAmount: {
             type: "integer",
           },
-          rate:{
+          rate: {
             type: "integer",
           },
           createdDate: {
@@ -134,7 +137,15 @@ export const SaleHeadersSchema: any = {
             format: "date-time",
           },
         },
-        required: ["service", "amount", "createdDate", "modifiedDate", "tax", "quantity","rate"],
+        required: [
+          "service",
+          "amount",
+          "createdDate",
+          "modifiedDate",
+          "tax",
+          "quantity",
+          "rate",
+        ],
         additionalProperties: false,
       },
     },

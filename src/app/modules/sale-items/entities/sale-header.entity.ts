@@ -28,6 +28,9 @@ export class SaleHeaders {
   @Column({ type: "varchar", length: 255, nullable: true, unique: true })
   code: string;
 
+  @Column({ type: "varchar", length: 600, nullable: true})
+  description: string;
+
   @CreateDateColumn({ type: "varchar", nullable: false })
   txnDate: string;
 
