@@ -116,6 +116,9 @@ exports.PurchaseHeadersSchema = {
                     taxAmount: {
                         type: "integer",
                     },
+                    rate: {
+                        type: "integer",
+                    },
                     createdDate: {
                         type: "string",
                         format: "date-time",
@@ -132,6 +135,7 @@ exports.PurchaseHeadersSchema = {
                     "modifiedDate",
                     "tax",
                     "quantity",
+                    "rate",
                 ],
                 additionalProperties: false,
             },

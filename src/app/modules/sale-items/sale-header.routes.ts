@@ -14,7 +14,6 @@ router.get(
   "/",
   // validateFilter(SaleHeaders),
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("inside thus 5223")
     try {
       const result = await saleHeaderService.find(
         await getQuery(req, SaleHeaders)
@@ -77,6 +76,18 @@ router.delete(
       const id = Number(req.params.id);
       await saleHeaderService.deleteById(id);
       res.send();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+router.post(
+  "/bulk",
+  validateBodyManual(SaleHeadersSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await saleHeaderService.createBulk(req.body);
+      res.send(result);
     } catch (error) {
       next(error);
     }

@@ -25,7 +25,7 @@ var ItemsStockTrack = /** @class */ (function () {
         __metadata("design:type", services_entity_1.Services)
     ], ItemsStockTrack.prototype, "service", void 0);
     __decorate([
-        (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: true }),
+        (0, typeorm_1.Column)({ type: "varchar", nullable: true }),
         __metadata("design:type", String)
     ], ItemsStockTrack.prototype, "stockNumber", void 0);
     __decorate([

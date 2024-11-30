@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from "typeorm";
 import { Taxes } from "../../taxes/entities/taxes.entity";
 import { DItemType } from "../../general-data/entities";
+import { ItemAvailable } from "../../sale-items/entities/item-stocks.entity";
 
 @Entity("services")
 export class Services {
@@ -28,6 +30,10 @@ export class Services {
   @ManyToOne(() => DItemType)
   @JoinColumn()
   itemType: DItemType;
+
+  @OneToOne(() => ItemAvailable, { nullable: true})
+  @JoinColumn()
+  inStock: ItemAvailable;
 
   @Column({ type: "int", nullable: false })
   taxAmount: number;
