@@ -67,10 +67,14 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
     const respo = await repo.create({
       ...data,
     });
+    const custmerRepo = dataSource.getRepository(Customer);
     //get customer data custo
     let customer = await customerService.findById(data.customer.id);
-    customer.lastVisitedDate = new Date().toISOString();
-    await customerService.updateById(data.customer.id, customer);
+    console.log("customer", customer);
+    await custmerRepo.save({
+      ...customer,
+      lastVisitedDate: new Date().toISOString(),
+    });
     await invoiceMailer({
       customer: customer.name,
       txnDate: new Date(data.txnDate).toLocaleDateString(),
