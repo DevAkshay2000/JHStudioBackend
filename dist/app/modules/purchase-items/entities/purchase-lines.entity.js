@@ -39,6 +39,10 @@ var PurchaseLines = /** @class */ (function () {
         __metadata("design:type", taxes_entity_1.Taxes)
     ], PurchaseLines.prototype, "tax", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "int", nullable: true }),
+        __metadata("design:type", Number)
+    ], PurchaseLines.prototype, "rate", void 0);
+    __decorate([
         (0, typeorm_1.Column)({ type: "int", nullable: false }),
         __metadata("design:type", Number)
     ], PurchaseLines.prototype, "quantity", void 0);

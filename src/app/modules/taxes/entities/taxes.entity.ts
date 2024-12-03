@@ -22,6 +22,9 @@ export class Taxes {
   @Column({ type: "varchar", length: 255, nullable: false })
   name: string;
 
+  @Column({ type: "varchar", length: 700, nullable: true })
+  description: string;
+
   @ManyToOne(() => Country)
   @JoinColumn()
   country: Country;

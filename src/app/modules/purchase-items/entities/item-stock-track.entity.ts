@@ -18,7 +18,7 @@ export class ItemsStockTrack {
   @JoinColumn()
   service: Services;
 
-  @CreateDateColumn({ type: "varchar", nullable: true })
+  @Column({ type: "varchar", nullable: true })
   stockNumber: string;
 
   @Column({ type: "int", nullable: false })

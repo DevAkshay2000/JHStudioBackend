@@ -3,6 +3,7 @@ import { Customer } from "../modules/customer/entities/customer.entity";
 import {
   City,
   Country,
+  DContactType,
   DFeatureType,
   DItemType,
   DPaymentType,
@@ -27,6 +28,7 @@ import { Supplier } from "../modules/suppliers/entities/supplier.entity";
 import { ItemAvailable } from "../modules/sale-items/entities/item-stocks.entity";
 import { Services } from "../modules/services/entities/services.entity";
 import { ItemsStockTrack } from "../modules/purchase-items/entities/item-stock-track.entity";
+import { Contact } from "../modules/contacts/entities/contact.entity";
 
 export const entities:
   | MixedList<string | Function | EntitySchema<any>>
@@ -56,5 +58,7 @@ export const entities:
   Supplier,
   ItemAvailable,
   DItemType,
-  ItemsStockTrack
+  ItemsStockTrack,
+  DContactType,
+  Contact
 ];

@@ -113,6 +113,9 @@ export const PurchaseHeadersSchema: any = {
           taxAmount: {
             type: "integer",
           },
+          rate: {
+            type: "integer",
+          },
           createdDate: {
             type: "string",
             format: "date-time",
@@ -129,6 +132,7 @@ export const PurchaseHeadersSchema: any = {
           "modifiedDate",
           "tax",
           "quantity",
+          "rate",
         ],
         additionalProperties: false,
       },

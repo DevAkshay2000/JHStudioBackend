@@ -19,6 +19,7 @@ import {
 } from "../../general-data/entities";
 import { SaleLines } from "./sale-lines.enity";
 import { InventoryLines } from "./inventory-lines.entity";
+import { Contact } from "../../contacts/entities/contact.entity";
 
 @Entity("sale_headers")
 export class SaleHeaders {
@@ -28,12 +29,15 @@ export class SaleHeaders {
   @Column({ type: "varchar", length: 255, nullable: true, unique: true })
   code: string;
 
+  @Column({ type: "varchar", length: 600, nullable: true})
+  description: string;
+
   @CreateDateColumn({ type: "varchar", nullable: false })
   txnDate: string;
 
-  @ManyToOne(() => Customer)
+  @ManyToOne(() => Contact)
   @JoinColumn()
-  customer: Customer;
+  customer: Contact;
 
   @ManyToOne(() => Users)
   @JoinColumn()

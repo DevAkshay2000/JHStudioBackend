@@ -59,6 +59,10 @@ var Customer = /** @class */ (function () {
         __metadata("design:type", Number)
     ], Customer.prototype, "isInactive", void 0);
     __decorate([
+        (0, typeorm_1.UpdateDateColumn)({ type: "varchar", nullable: true }),
+        __metadata("design:type", String)
+    ], Customer.prototype, "lastVisitedDate", void 0);
+    __decorate([
         (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], Customer.prototype, "createdDate", void 0);

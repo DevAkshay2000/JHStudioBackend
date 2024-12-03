@@ -10,6 +10,10 @@ import { AuthenticatedRequest } from "../../types";
 import { Services } from "../services/entities/services.entity";
 import { Customer } from "../customer/entities/customer.entity";
 import { SaleHeaders } from "../sale-items/entities/sale-header.entity";
+import {
+  getModelSchema,
+  validateRequestBody,
+} from "../../utils/get-model-schema.util";
 const router = Router();
 for (let [key, value] of Object.entries(routeToEntityMap)) {
   router.get(
@@ -21,6 +25,23 @@ for (let [key, value] of Object.entries(routeToEntityMap)) {
         const repository = appDataSource.getRepository(value);
         const data = await repository.find(await getQuery(req, value));
         res.status(200).json(data);
+      } catch (error) {
+        res
+          .status(500)
+          .json({ message: "Error fetching DescriptionType", error });
+      }
+    }
+  );
+  router.post(
+    key,
+    validateRequestBody(value),
+    async (req: Request, res: Response) => {
+      try {
+        const appDataSource = await handler();
+        const repository = appDataSource.getRepository(value);
+        const data = repository.create(req.body);
+        const respo = await repository.save(data);
+        res.status(200).json(respo);
       } catch (error) {
         res
           .status(500)

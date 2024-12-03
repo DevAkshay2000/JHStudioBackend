@@ -30,6 +30,9 @@ export class PurchaseLines {
   @JoinColumn()
   tax: Taxes;
 
+  @Column({ type: "int", nullable: true })
+  rate: number;
+
   @Column({ type: "int", nullable: false })
   quantity: number;
 

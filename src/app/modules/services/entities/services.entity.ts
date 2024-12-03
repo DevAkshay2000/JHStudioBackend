@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from "typeorm";
 import { Taxes } from "../../taxes/entities/taxes.entity";
 import { DItemType } from "../../general-data/entities";
+import { ItemAvailable } from "../../sale-items/entities/item-stocks.entity";
 
 @Entity("services")
 export class Services {
@@ -21,13 +23,17 @@ export class Services {
   @Column({ type: "varchar", length: 255, nullable: false })
   name: string;
 
-  @ManyToOne(() => Taxes)
+  @ManyToOne(() => Taxes, { nullable: false })
   @JoinColumn()
   tax: Taxes;
 
-  @ManyToOne(() => DItemType)
+  @ManyToOne(() => DItemType, { nullable: true })
   @JoinColumn()
   itemType: DItemType;
+
+  @OneToOne(() => ItemAvailable, { nullable: true })
+  @JoinColumn()
+  inStock: ItemAvailable;
 
   @Column({ type: "int", nullable: false })
   taxAmount: number;

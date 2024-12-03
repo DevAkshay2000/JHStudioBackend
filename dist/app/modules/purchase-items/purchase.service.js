@@ -69,6 +69,7 @@ var item_stocks_entity_1 = require("../sale-items/entities/item-stocks.entity");
 var item_stocks_service_1 = __importDefault(require("../sale-items/item-stocks.service"));
 var services_entity_1 = require("../services/entities/services.entity");
 var item_stock_track_entity_1 = require("./entities/item-stock-track.entity");
+var getuniquenumber_util_1 = __importDefault(require("../../utils/getuniquenumber.util"));
 //1. find multiple records
 var find = function (filter) { return __awaiter(void 0, void 0, void 0, function () {
     var repo, error_1;
@@ -241,6 +242,7 @@ var createBulk = function (data_1) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
+                    console.log("inside thsi fdfdf");
                     return [4 /*yield*/, (0, dbconfig_1.handler)()];
                 case 1:
                     dataSource = _a.sent();
@@ -250,6 +252,9 @@ var createBulk = function (data_1) {
                     itemIds_2 = [];
                     inventory_3 = [];
                     itemRepo = dataSource.getRepository(services_entity_1.Services);
+                    data.purchaseLines.forEach(function (value) {
+                        itemIds_2.push(value.service.id);
+                    });
                     skuMap_1 = {};
                     return [4 /*yield*/, itemRepo.find({
                             where: {
@@ -264,7 +269,7 @@ var createBulk = function (data_1) {
                     relatedItems = _a.sent();
                     //3. create sku mapping for future
                     relatedItems.forEach(function (val) {
-                        skuMap_1[val.id] = val.sku + "-" + Date.now();
+                        skuMap_1[val.id] = val.sku + "-" + (0, getuniquenumber_util_1.default)();
                     });
                     //3. start transaction
                     return [4 /*yield*/, dataSource.manager.transaction("SERIALIZABLE", function (transactionalEntityManager) { return __awaiter(void 0, void 0, void 0, function () {
@@ -304,7 +309,6 @@ var createBulk = function (data_1) {
                                             il.createdDate = value.createdDate;
                                             il.modifiedDate = value.modifiedDate;
                                             il.stock = itemIdStockMap[value.service.id];
-                                            itemIds_2.push(value.service.id);
                                             inventory_3.push(il);
                                         });
                                         //attch the object to inventory

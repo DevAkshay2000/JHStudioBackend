@@ -98,10 +98,11 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
         return {
           propertyName: relation.propertyName,
           relationType: relation.relationType,
+          required: !relation.isNullable,
           className: relation.inverseEntityMetadata.targetName, // Get the class name of the related entity
         };
       });
-
+      // console.log(relations);
       //3. loop through relations and crate a scheama for each relation entity
       for (const relation of relations) {
         if (relation.relationType === "one-to-many") {
@@ -123,9 +124,32 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
           schemaObject["properties"][relation.propertyName] =
             relativeModelSchema;
           //b. make it required
-          schemaObject.required.push(relation.propertyName);
+          if (
+            relation?.required &&
+            !schemaObject.required.includes(relation.propertyName)
+          ) {
+            console.log(relation.propertyName);
+            schemaObject.required.push(relation.propertyName);
+          }
+        }
+        if (relation.relationType === "one-to-one") {
+          //a. get the scheama oject for that entity
+          const relativeModelSchema = await getModelSchema(relation.className);
+          // set only id as required
+          relativeModelSchema.required = ["id"];
+          schemaObject["properties"][relation.propertyName] =
+            relativeModelSchema;
+          //b. make it required
+          if (
+            relation?.required &&
+            !schemaObject.required.includes(relation.propertyName)
+          ) {
+            console.log(relation.propertyName);
+            schemaObject.required.push(relation.propertyName);
+          }
         }
       }
+      // console.log("schemaObject", JSON.stringify(schemaObject));
       const validate = ajv.compile(schemaObject);
       const valid = validate(req.body);
       if (!valid) {
@@ -133,6 +157,7 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
       }
       next();
     } catch (error) {
+      console.log(error);
       res.status(422).json(error);
     }
   };

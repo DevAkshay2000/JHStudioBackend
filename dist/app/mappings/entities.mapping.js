@@ -20,6 +20,7 @@ var supplier_entity_1 = require("../modules/suppliers/entities/supplier.entity")
 var item_stocks_entity_1 = require("../modules/sale-items/entities/item-stocks.entity");
 var services_entity_1 = require("../modules/services/entities/services.entity");
 var item_stock_track_entity_1 = require("../modules/purchase-items/entities/item-stock-track.entity");
+var contact_entity_1 = require("../modules/contacts/entities/contact.entity");
 exports.entities = [
     items_entity_1.Item,
     item_images_entity_1.ItemImage,
@@ -46,6 +47,8 @@ exports.entities = [
     supplier_entity_1.Supplier,
     item_stocks_entity_1.ItemAvailable,
     entities_1.DItemType,
-    item_stock_track_entity_1.ItemsStockTrack
+    item_stock_track_entity_1.ItemsStockTrack,
+    entities_1.DContactType,
+    contact_entity_1.Contact
 ];
 //# sourceMappingURL=entities.mapping.js.map

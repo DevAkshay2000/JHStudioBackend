@@ -54,22 +54,19 @@ function (req, res, next) { return __awaiter(void 0, void 0, void 0, function ()
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                console.log("inside thus 5223");
-                _c.label = 1;
-            case 1:
-                _c.trys.push([1, 4, , 5]);
+                _c.trys.push([0, 3, , 4]);
                 _b = (_a = sale_header_service_1.default).find;
                 return [4 /*yield*/, (0, get_query_util_1.default)(req, sale_header_entity_1.SaleHeaders)];
-            case 2: return [4 /*yield*/, _b.apply(_a, [_c.sent()])];
-            case 3:
+            case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent()])];
+            case 2:
                 result = _c.sent();
                 res.send(result);
-                return [3 /*break*/, 5];
-            case 4:
+                return [3 /*break*/, 4];
+            case 3:
                 error_1 = _c.sent();
                 next(error_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
@@ -152,6 +149,25 @@ router.delete("/:id", function (req, res, next) { return __awaiter(void 0, void 
             case 2:
                 error_5 = _a.sent();
                 next(error_5);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/bulk", (0, validate_req_body_util_1.validateBodyManual)(sale_header_schema_1.SaleHeadersSchema), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, sale_header_service_1.default.createBulk(req.body)];
+            case 1:
+                result = _a.sent();
+                res.send(result);
+                return [3 /*break*/, 3];
+            case 2:
+                error_6 = _a.sent();
+                next(error_6);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

@@ -59,14 +59,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var typeorm_1 = require("typeorm");
 var get_object_code_util_1 = require("../../utils/get-object-code.util");
 var dbconfig_1 = require("../../config/dbconfig");
+var sale_header_entity_1 = require("./entities/sale-header.entity");
 var sale_header_repo_1 = __importDefault(require("./sale-header.repo"));
 var inventory_lines_entity_1 = require("./entities/inventory-lines.entity");
 var send_invoice_mail_service_1 = __importDefault(require("../../services/send-invoice-mail.service"));
-var customer_service_1 = __importDefault(require("../customer/customer.service"));
 var item_stocks_entity_1 = require("./entities/item-stocks.entity");
-var item_stocks_service_1 = __importDefault(require("./item-stocks.service"));
+var item_stock_track_entity_1 = require("../purchase-items/entities/item-stock-track.entity");
+var customer_entity_1 = require("../customer/entities/customer.entity");
+var contact_entity_1 = require("../contacts/entities/contact.entity");
+var contact_service_1 = __importDefault(require("../contacts/contact.service"));
 //1. find multiple records
 var find = function (filter) { return __awaiter(void 0, void 0, void 0, function () {
     var repo, error_1;
@@ -113,58 +117,46 @@ var create = function (data_1) {
         args_1[_i - 1] = arguments[_i];
     }
     return __awaiter(void 0, __spreadArray([data_1], args_1, true), void 0, function (data, isService) {
-        var repo, dataSource, itemStocksRepo, inventory_1, itemIds_1, invoiceItems_1, resultItemStock, itemStockResponse, respo, customer, error_3;
+        var dataSource, repo, customerRepo, invoiceItems_1, respo, custmerRepo, customer, error_3;
         if (isService === void 0) { isService = false; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 10, , 11]);
-                    return [4 /*yield*/, (0, sale_header_repo_1.default)()];
-                case 1:
-                    repo = _a.sent();
+                    _a.trys.push([0, 8, , 9]);
                     return [4 /*yield*/, (0, dbconfig_1.handler)()];
-                case 2:
+                case 1:
                     dataSource = _a.sent();
-                    itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
+                    return [4 /*yield*/, (0, sale_header_repo_1.default)()];
+                case 2:
+                    repo = _a.sent();
+                    customerRepo = dataSource.getRepository(customer_entity_1.Customer);
                     return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(19, data)];
                 case 3:
                     data = _a.sent();
-                    inventory_1 = [];
-                    itemIds_1 = [];
                     invoiceItems_1 = [];
-                    if (!!isService) return [3 /*break*/, 6];
-                    data.saleLines.forEach(function (value) {
-                        var il = new inventory_lines_entity_1.InventoryLines();
-                        (il.service = value.service),
-                            (il.quantity = value.quantity),
-                            (il.createdDate = value.createdDate),
-                            (il.modifiedDate = value.modifiedDate);
-                        inventory_1.push(il);
-                        itemIds_1.push(value.service.id);
-                        invoiceItems_1.push({
-                            name: value.service.name,
-                            quantity: value.quantity,
-                            unitPrice: value.rate,
-                            total: Number(value.amount + value.taxAmount),
-                            tax: value.taxAmount,
-                            taxName: value.tax.name,
+                    if (data.saleLines.length) {
+                        data.saleLines.forEach(function (value) {
+                            invoiceItems_1.push({
+                                name: value.service.name,
+                                quantity: value.quantity,
+                                unitPrice: value.rate,
+                                total: Number(value.amount + value.taxAmount),
+                                tax: value.taxAmount,
+                                taxName: value.tax.name,
+                            });
                         });
-                    });
-                    data.inventoryLines = inventory_1;
-                    return [4 /*yield*/, item_stocks_service_1.default.create(inventory_1, itemIds_1)];
+                    }
+                    return [4 /*yield*/, repo.create(__assign({}, data))];
                 case 4:
-                    resultItemStock = _a.sent();
-                    itemStockResponse = itemStocksRepo.create(resultItemStock);
-                    return [4 /*yield*/, itemStocksRepo.save(itemStockResponse)];
-                case 5:
-                    _a.sent();
-                    _a.label = 6;
-                case 6: return [4 /*yield*/, repo.create(__assign({}, data))];
-                case 7:
                     respo = _a.sent();
-                    return [4 /*yield*/, customer_service_1.default.findById(data.customer.id)];
-                case 8:
+                    custmerRepo = dataSource.getRepository(contact_entity_1.Contact);
+                    return [4 /*yield*/, contact_service_1.default.findById(data.customer.id)];
+                case 5:
                     customer = _a.sent();
+                    console.log("customer", customer);
+                    return [4 /*yield*/, custmerRepo.save(__assign(__assign({}, customer), { lastVisitedDate: new Date().toISOString() }))];
+                case 6:
+                    _a.sent();
                     return [4 /*yield*/, (0, send_invoice_mail_service_1.default)({
                             customer: customer.name,
                             txnDate: new Date(data.txnDate).toLocaleDateString(),
@@ -176,13 +168,13 @@ var create = function (data_1) {
                             email: customer.email,
                             itemData: invoiceItems_1,
                         })];
-                case 9:
+                case 7:
                     _a.sent();
                     return [2 /*return*/, respo];
-                case 10:
+                case 8:
                     error_3 = _a.sent();
                     throw error_3;
-                case 11: return [2 /*return*/];
+                case 9: return [2 /*return*/];
             }
         });
     });
@@ -194,7 +186,7 @@ var updateById = function (id_1, data_1) {
         args_1[_i - 2] = arguments[_i];
     }
     return __awaiter(void 0, __spreadArray([id_1, data_1], args_1, true), void 0, function (id, data, isService) {
-        var repo, inventory_2, respo, error_4;
+        var repo, inventory_1, respo, error_4;
         if (isService === void 0) { isService = false; }
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -206,7 +198,7 @@ var updateById = function (id_1, data_1) {
                     return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(19, data)];
                 case 2:
                     data = _a.sent();
-                    inventory_2 = [];
+                    inventory_1 = [];
                     if (!isService) {
                         data.saleLines.forEach(function (value) {
                             var il = new inventory_lines_entity_1.InventoryLines();
@@ -214,9 +206,9 @@ var updateById = function (id_1, data_1) {
                                 (il.quantity = value.quantity),
                                 (il.createdDate = value.createdDate),
                                 (il.modifiedDate = value.modifiedDate);
-                            inventory_2.push(il);
+                            inventory_1.push(il);
                         });
-                        data.inventoryLines = inventory_2;
+                        data.inventoryLines = inventory_1;
                     }
                     return [4 /*yield*/, repo.updateById(id, __assign({}, data))];
                 case 3:
@@ -251,5 +243,178 @@ var deleteById = function (id) { return __awaiter(void 0, void 0, void 0, functi
         }
     });
 }); };
-exports.default = { find: find, findById: findById, create: create, deleteById: deleteById, updateById: updateById };
+//3. create single record
+var createBulk = function (data_1) {
+    var args_1 = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args_1[_i - 1] = arguments[_i];
+    }
+    return __awaiter(void 0, __spreadArray([data_1], args_1, true), void 0, function (data, isService) {
+        var repo, dataSource, itemAvailableRepo, itemStockTrack, result_1, invoiceItems, inventory_2, itemIds_1, errors_1, itemToQauntityMap_1, itemsAvailable_1, stockMap_1, stockTrack_1, error_6;
+        if (isService === void 0) { isService = false; }
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 8, , 9]);
+                    return [4 /*yield*/, (0, sale_header_repo_1.default)()];
+                case 1:
+                    repo = _a.sent();
+                    return [4 /*yield*/, (0, dbconfig_1.handler)()];
+                case 2:
+                    dataSource = _a.sent();
+                    itemAvailableRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
+                    itemStockTrack = dataSource.getRepository(item_stock_track_entity_1.ItemsStockTrack);
+                    return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(19, data)];
+                case 3:
+                    data = _a.sent();
+                    result_1 = new sale_header_entity_1.SaleHeaders();
+                    invoiceItems = [];
+                    if (!!data.isService) return [3 /*break*/, 7];
+                    inventory_2 = [];
+                    itemIds_1 = [];
+                    errors_1 = [];
+                    itemToQauntityMap_1 = {};
+                    data.saleLines.forEach(function (value) {
+                        itemIds_1.push(value.service.id);
+                    });
+                    return [4 /*yield*/, itemAvailableRepo.find({
+                            where: {
+                                service: {
+                                    id: (0, typeorm_1.In)(itemIds_1),
+                                },
+                            },
+                            relations: {
+                                service: true,
+                            },
+                            select: {
+                                quantity: true,
+                                service: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        })];
+                case 4:
+                    itemsAvailable_1 = _a.sent();
+                    //add data to map
+                    itemsAvailable_1.forEach(function (val, index) {
+                        itemToQauntityMap_1[val.service.id] = {
+                            name: val.service.name,
+                            quantity: val.quantity,
+                            idx: index,
+                        };
+                    });
+                    //check availabilty
+                    data.saleLines.forEach(function (value) {
+                        var _a, _b;
+                        if (((_a = itemToQauntityMap_1[value.service.id]) === null || _a === void 0 ? void 0 : _a.quantity) < value.quantity) {
+                            errors_1.push("".concat(itemToQauntityMap_1[value.service.id].name, " is out of stock : available stock is ").concat((_b = itemToQauntityMap_1[value.service.id]) === null || _b === void 0 ? void 0 : _b.quantity));
+                        }
+                    });
+                    //throw error if applicable
+                    if (errors_1.length) {
+                        throw { message: errors_1, statusCode: 409 };
+                    }
+                    stockMap_1 = {};
+                    return [4 /*yield*/, itemStockTrack.find({
+                            where: {
+                                service: {
+                                    id: (0, typeorm_1.In)(itemIds_1),
+                                },
+                            },
+                            order: {
+                                id: "DESC",
+                            },
+                            relations: {
+                                service: true,
+                            },
+                        })];
+                case 5:
+                    stockTrack_1 = _a.sent();
+                    stockTrack_1.forEach(function (val, index) {
+                        stockMap_1[val.id] = {
+                            id: val.id,
+                            idx: index,
+                            aQuanity: val.quantityUvailable,
+                        };
+                    });
+                    data.saleLines.forEach(function (value) {
+                        //1. filter out stock entries for each item
+                        var idx = 0;
+                        var itmRemain = value.quantity;
+                        var uvailableForItem = stockTrack_1.filter(function (val) { return val.service.id === value.service.id; });
+                        while (itmRemain) {
+                            //1. update current entry
+                            var _uvailableForItem = uvailableForItem[idx];
+                            //create inventory records here
+                            var il = new inventory_lines_entity_1.InventoryLines();
+                            il.service = value.service;
+                            il.createdDate = value.createdDate;
+                            il.modifiedDate = value.modifiedDate;
+                            il.stock = _uvailableForItem;
+                            var sold = _uvailableForItem.quantityUvailable - itmRemain;
+                            _uvailableForItem = __assign(__assign({}, _uvailableForItem), { quantityUvailable: sold > 0 ? sold : 0 });
+                            if (stockMap_1[_uvailableForItem.id]) {
+                                stockTrack_1[stockMap_1[_uvailableForItem.id].idx] = _uvailableForItem;
+                            }
+                            if (sold < 0) {
+                                il.quantity = -Number(itmRemain + sold);
+                                inventory_2.push(il);
+                                itmRemain = Math.abs(sold);
+                            }
+                            else {
+                                il.quantity = -Number(itmRemain);
+                                inventory_2.push(il);
+                                itmRemain = 0;
+                            }
+                            idx++;
+                        }
+                        //decrease item availabilty
+                        if (itemToQauntityMap_1[value.service.id]) {
+                            var _itemsAvailable = itemsAvailable_1[itemToQauntityMap_1[value.service.id].idx];
+                            _itemsAvailable = __assign(__assign({}, _itemsAvailable), { quantity: _itemsAvailable.quantity - value.quantity });
+                            itemsAvailable_1[itemToQauntityMap_1[value.service.id].idx] =
+                                _itemsAvailable;
+                        }
+                    });
+                    data.inventoryLines = inventory_2;
+                    //3. start transaction
+                    return [4 /*yield*/, dataSource.manager.transaction("SERIALIZABLE", function (transactionalEntityManager) { return __awaiter(void 0, void 0, void 0, function () {
+                            var headerEntry, headerEntryResult;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: 
+                                    //2. update items availability
+                                    //2. update items availability
+                                    return [4 /*yield*/, transactionalEntityManager.save(item_stock_track_entity_1.ItemsStockTrack, stockTrack_1)];
+                                    case 1:
+                                        //2. update items availability
+                                        //2. update items availability
+                                        _a.sent();
+                                        return [4 /*yield*/, transactionalEntityManager.save(item_stocks_entity_1.ItemAvailable, itemsAvailable_1)];
+                                    case 2:
+                                        _a.sent();
+                                        headerEntry = transactionalEntityManager.create(sale_header_entity_1.SaleHeaders, data);
+                                        return [4 /*yield*/, transactionalEntityManager.save(sale_header_entity_1.SaleHeaders, headerEntry)];
+                                    case 3:
+                                        headerEntryResult = _a.sent();
+                                        result_1 = headerEntryResult;
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); })];
+                case 6:
+                    //3. start transaction
+                    _a.sent();
+                    _a.label = 7;
+                case 7: return [2 /*return*/, result_1];
+                case 8:
+                    error_6 = _a.sent();
+                    throw error_6;
+                case 9: return [2 /*return*/];
+            }
+        });
+    });
+};
+exports.default = { find: find, findById: findById, create: create, deleteById: deleteById, updateById: updateById, createBulk: createBulk };
 //# sourceMappingURL=sale-header.service.js.map

@@ -10,6 +10,7 @@ import { ItemAvailable } from "../sale-items/entities/item-stocks.entity";
 import itemStocksService from "../sale-items/item-stocks.service";
 import { Services } from "../services/entities/services.entity";
 import { ItemsStockTrack } from "./entities/item-stock-track.entity";
+import generateUniqueNumber from "../../utils/getuniquenumber.util";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<PurchaseHeaders>) => {
@@ -120,12 +121,16 @@ const createBulk = async (
   isService: boolean = false
 ) => {
   try {
+    console.log("inside thsi fdfdf")
     const dataSource = await handler();
     data = await generateCode(20, data);
     const itemIds: number[] = [];
     const inventory: InventoryLines[] = [];
     const itemRepo = dataSource.getRepository(Services);
 
+    data.purchaseLines.forEach((value) => {
+      itemIds.push(value.service.id);
+    });
     //. 1.create itemId and sku mapping
     const skuMap: {
       [key: number]: string;
@@ -142,7 +147,7 @@ const createBulk = async (
     });
     //3. create sku mapping for future
     relatedItems.forEach((val) => {
-      skuMap[val.id] = val.sku + "-" + Date.now();
+      skuMap[val.id] = val.sku + "-" + generateUniqueNumber();
     });
     //3. start transaction
     await dataSource.manager.transaction(
@@ -192,7 +197,6 @@ const createBulk = async (
           il.createdDate = value.createdDate;
           il.modifiedDate = value.modifiedDate;
           il.stock = itemIdStockMap[value.service.id];
-          itemIds.push(value.service.id);
           inventory.push(il);
         });
         //attch the object to inventory

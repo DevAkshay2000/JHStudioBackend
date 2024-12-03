@@ -12,10 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaleHeaders = void 0;
 var typeorm_1 = require("typeorm");
 var user_entity_1 = require("../../auth/entities/user.entity");
-var customer_entity_1 = require("../../customer/entities/customer.entity");
 var entities_1 = require("../../general-data/entities");
 var sale_lines_enity_1 = require("./sale-lines.enity");
 var inventory_lines_entity_1 = require("./inventory-lines.entity");
+var contact_entity_1 = require("../../contacts/entities/contact.entity");
 var SaleHeaders = /** @class */ (function () {
     function SaleHeaders() {
     }
@@ -28,13 +28,17 @@ var SaleHeaders = /** @class */ (function () {
         __metadata("design:type", String)
     ], SaleHeaders.prototype, "code", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "varchar", length: 600, nullable: true }),
+        __metadata("design:type", String)
+    ], SaleHeaders.prototype, "description", void 0);
+    __decorate([
         (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], SaleHeaders.prototype, "txnDate", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return customer_entity_1.Customer; }),
+        (0, typeorm_1.ManyToOne)(function () { return contact_entity_1.Contact; }),
         (0, typeorm_1.JoinColumn)(),
-        __metadata("design:type", customer_entity_1.Customer)
+        __metadata("design:type", contact_entity_1.Contact)
     ], SaleHeaders.prototype, "customer", void 0);
     __decorate([
         (0, typeorm_1.ManyToOne)(function () { return user_entity_1.Users; }),

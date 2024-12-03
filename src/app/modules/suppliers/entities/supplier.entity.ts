@@ -22,15 +22,15 @@ export class Supplier {
   @Column({ type: "varchar", length: 255, nullable: false })
   name: string;
 
-  @ManyToOne(() => States)
+  @ManyToOne(() => States, { nullable: true })
   @JoinColumn()
   state: States;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn()
   country: Country;
 
-  @ManyToOne(() => City)
+  @ManyToOne(() => City, { nullable: true })
   @JoinColumn()
   city: City;
 

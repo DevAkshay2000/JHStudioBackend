@@ -13,6 +13,7 @@ exports.Services = void 0;
 var typeorm_1 = require("typeorm");
 var taxes_entity_1 = require("../../taxes/entities/taxes.entity");
 var entities_1 = require("../../general-data/entities");
+var item_stocks_entity_1 = require("../../sale-items/entities/item-stocks.entity");
 var Services = /** @class */ (function () {
     function Services() {
     }
@@ -29,15 +30,20 @@ var Services = /** @class */ (function () {
         __metadata("design:type", String)
     ], Services.prototype, "name", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return taxes_entity_1.Taxes; }),
+        (0, typeorm_1.ManyToOne)(function () { return taxes_entity_1.Taxes; }, { nullable: false }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", taxes_entity_1.Taxes)
     ], Services.prototype, "tax", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return entities_1.DItemType; }),
+        (0, typeorm_1.ManyToOne)(function () { return entities_1.DItemType; }, { nullable: true }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", entities_1.DItemType)
     ], Services.prototype, "itemType", void 0);
+    __decorate([
+        (0, typeorm_1.OneToOne)(function () { return item_stocks_entity_1.ItemAvailable; }, { nullable: true }),
+        (0, typeorm_1.JoinColumn)(),
+        __metadata("design:type", item_stocks_entity_1.ItemAvailable)
+    ], Services.prototype, "inStock", void 0);
     __decorate([
         (0, typeorm_1.Column)({ type: "int", nullable: false }),
         __metadata("design:type", Number)

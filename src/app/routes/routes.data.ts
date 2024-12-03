@@ -10,6 +10,7 @@ import serviceSessionRoutes from "../modules/service-session/service-session.rou
 import taxesRoutes from "../modules/taxes/taxes.routes";
 import purchaseRoutes from "../modules/purchase-items/purchase.routes";
 import supplierRoutes from "../modules/suppliers/supplier.routes";
+import contactRoutes from "../modules/contacts/contact.routes";
 
 export const routes: Routes = [
   itemRoute,
@@ -22,5 +23,6 @@ export const routes: Routes = [
   serviceSessionRoutes,
   taxesRoutes,
   purchaseRoutes,
-  supplierRoutes
+  supplierRoutes,
+  contactRoutes
 ];

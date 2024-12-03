@@ -28,6 +28,10 @@ var Taxes = /** @class */ (function () {
         __metadata("design:type", String)
     ], Taxes.prototype, "name", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "varchar", length: 700, nullable: true }),
+        __metadata("design:type", String)
+    ], Taxes.prototype, "description", void 0);
+    __decorate([
         (0, typeorm_1.ManyToOne)(function () { return entities_1.Country; }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", entities_1.Country)
