@@ -13,6 +13,8 @@ import itemStocksService from "./item-stocks.service";
 import { Services } from "../services/entities/services.entity";
 import { ItemsStockTrack } from "../purchase-items/entities/item-stock-track.entity";
 import { Customer } from "../customer/entities/customer.entity";
+import { Contact } from "../contacts/entities/contact.entity";
+import contactService from "../contacts/contact.service";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<SaleHeaders>) => {
@@ -67,9 +69,9 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
     const respo = await repo.create({
       ...data,
     });
-    const custmerRepo = dataSource.getRepository(Customer);
+    const custmerRepo = dataSource.getRepository(Contact);
     //get customer data custo
-    let customer = await customerService.findById(data.customer.id);
+    let customer = await contactService.findById(data.customer.id);
     console.log("customer", customer);
     await custmerRepo.save({
       ...customer,

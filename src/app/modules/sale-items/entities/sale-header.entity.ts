@@ -19,6 +19,7 @@ import {
 } from "../../general-data/entities";
 import { SaleLines } from "./sale-lines.enity";
 import { InventoryLines } from "./inventory-lines.entity";
+import { Contact } from "../../contacts/entities/contact.entity";
 
 @Entity("sale_headers")
 export class SaleHeaders {
@@ -34,9 +35,9 @@ export class SaleHeaders {
   @CreateDateColumn({ type: "varchar", nullable: false })
   txnDate: string;
 
-  @ManyToOne(() => Customer)
+  @ManyToOne(() => Contact)
   @JoinColumn()
-  customer: Customer;
+  customer: Contact;
 
   @ManyToOne(() => Users)
   @JoinColumn()

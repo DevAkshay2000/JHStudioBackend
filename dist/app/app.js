@@ -44,7 +44,6 @@ var express_1 = __importDefault(require("express"));
 var http_1 = __importDefault(require("http"));
 var routes_1 = require("./routes/routes");
 var errorHandler_middleware_1 = require("./middlewares/errorHandler.middleware");
-var constant_1 = require("./utils/constant");
 var dbconfig_1 = require("./config/dbconfig");
 // import { initializeDataSource } from "./config/dbconfig";
 /**
@@ -68,7 +67,7 @@ var startServer = function () { return __awaiter(void 0, void 0, void 0, functio
                 /**
                  * Register All the routes here
                  */
-                app.get(constant_1.API_BASE, function (req, res) {
+                app.get("/", function (req, res) {
                     res.send("\n    <html>\n      <head>\n        <title>Welcome to My E-commerce</title>\n        <style>\n          body {\n            font-family: Arial, sans-serif;\n            text-align: center;\n            margin-top: 50px;\n          }\n          h1 {\n            color: #2c3e50;\n          }\n        </style>\n      </head>\n      <body>\n        <h1>Welcome to KFT Foods E-commerce!</h1>\n        <p>This is the home page of your application.</p>\n        <p>Enjoy your stay!</p>\n      </body>\n    </html>\n  ");
                 });
                 (0, routes_1.registerRoutes)(app);

@@ -6,3 +6,4 @@ export * from './d-payment-types.entity'
 export * from './d-user-types.entity'
 export * from './menus.entity'
 export * from "./d-item-types.entity"
+export * from "./dp-contact-types"

@@ -8,6 +8,7 @@ import {
   DUserType,
   Menus,
   States,
+  DContactType,
 } from "../entities";
 
 export const routeToEntityMap: {
@@ -21,4 +22,5 @@ export const routeToEntityMap: {
   "/countries": Country,
   "/menus": Menus,
   "/item-types": DItemType,
+  "/contact-types": DContactType,
 };

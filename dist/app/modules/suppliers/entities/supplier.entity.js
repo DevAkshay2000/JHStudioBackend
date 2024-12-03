@@ -28,17 +28,17 @@ var Supplier = /** @class */ (function () {
         __metadata("design:type", String)
     ], Supplier.prototype, "name", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return entities_1.States; }),
+        (0, typeorm_1.ManyToOne)(function () { return entities_1.States; }, { nullable: true }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", entities_1.States)
     ], Supplier.prototype, "state", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return entities_1.Country; }),
+        (0, typeorm_1.ManyToOne)(function () { return entities_1.Country; }, { nullable: true }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", entities_1.Country)
     ], Supplier.prototype, "country", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return entities_1.City; }),
+        (0, typeorm_1.ManyToOne)(function () { return entities_1.City; }, { nullable: true }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", entities_1.City)
     ], Supplier.prototype, "city", void 0);

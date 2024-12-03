@@ -28,7 +28,7 @@ export const startServer = async () => {
     /**
      * Register All the routes here
      */
-    app.get(API_BASE, (req, res) => {
+    app.get("/", (req, res) => {
       res.send(`
     <html>
       <head>

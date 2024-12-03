@@ -30,12 +30,12 @@ var Services = /** @class */ (function () {
         __metadata("design:type", String)
     ], Services.prototype, "name", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return taxes_entity_1.Taxes; }),
+        (0, typeorm_1.ManyToOne)(function () { return taxes_entity_1.Taxes; }, { nullable: false }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", taxes_entity_1.Taxes)
     ], Services.prototype, "tax", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return entities_1.DItemType; }),
+        (0, typeorm_1.ManyToOne)(function () { return entities_1.DItemType; }, { nullable: true }),
         (0, typeorm_1.JoinColumn)(),
         __metadata("design:type", entities_1.DItemType)
     ], Services.prototype, "itemType", void 0);

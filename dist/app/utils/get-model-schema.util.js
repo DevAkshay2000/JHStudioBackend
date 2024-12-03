@@ -126,11 +126,11 @@ exports.getModelSchema = getModelSchema;
 /** this function can validate req body agains the schema*/
 var validateRequestBody = function (model) {
     return function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-        var appDataSource, entityMetadata, schemaObject, relations, _i, relations_1, relation, relativeModelSchema, relativeModelSchema, validate, valid, error_1;
+        var appDataSource, entityMetadata, schemaObject, relations, _i, relations_1, relation, relativeModelSchema, relativeModelSchema, relativeModelSchema, validate, valid, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 9, , 10]);
+                    _a.trys.push([0, 11, , 12]);
                     return [4 /*yield*/, (0, dbconfig_1.handler)()];
                 case 1:
                     appDataSource = _a.sent();
@@ -142,13 +142,14 @@ var validateRequestBody = function (model) {
                         return {
                             propertyName: relation.propertyName,
                             relationType: relation.relationType,
+                            required: !relation.isNullable,
                             className: relation.inverseEntityMetadata.targetName, // Get the class name of the related entity
                         };
                     });
                     _i = 0, relations_1 = relations;
                     _a.label = 3;
                 case 3:
-                    if (!(_i < relations_1.length)) return [3 /*break*/, 8];
+                    if (!(_i < relations_1.length)) return [3 /*break*/, 10];
                     relation = relations_1[_i];
                     if (!(relation.relationType === "one-to-many")) return [3 /*break*/, 5];
                     return [4 /*yield*/, (0, exports.getModelSchema)(relation.className)];
@@ -172,24 +173,45 @@ var validateRequestBody = function (model) {
                     schemaObject["properties"][relation.propertyName] =
                         relativeModelSchema;
                     //b. make it required
-                    schemaObject.required.push(relation.propertyName);
+                    if ((relation === null || relation === void 0 ? void 0 : relation.required) &&
+                        !schemaObject.required.includes(relation.propertyName)) {
+                        console.log(relation.propertyName);
+                        schemaObject.required.push(relation.propertyName);
+                    }
                     _a.label = 7;
                 case 7:
+                    if (!(relation.relationType === "one-to-one")) return [3 /*break*/, 9];
+                    return [4 /*yield*/, (0, exports.getModelSchema)(relation.className)];
+                case 8:
+                    relativeModelSchema = _a.sent();
+                    // set only id as required
+                    relativeModelSchema.required = ["id"];
+                    schemaObject["properties"][relation.propertyName] =
+                        relativeModelSchema;
+                    //b. make it required
+                    if ((relation === null || relation === void 0 ? void 0 : relation.required) &&
+                        !schemaObject.required.includes(relation.propertyName)) {
+                        console.log(relation.propertyName);
+                        schemaObject.required.push(relation.propertyName);
+                    }
+                    _a.label = 9;
+                case 9:
                     _i++;
                     return [3 /*break*/, 3];
-                case 8:
+                case 10:
                     validate = ajv.compile(schemaObject);
                     valid = validate(req.body);
                     if (!valid) {
                         throw validate.errors;
                     }
                     next();
-                    return [3 /*break*/, 10];
-                case 9:
+                    return [3 /*break*/, 12];
+                case 11:
                     error_1 = _a.sent();
+                    console.log(error_1);
                     res.status(422).json(error_1);
-                    return [3 /*break*/, 10];
-                case 10: return [2 /*return*/];
+                    return [3 /*break*/, 12];
+                case 12: return [2 /*return*/];
             }
         });
     }); };

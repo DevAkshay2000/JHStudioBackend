@@ -15,7 +15,7 @@ var user_entity_1 = require("../../auth/entities/user.entity");
 var entities_1 = require("../../general-data/entities");
 var purchase_lines_entity_1 = require("./purchase-lines.entity");
 var inventory_lines_entity_1 = require("../../sale-items/entities/inventory-lines.entity");
-var supplier_entity_1 = require("../../suppliers/entities/supplier.entity");
+var contact_entity_1 = require("../../contacts/entities/contact.entity");
 var PurchaseHeaders = /** @class */ (function () {
     function PurchaseHeaders() {
     }
@@ -36,9 +36,9 @@ var PurchaseHeaders = /** @class */ (function () {
         __metadata("design:type", String)
     ], PurchaseHeaders.prototype, "saleInvoiceNumber", void 0);
     __decorate([
-        (0, typeorm_1.ManyToOne)(function () { return supplier_entity_1.Supplier; }),
+        (0, typeorm_1.ManyToOne)(function () { return contact_entity_1.Contact; }),
         (0, typeorm_1.JoinColumn)(),
-        __metadata("design:type", supplier_entity_1.Supplier)
+        __metadata("design:type", contact_entity_1.Contact)
     ], PurchaseHeaders.prototype, "supplier", void 0);
     __decorate([
         (0, typeorm_1.ManyToOne)(function () { return user_entity_1.Users; }),

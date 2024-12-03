@@ -59,6 +59,7 @@ var routes_types_1 = require("../../routes/routes.types");
 var entities_1 = require("./entities");
 var authenticate_middleware_1 = __importDefault(require("../../middlewares/authenticate.middleware"));
 var services_entity_1 = require("../services/entities/services.entity");
+var get_model_schema_util_1 = require("../../utils/get-model-schema.util");
 var router = (0, express_1.Router)();
 var _loop_1 = function (key, value) {
     router.get(key, (0, validate_filter_util_1.validateFilter)(value), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -88,13 +89,39 @@ var _loop_1 = function (key, value) {
             }
         });
     }); });
+    router.post(key, (0, get_model_schema_util_1.validateRequestBody)(value), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var appDataSource, repository, data, respo, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    return [4 /*yield*/, (0, dbconfig_1.handler)()];
+                case 1:
+                    appDataSource = _a.sent();
+                    repository = appDataSource.getRepository(value);
+                    data = repository.create(req.body);
+                    return [4 /*yield*/, repository.save(data)];
+                case 2:
+                    respo = _a.sent();
+                    res.status(200).json(respo);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_2 = _a.sent();
+                    res
+                        .status(500)
+                        .json({ message: "Error fetching DescriptionType", error: error_2 });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); });
 };
 for (var _i = 0, _a = Object.entries(modeltoroutemapping_mapping_1.routeToEntityMap); _i < _a.length; _i++) {
     var _b = _a[_i], key = _b[0], value = _b[1];
     _loop_1(key, value);
 }
 router.get("/menu-headers", authenticate_middleware_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, appDataSource, repository, data, respo, _i, data_1, menu, level1, _a, _b, feature, error_2;
+    var user, appDataSource, repository, data, respo, _i, data_1, menu, level1, _a, _b, feature, error_3;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -154,8 +181,8 @@ router.get("/menu-headers", authenticate_middleware_1.default, function (req, re
             };
             case 4: return [3 /*break*/, 6];
             case 5:
-                error_2 = _c.sent();
-                res.status(500).json({ message: "Error fetching menus", error: error_2 });
+                error_3 = _c.sent();
+                res.status(500).json({ message: "Error fetching menus", error: error_3 });
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];
         }
@@ -168,7 +195,7 @@ function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 router.get("/get-schema", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var skip_1, result_1, appDataSource, entityMetadata, error_3;
+    var skip_1, result_1, appDataSource, entityMetadata, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -221,8 +248,8 @@ router.get("/get-schema", function (req, res, next) { return __awaiter(void 0, v
                 res.send(result_1);
                 return [3 /*break*/, 3];
             case 2:
-                error_3 = _a.sent();
-                next(error_3);
+                error_4 = _a.sent();
+                next(error_4);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

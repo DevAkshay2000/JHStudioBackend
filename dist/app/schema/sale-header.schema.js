@@ -10,6 +10,9 @@ exports.SaleHeadersSchema = {
         code: {
             type: "string",
         },
+        description: {
+            type: "string",
+        },
         txnDate: {
             type: "string",
         },
@@ -89,7 +92,7 @@ exports.SaleHeadersSchema = {
                             },
                             name: {
                                 type: "string",
-                            }
+                            },
                         },
                         required: ["id", "name"],
                         additionalProperties: false,
@@ -105,7 +108,7 @@ exports.SaleHeadersSchema = {
                             },
                             percentage: {
                                 type: "integer",
-                            }
+                            },
                         },
                         required: ["id", "name"],
                         additionalProperties: false,
@@ -137,7 +140,15 @@ exports.SaleHeadersSchema = {
                         format: "date-time",
                     },
                 },
-                required: ["service", "amount", "createdDate", "modifiedDate", "tax", "quantity", "rate"],
+                required: [
+                    "service",
+                    "amount",
+                    "createdDate",
+                    "modifiedDate",
+                    "tax",
+                    "quantity",
+                    "rate",
+                ],
                 additionalProperties: false,
             },
         },

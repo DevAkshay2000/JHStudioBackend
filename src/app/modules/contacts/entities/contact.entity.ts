@@ -9,10 +9,15 @@ import {
   OneToOne,
   ManyToOne,
 } from "typeorm";
-import { City, Country, States } from "../../general-data/entities";
+import {
+  City,
+  Country,
+  DContactType,
+  States,
+} from "../../general-data/entities";
 
-@Entity("suppliers")
-export class Supplier {
+@Entity("contacts")
+export class Contact {
   @PrimaryGeneratedColumn({ type: "int" })
   id: number;
 
@@ -34,6 +39,10 @@ export class Supplier {
   @JoinColumn()
   city: City;
 
+  @ManyToOne(() => DContactType, { nullable: false })
+  @JoinColumn()
+  contactType: DContactType;
+
   @CreateDateColumn({ type: "varchar", nullable: true })
   birthDate: string;
 
@@ -45,6 +54,9 @@ export class Supplier {
 
   @Column({ type: "int", default: 0 })
   isInactive: number;
+
+  @UpdateDateColumn({ type: "varchar", nullable: true })
+  lastVisitedDate: string;
 
   @CreateDateColumn({ type: "varchar", nullable: false })
   createdDate: string;

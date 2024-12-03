@@ -66,9 +66,11 @@ var sale_header_entity_1 = require("./entities/sale-header.entity");
 var sale_header_repo_1 = __importDefault(require("./sale-header.repo"));
 var inventory_lines_entity_1 = require("./entities/inventory-lines.entity");
 var send_invoice_mail_service_1 = __importDefault(require("../../services/send-invoice-mail.service"));
-var customer_service_1 = __importDefault(require("../customer/customer.service"));
 var item_stocks_entity_1 = require("./entities/item-stocks.entity");
 var item_stock_track_entity_1 = require("../purchase-items/entities/item-stock-track.entity");
+var customer_entity_1 = require("../customer/entities/customer.entity");
+var contact_entity_1 = require("../contacts/entities/contact.entity");
+var contact_service_1 = __importDefault(require("../contacts/contact.service"));
 //1. find multiple records
 var find = function (filter) { return __awaiter(void 0, void 0, void 0, function () {
     var repo, error_1;
@@ -115,17 +117,21 @@ var create = function (data_1) {
         args_1[_i - 1] = arguments[_i];
     }
     return __awaiter(void 0, __spreadArray([data_1], args_1, true), void 0, function (data, isService) {
-        var repo, invoiceItems_1, respo, customer, error_3;
+        var dataSource, repo, customerRepo, invoiceItems_1, respo, custmerRepo, customer, error_3;
         if (isService === void 0) { isService = false; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
-                    return [4 /*yield*/, (0, sale_header_repo_1.default)()];
+                    _a.trys.push([0, 8, , 9]);
+                    return [4 /*yield*/, (0, dbconfig_1.handler)()];
                 case 1:
-                    repo = _a.sent();
-                    return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(19, data)];
+                    dataSource = _a.sent();
+                    return [4 /*yield*/, (0, sale_header_repo_1.default)()];
                 case 2:
+                    repo = _a.sent();
+                    customerRepo = dataSource.getRepository(customer_entity_1.Customer);
+                    return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(19, data)];
+                case 3:
                     data = _a.sent();
                     invoiceItems_1 = [];
                     if (data.saleLines.length) {
@@ -141,11 +147,16 @@ var create = function (data_1) {
                         });
                     }
                     return [4 /*yield*/, repo.create(__assign({}, data))];
-                case 3:
-                    respo = _a.sent();
-                    return [4 /*yield*/, customer_service_1.default.findById(data.customer.id)];
                 case 4:
+                    respo = _a.sent();
+                    custmerRepo = dataSource.getRepository(contact_entity_1.Contact);
+                    return [4 /*yield*/, contact_service_1.default.findById(data.customer.id)];
+                case 5:
                     customer = _a.sent();
+                    console.log("customer", customer);
+                    return [4 /*yield*/, custmerRepo.save(__assign(__assign({}, customer), { lastVisitedDate: new Date().toISOString() }))];
+                case 6:
+                    _a.sent();
                     return [4 /*yield*/, (0, send_invoice_mail_service_1.default)({
                             customer: customer.name,
                             txnDate: new Date(data.txnDate).toLocaleDateString(),
@@ -157,13 +168,13 @@ var create = function (data_1) {
                             email: customer.email,
                             itemData: invoiceItems_1,
                         })];
-                case 5:
+                case 7:
                     _a.sent();
                     return [2 /*return*/, respo];
-                case 6:
+                case 8:
                     error_3 = _a.sent();
                     throw error_3;
-                case 7: return [2 /*return*/];
+                case 9: return [2 /*return*/];
             }
         });
     });
@@ -340,6 +351,7 @@ var createBulk = function (data_1) {
                             il.service = value.service;
                             il.createdDate = value.createdDate;
                             il.modifiedDate = value.modifiedDate;
+                            il.stock = _uvailableForItem;
                             var sold = _uvailableForItem.quantityUvailable - itmRemain;
                             _uvailableForItem = __assign(__assign({}, _uvailableForItem), { quantityUvailable: sold > 0 ? sold : 0 });
                             if (stockMap_1[_uvailableForItem.id]) {

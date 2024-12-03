@@ -11,5 +11,6 @@ exports.routeToEntityMap = {
     "/countries": entities_1.Country,
     "/menus": entities_1.Menus,
     "/item-types": entities_1.DItemType,
+    "/contact-types": entities_1.DContactType,
 };
 //# sourceMappingURL=modeltoroutemapping.mapping.js.map
