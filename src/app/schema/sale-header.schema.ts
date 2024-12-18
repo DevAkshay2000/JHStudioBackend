@@ -56,6 +56,9 @@ export const SaleHeadersSchema: any = {
       required: ["id"],
       additionalProperties: false,
     },
+    isService: {
+      type: "integer",
+    },
     paymentType: {
       type: "object",
       properties: {
@@ -116,7 +119,11 @@ export const SaleHeadersSchema: any = {
           amount: {
             type: "integer",
           },
+
           quantity: {
+            type: "integer",
+          },
+          costPrice: {
             type: "integer",
           },
           discountAmount: {
@@ -159,6 +166,7 @@ export const SaleHeadersSchema: any = {
     "user",
     "paymentType",
     "saleLines",
+    "isService"
   ],
   additionalProperties: false,
 };

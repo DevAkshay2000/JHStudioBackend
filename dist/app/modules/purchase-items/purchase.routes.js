@@ -88,7 +88,9 @@ router.post("/", (0, validate_req_body_util_1.validateBodyManual)(schema_1.Purch
         }
     });
 }); });
-router.get("/:id", (0, validate_filter_util_1.validateFilter)(purchase_headers_entity_1.PurchaseHeaders), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.get("/:id", 
+// validateFilter(PurchaseHeaders),
+function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var id, result, _a, _b, _c, error_3;
     return __generator(this, function (_d) {
         switch (_d.label) {

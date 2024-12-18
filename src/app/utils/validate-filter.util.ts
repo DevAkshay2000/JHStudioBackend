@@ -12,7 +12,8 @@ addFormats(ajv);
 //2. get relation names relations
 const getRelationNames = async <T extends EntityTarget<T>>(
   model: T,
-  baseModelName?: string
+  baseModelName?: string,
+  level: number = 1
 ): Promise<string[]> => {
   let relationArray: string[] = [];
   try {
@@ -30,12 +31,13 @@ const getRelationNames = async <T extends EntityTarget<T>>(
 
     //3. loop through relations and crate a scheama for each relation entity
     for (const relation of relations) {
-      if (baseModelName !== relation.className) {
+      if (baseModelName !== relation.className && level < 5) {
         //a. get the scheama oject for that entity
         relationArray.push(relation.propertyName);
         const result = await getRelationNames(
           relation.className,
-          baseModelName
+          baseModelName,
+          level++
         );
         relationArray = [...relationArray, ...result];
       } else {
@@ -260,13 +262,17 @@ export const validateFilter = <T extends EntityTarget<T>>(model: T) => {
         if (!valid) {
           throw validate.errors;
         }
+
         //b. validate relation names
         const appDataSource = await handler();
-         const entityMetadata = appDataSource.getMetadata(model);
+
+        const entityMetadata = appDataSource.getMetadata(model);
+
         const relationList = await getRelationNames(
           model,
           entityMetadata.targetName
         );
+
         //b1.check whether user passed anonymus relations
         await validateFilterRelations(relationList, query.relations);
       }

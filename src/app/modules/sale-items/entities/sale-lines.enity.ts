@@ -35,6 +35,9 @@ export class SaleLines {
 
   @Column({ type: "int", nullable: false })
   rate: number;
+  
+  @Column({ type: "int", nullable: true })
+  costPrice: number;
 
   @Column({ type: "int", nullable: false })
   amount: number;

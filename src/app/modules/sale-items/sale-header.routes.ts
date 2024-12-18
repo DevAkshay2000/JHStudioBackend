@@ -12,7 +12,7 @@ const router = Router();
 
 router.get(
   "/",
-  // validateFilter(SaleHeaders),
+  validateFilter(SaleHeaders),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await saleHeaderService.find(

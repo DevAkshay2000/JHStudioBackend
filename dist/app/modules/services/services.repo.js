@@ -49,6 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var dbconfig_1 = require("../../../app/config/dbconfig");
 var services_entity_1 = require("./entities/services.entity");
+var item_stocks_entity_1 = require("../sale-items/entities/item-stocks.entity");
 var repository = function () { return __awaiter(void 0, void 0, void 0, function () {
     var dataSource, repo, find, findOne, findOneById, create, updateById, deleteById, createAll, createBulk;
     return __generator(this, function (_a) {
@@ -112,20 +113,48 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                     });
                 }); };
                 create = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-                    var respo, error_4;
+                    var respo_1, itv_1, error_4;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                _a.trys.push([0, 2, , 3]);
-                                respo = repo.create(data);
-                                return [4 /*yield*/, repo.save(respo)];
+                                _a.trys.push([0, 5, , 6]);
+                                respo_1 = new services_entity_1.Services();
+                                if (!!data.isService) return [3 /*break*/, 2];
+                                itv_1 = new item_stocks_entity_1.ItemAvailable();
+                                itv_1.modifiedDate = data.modifiedDate;
+                                itv_1.quantity = 0;
+                                return [4 /*yield*/, dataSource.manager.transaction("SERIALIZABLE", function (transactionalEntityManager) { return __awaiter(void 0, void 0, void 0, function () {
+                                        var item, itemResult, itemAvalableEntry;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0:
+                                                    item = transactionalEntityManager.create(services_entity_1.Services, data);
+                                                    return [4 /*yield*/, transactionalEntityManager.save(services_entity_1.Services, item)];
+                                                case 1:
+                                                    itemResult = _a.sent();
+                                                    itemAvalableEntry = transactionalEntityManager.create(item_stocks_entity_1.ItemAvailable, __assign(__assign({}, itv_1), { service: itemResult }));
+                                                    return [4 /*yield*/, transactionalEntityManager.save(item_stocks_entity_1.ItemAvailable, itemAvalableEntry)];
+                                                case 2:
+                                                    _a.sent();
+                                                    respo_1 = itemResult;
+                                                    return [2 /*return*/];
+                                            }
+                                        });
+                                    }); })];
                             case 1:
                                 _a.sent();
-                                return [2 /*return*/, respo];
+                                return [3 /*break*/, 4];
                             case 2:
+                                repo.create(data);
+                                return [4 /*yield*/, repo.save(respo_1)];
+                            case 3:
+                                respo_1 = _a.sent();
+                                _a.label = 4;
+                            case 4: return [2 /*return*/, respo_1];
+                            case 5:
                                 error_4 = _a.sent();
                                 throw error_4;
-                            case 3: return [2 /*return*/];
+                            case 6: return [2 /*return*/];
                         }
                     });
                 }); };

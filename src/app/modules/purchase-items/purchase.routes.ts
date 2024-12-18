@@ -40,7 +40,7 @@ router.post(
 
 router.get(
   "/:id",
-  validateFilter(PurchaseHeaders),
+  // validateFilter(PurchaseHeaders),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);

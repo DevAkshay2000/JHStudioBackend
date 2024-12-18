@@ -67,53 +67,60 @@ var dbconfig_1 = require("../config/dbconfig");
 var ajv = new ajv_1.default({ allErrors: true });
 (0, ajv_formats_1.default)(ajv);
 //2. get relation names relations
-var getRelationNames = function (model, baseModelName) { return __awaiter(void 0, void 0, void 0, function () {
-    var relationArray, appDataSource, entityMetadata, relations, _i, relations_1, relation, result, e_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                relationArray = [];
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 8, , 9]);
-                return [4 /*yield*/, (0, dbconfig_1.handler)()];
-            case 2:
-                appDataSource = _a.sent();
-                entityMetadata = appDataSource.getMetadata(model);
-                relations = entityMetadata.relations.map(function (relation) {
-                    return {
-                        propertyName: relation.propertyName,
-                        relationType: relation.relationType,
-                        className: relation.inverseEntityMetadata.targetName,
-                    };
-                });
-                _i = 0, relations_1 = relations;
-                _a.label = 3;
-            case 3:
-                if (!(_i < relations_1.length)) return [3 /*break*/, 7];
-                relation = relations_1[_i];
-                if (!(baseModelName !== relation.className)) return [3 /*break*/, 5];
-                //a. get the scheama oject for that entity
-                relationArray.push(relation.propertyName);
-                return [4 /*yield*/, getRelationNames(relation.className, baseModelName)];
-            case 4:
-                result = _a.sent();
-                relationArray = __spreadArray(__spreadArray([], relationArray, true), result, true);
-                return [3 /*break*/, 6];
-            case 5:
-                relationArray.push(relation.propertyName);
-                _a.label = 6;
-            case 6:
-                _i++;
-                return [3 /*break*/, 3];
-            case 7: return [2 /*return*/, Array.from(new Set(relationArray))];
-            case 8:
-                e_1 = _a.sent();
-                throw e_1;
-            case 9: return [2 /*return*/];
-        }
+var getRelationNames = function (model_1, baseModelName_1) {
+    var args_1 = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        args_1[_i - 2] = arguments[_i];
+    }
+    return __awaiter(void 0, __spreadArray([model_1, baseModelName_1], args_1, true), void 0, function (model, baseModelName, level) {
+        var relationArray, appDataSource, entityMetadata, relations, _a, relations_1, relation, result, e_1;
+        if (level === void 0) { level = 1; }
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    relationArray = [];
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 8, , 9]);
+                    return [4 /*yield*/, (0, dbconfig_1.handler)()];
+                case 2:
+                    appDataSource = _b.sent();
+                    entityMetadata = appDataSource.getMetadata(model);
+                    relations = entityMetadata.relations.map(function (relation) {
+                        return {
+                            propertyName: relation.propertyName,
+                            relationType: relation.relationType,
+                            className: relation.inverseEntityMetadata.targetName,
+                        };
+                    });
+                    _a = 0, relations_1 = relations;
+                    _b.label = 3;
+                case 3:
+                    if (!(_a < relations_1.length)) return [3 /*break*/, 7];
+                    relation = relations_1[_a];
+                    if (!(baseModelName !== relation.className && level < 5)) return [3 /*break*/, 5];
+                    //a. get the scheama oject for that entity
+                    relationArray.push(relation.propertyName);
+                    return [4 /*yield*/, getRelationNames(relation.className, baseModelName, level++)];
+                case 4:
+                    result = _b.sent();
+                    relationArray = __spreadArray(__spreadArray([], relationArray, true), result, true);
+                    return [3 /*break*/, 6];
+                case 5:
+                    relationArray.push(relation.propertyName);
+                    _b.label = 6;
+                case 6:
+                    _a++;
+                    return [3 /*break*/, 3];
+                case 7: return [2 /*return*/, Array.from(new Set(relationArray))];
+                case 8:
+                    e_1 = _b.sent();
+                    throw e_1;
+                case 9: return [2 /*return*/];
+            }
+        });
     });
-}); };
+};
 //3.function which can validate relations passes
 var validateFilterRelations = function (checkArray, relationArray) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {

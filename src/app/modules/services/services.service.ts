@@ -2,6 +2,7 @@ import { FindManyOptions, FindOneOptions } from "typeorm";
 import { generateCode } from "../../utils/get-object-code.util";
 import repository from "./services.repo";
 import { Services } from "./entities/services.entity";
+import { ItemAvailable } from "../sale-items/entities/item-stocks.entity";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<Services>) => {

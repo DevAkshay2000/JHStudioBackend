@@ -7,9 +7,8 @@ import {
     JoinColumn,
     ManyToOne,
 } from "typeorm";
-import { SaleHeaders } from "./sale-header.entity";
 import { Services } from "../../services/entities/services.entity";
-import { Taxes } from "../../taxes/entities/taxes.entity";
+
 
 @Entity("item_available")
 export class ItemAvailable{
