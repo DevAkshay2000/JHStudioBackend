@@ -10,6 +10,9 @@ exports.PurchaseHeadersSchema = {
         code: {
             type: "string",
         },
+        description: {
+            type: "string",
+        },
         txnDate: {
             type: "string",
         },
@@ -87,8 +90,11 @@ exports.PurchaseHeadersSchema = {
                             id: {
                                 type: "integer",
                             },
+                            name: {
+                                type: "string",
+                            },
                         },
-                        required: ["id"],
+                        required: ["id", "name"],
                         additionalProperties: false,
                     },
                     tax: {
@@ -97,8 +103,14 @@ exports.PurchaseHeadersSchema = {
                             id: {
                                 type: "integer",
                             },
+                            name: {
+                                type: "string",
+                            },
+                            percentage: {
+                                type: "integer",
+                            },
                         },
-                        required: ["id"],
+                        required: ["id", "name"],
                         additionalProperties: false,
                     },
                     id: {
@@ -108,6 +120,9 @@ exports.PurchaseHeadersSchema = {
                         type: "integer",
                     },
                     quantity: {
+                        type: "integer",
+                    },
+                    costPrice: {
                         type: "integer",
                     },
                     discountAmount: {

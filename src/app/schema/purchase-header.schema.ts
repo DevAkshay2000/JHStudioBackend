@@ -7,6 +7,9 @@ export const PurchaseHeadersSchema: any = {
     code: {
       type: "string",
     },
+    description: {
+      type: "string",
+    },
     txnDate: {
       type: "string",
     },
@@ -84,8 +87,11 @@ export const PurchaseHeadersSchema: any = {
               id: {
                 type: "integer",
               },
+              name: {
+                type: "string",
+              },
             },
-            required: ["id"],
+            required: ["id", "name"],
             additionalProperties: false,
           },
           tax: {
@@ -94,8 +100,14 @@ export const PurchaseHeadersSchema: any = {
               id: {
                 type: "integer",
               },
+              name: {
+                type: "string",
+              },
+              percentage: {
+                type: "integer",
+              },
             },
-            required: ["id"],
+            required: ["id", "name"],
             additionalProperties: false,
           },
           id: {
@@ -105,6 +117,9 @@ export const PurchaseHeadersSchema: any = {
             type: "integer",
           },
           quantity: {
+            type: "integer",
+          },
+          costPrice: {
             type: "integer",
           },
           discountAmount: {

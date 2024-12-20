@@ -1,5 +1,6 @@
 import { handler } from "../config/dbconfig";
 import {
+  Between,
   EntityTarget,
   Equal,
   FindManyOptions,
@@ -122,8 +123,17 @@ const convertWhereObject = (where: object): object => {
               ? (result[level3Key] = Not(In(level3Value)))
               : null;
           }
+        } //11. between
+        else if (key1 === "between") {
+          for (let [level3Key, level3Value] of Object.entries(
+            where["$a"][key1]
+          )) {
+            if (Array.isArray(level3Value) && level3Value.length === 2) {
+              result[level3Key] = Between(level3Value[0], level3Value[1]);
+            }
+          }
         }
-        //11. between
+
         //13. null
         else {
         }
@@ -140,6 +150,7 @@ const createSelectObject = (
     name?: string;
     fields?: object;
     where?: object;
+    order?: object;
     relations?: RelationType[];
   },
   name?: string
@@ -147,8 +158,12 @@ const createSelectObject = (
   let selectObj = {};
   let relationObj = {};
   let whereObj = {};
+  let orderObj = {};
   if (obj?.fields) {
     selectObj = obj?.fields;
+  }
+  if (obj?.order) {
+    orderObj = obj?.order;
   }
   if (obj.where) {
     //convert where object here
@@ -158,10 +173,8 @@ const createSelectObject = (
     for (const relation of obj?.relations) {
       if (relation.name && relation?.fields) {
         relationObj[relation.name] = true;
-        let [resposelect, respoRelation, respoWhere] = createSelectObject(
-          relation,
-          relation.name
-        );
+        let [resposelect, respoRelation, respoWhere, respoOrder] =
+          createSelectObject(relation, relation.name);
         //add relation object
         relationObj[relation.name] = Object.keys(respoRelation).length
           ? respoRelation
@@ -174,10 +187,14 @@ const createSelectObject = (
         if (Object.keys(respoWhere)?.length) {
           whereObj[relation.name] = respoWhere;
         }
+        //add where object
+        if (Object.keys(respoOrder)?.length) {
+          orderObj[relation.name] = respoOrder;
+        }
       }
     }
   }
-  return [selectObj, relationObj, whereObj];
+  return [selectObj, relationObj, whereObj, orderObj];
 };
 
 export const queryBuilder = async <T extends EntityTarget<T>>(
@@ -203,14 +220,14 @@ export const queryBuilder = async <T extends EntityTarget<T>>(
   });
   //c. take sanitized data back
   const finalFilter = await sanitizeFilterObject(query, resultMapping);
-
   //d. create object from filter
   //consist for three things
-  const [select, relations, where] = createSelectObject(finalFilter);
+  const [select, relations, where, order] = createSelectObject(finalFilter);
   return {
     ...(Object.keys(select).length ? { select } : {}),
     ...(Object.keys(relations).length ? { relations } : {}),
     ...(Object.keys(where).length ? { where } : {}),
+    ...(Object.keys(order).length ? { order } : {}),
     ...(query.skip ? { skip: query.skip } : {}),
     ...(query.limit ? { take: query.limit } : {}),
   };

@@ -39,56 +39,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
-require("reflect-metadata");
-var typeorm_1 = require("typeorm");
-var dotenv_1 = __importDefault(require("dotenv"));
-var path_1 = __importDefault(require("path"));
-var entities_mapping_1 = require("../../mappings/entities.mapping");
-// Load environment variables from .env file
-dotenv_1.default.config({ path: path_1.default.join(__dirname, "../../.env") });
-var appDataSource;
-var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var express_1 = require("express");
+var routes_types_1 = require("../../routes/routes.types");
+var validate_filter_util_1 = require("../../utils/validate-filter.util");
+var get_query_util_1 = __importDefault(require("../../utils/get-query.util"));
+var item_stock_track_entity_1 = require("../purchase-items/entities/item-stock-track.entity");
+var dbconfig_1 = require("../../config/dbconfig");
+var router = (0, express_1.Router)();
+router.get("/", (0, validate_filter_util_1.validateFilter)(item_stock_track_entity_1.ItemsStockTrack), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var dataSource, repo, result, _a, _b, error_1;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                if (!!appDataSource) return [3 /*break*/, 2];
-                appDataSource = new typeorm_1.DataSource({
-                    type: "postgres",
-                    host: process.env.Host,
-                    port: Number(process.env.port),
-                    username: process.env.User_Name,
-                    password: process.env.Password,
-                    database: process.env.Database,
-                    entities: entities_mapping_1.entities,
-                    //   entities: [
-                    //     "../../../src/entities/index/**/*.{ts,js}",
-                    //     "../../../build/entities/**/*.{ts,js}",
-                    //   ],
-                    synchronize: true,
-                    logging: true,
-                    ssl: {
-                        rejectUnauthorized: false, // Disables SSL certificate verification
-                    },
-                });
-                return [4 /*yield*/, appDataSource.initialize()];
+                _c.trys.push([0, 4, , 5]);
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2: return [2 /*return*/, appDataSource];
+                dataSource = _c.sent();
+                repo = dataSource.getRepository(item_stock_track_entity_1.ItemsStockTrack);
+                _b = (_a = repo).find;
+                return [4 /*yield*/, (0, get_query_util_1.default)(req, item_stock_track_entity_1.ItemsStockTrack)];
+            case 2: return [4 /*yield*/, _b.apply(_a, [_c.sent()])];
+            case 3:
+                result = _c.sent();
+                res.send(result);
+                return [3 /*break*/, 5];
+            case 4:
+                error_1 = _c.sent();
+                next(error_1);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
-}); };
-var handler = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var dataSource;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, initializeDataSource()];
-            case 1:
-                dataSource = _a.sent();
-                return [2 /*return*/, dataSource];
-        }
-    });
-}); };
-exports.handler = handler;
-//# sourceMappingURL=index.js.map
+}); });
+exports.default = new routes_types_1.Route("/item-stock-report", router);
+//# sourceMappingURL=stock-report.route.js.map

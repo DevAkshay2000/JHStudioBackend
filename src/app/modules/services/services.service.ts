@@ -2,6 +2,7 @@ import { FindManyOptions, FindOneOptions } from "typeorm";
 import { generateCode } from "../../utils/get-object-code.util";
 import repository from "./services.repo";
 import { Services } from "./entities/services.entity";
+import { ItemAvailable } from "../sale-items/entities/item-stocks.entity";
 
 //1. find multiple records
 const find = async (filter?: FindManyOptions<Services>) => {
@@ -31,6 +32,20 @@ const create = async (data: Services) => {
   try {
     const repo = await repository();
     data = await generateCode(15, data);
+    if (!data.isService) {
+      const duplicate = await repo.find({
+        where: {
+          sku: data.sku,
+        },
+      });
+      if (duplicate.length) {
+        throw {
+          message: "Duplicate SKU please check again.: ",
+          statusCode: 409,
+        };
+      }
+    }
+
     const respo = repo.create({
       ...data,
     });

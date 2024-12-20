@@ -153,7 +153,6 @@ var create = function (data_1) {
                     return [4 /*yield*/, contact_service_1.default.findById(data.customer.id)];
                 case 5:
                     customer = _a.sent();
-                    console.log("customer", customer);
                     return [4 /*yield*/, custmerRepo.save(__assign(__assign({}, customer), { lastVisitedDate: new Date().toISOString() }))];
                 case 6:
                     _a.sent();
@@ -255,7 +254,7 @@ var createBulk = function (data_1) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 8, , 9]);
+                    _a.trys.push([0, 7, , 8]);
                     return [4 /*yield*/, (0, sale_header_repo_1.default)()];
                 case 1:
                     repo = _a.sent();
@@ -269,7 +268,6 @@ var createBulk = function (data_1) {
                     data = _a.sent();
                     result_1 = new sale_header_entity_1.SaleHeaders();
                     invoiceItems = [];
-                    if (!!data.isService) return [3 /*break*/, 7];
                     inventory_2 = [];
                     itemIds_1 = [];
                     errors_1 = [];
@@ -287,6 +285,7 @@ var createBulk = function (data_1) {
                                 service: true,
                             },
                             select: {
+                                id: true,
                                 quantity: true,
                                 service: {
                                     id: true,
@@ -306,9 +305,16 @@ var createBulk = function (data_1) {
                     });
                     //check availabilty
                     data.saleLines.forEach(function (value) {
-                        var _a, _b;
-                        if (((_a = itemToQauntityMap_1[value.service.id]) === null || _a === void 0 ? void 0 : _a.quantity) < value.quantity) {
-                            errors_1.push("".concat(itemToQauntityMap_1[value.service.id].name, " is out of stock : available stock is ").concat((_b = itemToQauntityMap_1[value.service.id]) === null || _b === void 0 ? void 0 : _b.quantity));
+                        var _a, _b, _c;
+                        if (itemToQauntityMap_1[value.service.id]) {
+                            if (((_a = itemToQauntityMap_1[value.service.id]) === null || _a === void 0 ? void 0 : _a.quantity) < value.quantity) {
+                                errors_1.push("".concat(itemToQauntityMap_1[value.service.id].name, " is out of stock : available stock is ").concat(((_b = itemToQauntityMap_1[value.service.id]) === null || _b === void 0 ? void 0 : _b.quantity)
+                                    ? (_c = itemToQauntityMap_1[value.service.id]) === null || _c === void 0 ? void 0 : _c.quantity
+                                    : 0));
+                            }
+                        }
+                        else {
+                            errors_1.push("".concat(value.service.name, " is out of stock : available stock is ").concat(0));
                         }
                     });
                     //throw error if applicable
@@ -323,7 +329,7 @@ var createBulk = function (data_1) {
                                 },
                             },
                             order: {
-                                id: "DESC",
+                                id: "ASC",
                             },
                             relations: {
                                 service: true,
@@ -335,7 +341,7 @@ var createBulk = function (data_1) {
                         stockMap_1[val.id] = {
                             id: val.id,
                             idx: index,
-                            aQuanity: val.quantityUvailable,
+                            aQuanity: val === null || val === void 0 ? void 0 : val.quantityUvailable,
                         };
                     });
                     data.saleLines.forEach(function (value) {
@@ -372,7 +378,7 @@ var createBulk = function (data_1) {
                         //decrease item availabilty
                         if (itemToQauntityMap_1[value.service.id]) {
                             var _itemsAvailable = itemsAvailable_1[itemToQauntityMap_1[value.service.id].idx];
-                            _itemsAvailable = __assign(__assign({}, _itemsAvailable), { quantity: _itemsAvailable.quantity - value.quantity });
+                            _itemsAvailable = __assign(__assign({}, _itemsAvailable), { id: _itemsAvailable.id, quantity: _itemsAvailable.quantity - value.quantity });
                             itemsAvailable_1[itemToQauntityMap_1[value.service.id].idx] =
                                 _itemsAvailable;
                         }
@@ -406,12 +412,54 @@ var createBulk = function (data_1) {
                 case 6:
                     //3. start transaction
                     _a.sent();
-                    _a.label = 7;
-                case 7: return [2 /*return*/, result_1];
-                case 8:
+                    // data.saleLines.forEach((value) => {
+                    //   const il = new InventoryLines();
+                    //   (il.service = value.service),
+                    //     (il.quantity = -value.quantity),
+                    //     (il.createdDate = value.createdDate),
+                    //     (il.modifiedDate = value.modifiedDate);
+                    //   inventory.push(il);
+                    //   itemIds.push(value.service.id);
+                    //   invoiceItems.push({
+                    //     name: value.service.name,
+                    //     quantity: value.quantity,
+                    //     unitPrice: value.rate,
+                    //     total: Number(value.amount + value.taxAmount),
+                    //     tax: value.taxAmount,
+                    //     taxName: value.tax.name,
+                    //   });
+                    // });
+                    // data.inventoryLines = inventory;
+                    //   // create stock elements
+                    //   const resultItemStock = await itemStocksService.create(
+                    //     inventory,
+                    //     itemIds
+                    //   );
+                    //   const itemStockResponse = itemStocksRepo.create(resultItemStock);
+                    //   await itemStocksRepo.save(itemStockResponse);
+                    // }
+                    // const respo = await repo.create({
+                    //   ...data,
+                    // });
+                    // //get customer data custo
+                    // const customer = await customerService.findById(data.customer.id);
+                    // await invoiceMailer({
+                    //   customer: customer.name,
+                    //   txnDate: new Date(data.txnDate).toLocaleDateString(),
+                    //   txnId: data.code,
+                    //   mobile: customer.mobile,
+                    //   subTotal: data.grandTotal,
+                    //   tax: data.totalTax,
+                    //   discount: data.totalDiscount,
+                    //   email: customer.email,
+                    //   itemData: invoiceItems,
+                    // });
+                    // return respo;
+                    return [2 /*return*/, result_1];
+                case 7:
                     error_6 = _a.sent();
                     throw error_6;
-                case 9: return [2 /*return*/];
+                case 8: return [2 /*return*/];
             }
         });
     });

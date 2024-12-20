@@ -59,6 +59,9 @@ exports.SaleHeadersSchema = {
             required: ["id"],
             additionalProperties: false,
         },
+        isService: {
+            type: "integer",
+        },
         paymentType: {
             type: "object",
             properties: {
@@ -122,6 +125,9 @@ exports.SaleHeadersSchema = {
                     quantity: {
                         type: "integer",
                     },
+                    costPrice: {
+                        type: "integer",
+                    },
                     discountAmount: {
                         type: "integer",
                     },
@@ -162,6 +168,7 @@ exports.SaleHeadersSchema = {
         "user",
         "paymentType",
         "saleLines",
+        "isService"
     ],
     additionalProperties: false,
 };

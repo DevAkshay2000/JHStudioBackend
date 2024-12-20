@@ -41,15 +41,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var routes_types_1 = require("../../routes/routes.types");
+var validate_filter_util_1 = require("../../utils/validate-filter.util");
 var get_query_util_1 = __importDefault(require("../../utils/get-query.util"));
 var sale_header_service_1 = __importDefault(require("./sale-header.service"));
 var sale_header_entity_1 = require("./entities/sale-header.entity");
 var validate_req_body_util_1 = require("../../utils/validate-req-body.util");
 var sale_header_schema_1 = require("../../schema/sale-header.schema");
 var router = (0, express_1.Router)();
-router.get("/", 
-// validateFilter(SaleHeaders),
-function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.get("/", (0, validate_filter_util_1.validateFilter)(sale_header_entity_1.SaleHeaders), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var result, _a, _b, error_1;
     return __generator(this, function (_c) {
         switch (_c.label) {

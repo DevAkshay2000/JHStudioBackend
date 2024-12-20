@@ -57,7 +57,8 @@ router.get(
     try {
       //take user related data only
       const user: any = req.user;
-      if (user) {
+      console.log(user);
+      if (user.userType) {
         const appDataSource = await handler();
         const repository = appDataSource.getRepository(Menus);
         const data = await repository.find({
@@ -106,10 +107,11 @@ router.get(
       } else {
         throw {
           message: "No metadata found for given user..",
-          statusCode: 404,
+          statusCode: 401,
         };
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error fetching menus", error });
     }
   }

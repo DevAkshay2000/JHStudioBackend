@@ -127,7 +127,8 @@ router.get("/menu-headers", authenticate_middleware_1.default, function (req, re
             case 0:
                 _c.trys.push([0, 5, , 6]);
                 user = req.user;
-                if (!user) return [3 /*break*/, 3];
+                console.log(user);
+                if (!user.userType) return [3 /*break*/, 3];
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 appDataSource = _c.sent();
@@ -177,11 +178,12 @@ router.get("/menu-headers", authenticate_middleware_1.default, function (req, re
                 return [3 /*break*/, 4];
             case 3: throw {
                 message: "No metadata found for given user..",
-                statusCode: 404,
+                statusCode: 401,
             };
             case 4: return [3 /*break*/, 6];
             case 5:
                 error_3 = _c.sent();
+                console.log(error_3);
                 res.status(500).json({ message: "Error fetching menus", error: error_3 });
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];

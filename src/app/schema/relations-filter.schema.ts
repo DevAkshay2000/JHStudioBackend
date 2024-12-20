@@ -89,9 +89,9 @@ export let RelationsFilter: JSONSchemaType<RelationType> = {
             },
             between: {
               type: "object",
-              //   items: { type: "integer" },
-              //   minItems: 2,
-              //   maxItems: 2,
+                // items: { type: "integer" },
+                // minItems: 2,
+                // maxItems: 2,
               //   additionalItems: false, // No additional items beyond specified two
               nullable: true,
             },
@@ -108,6 +108,10 @@ export let RelationsFilter: JSONSchemaType<RelationType> = {
       type: "array",
       nullable: true,
       items: { $ref: "#" } as JSONSchemaType<RelationType>,
+    },
+    order: {
+      type: "object",
+      nullable: true,
     },
   },
   required: [],

@@ -52,7 +52,7 @@ var dbconfig_1 = require("../../config/dbconfig");
 var item_stocks_entity_1 = require("./entities/item-stocks.entity");
 //3. create single record
 var create = function (inventory, itemIds) { return __awaiter(void 0, void 0, void 0, function () {
-    var dataSource, itemStocksRepo, resultItemStock_1, itemStocks_1, error_1;
+    var dataSource, itemAvailableRepo, resultItemStock_1, itemStocks_1, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -60,9 +60,9 @@ var create = function (inventory, itemIds) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 dataSource = _a.sent();
-                itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
+                itemAvailableRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
                 resultItemStock_1 = [];
-                return [4 /*yield*/, itemStocksRepo.find({
+                return [4 /*yield*/, itemAvailableRepo.find({
                         where: {
                             service: {
                                 id: (0, typeorm_1.In)(itemIds),
@@ -83,11 +83,9 @@ var create = function (inventory, itemIds) { return __awaiter(void 0, void 0, vo
                     }
                     // if not then add new record in itemStocks and assign vlue
                     else {
-                        resultItemStock_1.push({
-                            quantity: element.quantity,
-                            modifiedDate: element.modifiedDate,
-                            service: element.service,
-                        });
+                        var errors = [];
+                        errors.push("Stock Entry not available for ".concat(element.service.name, " Contact Sale"));
+                        throw { message: errors, statusCode: 409 };
                     }
                 });
                 return [2 /*return*/, resultItemStock_1];
@@ -100,7 +98,7 @@ var create = function (inventory, itemIds) { return __awaiter(void 0, void 0, vo
 }); };
 //3. create single record
 var createBulk = function (inventory, itemIds) { return __awaiter(void 0, void 0, void 0, function () {
-    var dataSource, itemStocksRepo, resultItemStock_2, itemStocks_2, error_2;
+    var dataSource, itemAvailableRepo, resultItemStock_2, itemStocks_2, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -108,9 +106,9 @@ var createBulk = function (inventory, itemIds) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 dataSource = _a.sent();
-                itemStocksRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
+                itemAvailableRepo = dataSource.getRepository(item_stocks_entity_1.ItemAvailable);
                 resultItemStock_2 = [];
-                return [4 /*yield*/, itemStocksRepo.find({
+                return [4 /*yield*/, itemAvailableRepo.find({
                         where: {
                             service: {
                                 id: (0, typeorm_1.In)(itemIds),

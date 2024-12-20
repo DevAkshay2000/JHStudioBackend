@@ -28,6 +28,10 @@ var PurchaseHeaders = /** @class */ (function () {
         __metadata("design:type", String)
     ], PurchaseHeaders.prototype, "code", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "varchar", length: 600, nullable: true }),
+        __metadata("design:type", String)
+    ], PurchaseHeaders.prototype, "description", void 0);
+    __decorate([
         (0, typeorm_1.CreateDateColumn)({ type: "varchar", nullable: false }),
         __metadata("design:type", String)
     ], PurchaseHeaders.prototype, "txnDate", void 0);

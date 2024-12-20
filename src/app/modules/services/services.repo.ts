@@ -2,7 +2,7 @@ import { FindManyOptions, FindOneOptions } from "typeorm";
 
 import { handler } from "../../../app/config/dbconfig";
 import { Services } from "./entities/services.entity";
-
+import { ItemAvailable } from "../sale-items/entities/item-stocks.entity";
 
 const repository = async () => {
   const dataSource = await handler();
@@ -52,8 +52,44 @@ const repository = async () => {
   //4. create single record
   const create = async (data: Services) => {
     try {
-      const respo = repo.create(data);
-      await repo.save(respo);
+      //
+      let respo = new Services();
+      if (!data.isService) {
+        const itv = new ItemAvailable();
+        itv.modifiedDate = data.modifiedDate;
+        itv.quantity = 0;
+
+        await dataSource.manager.transaction(
+          "SERIALIZABLE",
+          async (transactionalEntityManager) => {
+            const item = transactionalEntityManager.create(Services, data);
+            const itemResult = await transactionalEntityManager.save(
+              Services,
+              item
+            );
+            const itemAvalableEntry = transactionalEntityManager.create(
+              ItemAvailable,
+              {
+                ...itv,
+                service: itemResult,
+              }
+            );
+            const insTocksaved = await transactionalEntityManager.save(
+              ItemAvailable,
+              itemAvalableEntry
+            );
+            await transactionalEntityManager.save(Services, {
+              ...itemResult,
+              inStock: insTocksaved,
+            });
+            respo = itemResult;
+          }
+        );
+      } else {
+        repo.create(data);
+        respo = await repo.save(respo);
+      }
+
       return respo;
     } catch (error) {
       throw error;

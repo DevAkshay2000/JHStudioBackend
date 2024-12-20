@@ -12,11 +12,11 @@ const create = async (
 ): Promise<Omit<ItemAvailable, "id">[]> => {
   try {
     const dataSource = await handler();
-    const itemStocksRepo = dataSource.getRepository(ItemAvailable);
+    const itemAvailableRepo = dataSource.getRepository(ItemAvailable);
 
     const resultItemStock: Omit<ItemAvailable, "id">[] = [];
     //update inventory stocks
-    const itemStocks = await itemStocksRepo.find({
+    const itemStocks = await itemAvailableRepo.find({
       where: {
         service: {
           id: In(itemIds),
@@ -41,11 +41,11 @@ const create = async (
       }
       // if not then add new record in itemStocks and assign vlue
       else {
-        resultItemStock.push({
-          quantity: element.quantity,
-          modifiedDate: element.modifiedDate,
-          service: element.service,
-        });
+        const errors: string[] = [];
+        errors.push(
+          `Stock Entry not available for ${element.service.name} Contact Sale`
+        );
+        throw { message: errors, statusCode: 409 };
       }
     });
     return resultItemStock;
@@ -61,11 +61,11 @@ const createBulk = async (
 ): Promise<Omit<ItemAvailable, "id">[]> => {
   try {
     const dataSource = await handler();
-    const itemStocksRepo = dataSource.getRepository(ItemAvailable);
+    const itemAvailableRepo = dataSource.getRepository(ItemAvailable);
 
     const resultItemStock: Omit<ItemAvailable, "id">[] = [];
     //update inventory stocks
-    const itemStocks = await itemStocksRepo.find({
+    const itemStocks = await itemAvailableRepo.find({
       where: {
         service: {
           id: In(itemIds),

@@ -102,6 +102,10 @@ exports.FilterSchema = {
                 },
             },
         },
+        order: {
+            type: "object",
+            nullable: true,
+        },
         relations: {
             type: "array",
             items: relations_filter_schema_1.RelationsFilter,
