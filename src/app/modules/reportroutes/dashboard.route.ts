@@ -3,6 +3,7 @@ import { Route } from "../../routes/routes.types";
 import { handler } from "../../config/dbconfig";
 import { Users } from "../auth/entities/user.entity";
 import { SaleHeaders } from "../sale-items/entities/sale-header.entity";
+import { SaleLines } from "../sale-items/entities/sale-lines.enity";
 
 const router = Router();
 
@@ -26,7 +27,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       "#F6EFEF",
     ];
     const colorArrayItem = [
-      "#9E0508	",
+      "#9E0508",
       "#F8171B",
       "#FB7E81",
       "#E8F3FD",
@@ -34,7 +35,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       "#F6EFEF",
     ];
     const colorArrayService = [
-      "#6B8E23	",
+      "#6B8E23",
       "#A4D146",
       "#CCE698",
       "#F5FAEB",
@@ -43,31 +44,73 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     //get start date of current month
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const dataSource = await handler();
-    const dashboards = await dataSource
+    const artist = await dataSource
       .getRepository(SaleHeaders)
       .createQueryBuilder("sale")
       .leftJoinAndSelect("sale.user", "user")
-      .select([
-        //   "sale.id",
-        "user.name as artist",
-        "COUNT(user.id) as count",
-      ])
+      .select(["user.name as artist", "COUNT(user.id) as count"])
       .where("sale.txnDate BETWEEN :start AND :end", {
         start: startOfMonth,
         end: now,
       })
       .groupBy("user.id")
-      .orderBy("count","DESC")
+      .orderBy("count", "DESC")
       .limit(5)
-      // .addGroupBy("sale.id")
-      // .addGroupBy("user.name")
-      .getRawMany(); // Use getRawMany for raw results
+      .getRawMany();
 
-    result.topArtist = dashboards.map((val: any, index) => {
+    const item = await dataSource
+      .getRepository(SaleHeaders)
+      .createQueryBuilder("sale")
+      .leftJoinAndSelect("sale.saleLines", "saleLines")
+      .leftJoinAndSelect("saleLines.service", "service")
+      .select(["service.name as item", "SUM(saleLines.quantity) as count"])
+      .where("sale.txnDate BETWEEN :start AND :end", {
+        start: startOfMonth,
+        end: now,
+      })
+      .andWhere("sale.isService = :isService", { isService: 0 })
+      .addGroupBy("service.name")
+      .orderBy("count", "DESC")
+      .limit(5)
+      .getRawMany(); 
+
+    const service = await dataSource
+      .getRepository(SaleHeaders)
+      .createQueryBuilder("sale")
+      .leftJoinAndSelect("sale.saleLines", "saleLines")
+      .leftJoinAndSelect("saleLines.service", "service")
+      .select(["service.name as item", "SUM(saleLines.quantity) as count"])
+      .where("sale.txnDate BETWEEN :start AND :end", {
+        start: startOfMonth,
+        end: now,
+      })
+      .andWhere("sale.isService = :isService", { isService: 1 })
+      .addGroupBy("service.name")
+      .orderBy("count", "DESC")
+      .limit(5)
+      .getRawMany(); // Use getRawMany for raw results
+    //add colors
+    result.topArtist = artist.map((val: any, index) => {
       return {
         artist: val.artist,
         count: Number(val.count),
         fill: colorArrayArtist[index],
+      };
+    });
+    //add colors
+    result.topItems = item.map((val: any, index) => {
+      return {
+        item: val.item,
+        count: Number(val.count),
+        fill: colorArrayItem[index],
+      };
+    });
+   //add colors
+    result.topService = service.map((val: any, index) => {
+      return {
+        item: val.item,
+        count: Number(val.count),
+        fill: colorArrayItem[index],
       };
     });
     res.send(result);

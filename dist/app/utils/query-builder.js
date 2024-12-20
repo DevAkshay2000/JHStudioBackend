@@ -225,7 +225,6 @@ var queryBuilder = function (query, model) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, (0, validate_filter_util_1.sanitizeFilterObject)(query, resultMapping)];
             case 2:
                 finalFilter = _b.sent();
-                console.log(JSON.stringify(finalFilter));
                 _a = createSelectObject(finalFilter), select = _a[0], relations = _a[1], where = _a[2], order = _a[3];
                 return [2 /*return*/, __assign(__assign(__assign(__assign(__assign(__assign({}, (Object.keys(select).length ? { select: select } : {})), (Object.keys(relations).length ? { relations: relations } : {})), (Object.keys(where).length ? { where: where } : {})), (Object.keys(order).length ? { order: order } : {})), (query.skip ? { skip: query.skip } : {})), (query.limit ? { take: query.limit } : {}))];
         }

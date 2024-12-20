@@ -42,11 +42,11 @@ var dbconfig_1 = require("../../config/dbconfig");
 var sale_header_entity_1 = require("../sale-items/entities/sale-header.entity");
 var router = (0, express_1.Router)();
 router.get("/", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, now, colorArrayArtist_1, colorArrayItem, colorArrayService, startOfMonth, dataSource, dashboards, error_1;
+    var result, now, colorArrayArtist_1, colorArrayItem_1, colorArrayService, startOfMonth, dataSource, artist, item, service, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 5, , 6]);
                 result = {
                     topArtist: [],
                     topItems: [],
@@ -60,8 +60,8 @@ router.get("/", function (req, res, next) { return __awaiter(void 0, void 0, voi
                     "#E8F3FD",
                     "#F6EFEF",
                 ];
-                colorArrayItem = [
-                    "#9E0508	",
+                colorArrayItem_1 = [
+                    "#9E0508",
                     "#F8171B",
                     "#FB7E81",
                     "#E8F3FD",
@@ -69,7 +69,7 @@ router.get("/", function (req, res, next) { return __awaiter(void 0, void 0, voi
                     "#F6EFEF",
                 ];
                 colorArrayService = [
-                    "#6B8E23	",
+                    "#6B8E23",
                     "#A4D146",
                     "#CCE698",
                     "#F5FAEB",
@@ -83,11 +83,7 @@ router.get("/", function (req, res, next) { return __awaiter(void 0, void 0, voi
                         .getRepository(sale_header_entity_1.SaleHeaders)
                         .createQueryBuilder("sale")
                         .leftJoinAndSelect("sale.user", "user")
-                        .select([
-                        //   "sale.id",
-                        "user.name as artist",
-                        "COUNT(user.id) as count",
-                    ])
+                        .select(["user.name as artist", "COUNT(user.id) as count"])
                         .where("sale.txnDate BETWEEN :start AND :end", {
                         start: startOfMonth,
                         end: now,
@@ -95,25 +91,74 @@ router.get("/", function (req, res, next) { return __awaiter(void 0, void 0, voi
                         .groupBy("user.id")
                         .orderBy("count", "DESC")
                         .limit(5)
-                        // .addGroupBy("sale.id")
-                        // .addGroupBy("user.name")
                         .getRawMany()];
             case 2:
-                dashboards = _a.sent();
-                result.topArtist = dashboards.map(function (val, index) {
+                artist = _a.sent();
+                return [4 /*yield*/, dataSource
+                        .getRepository(sale_header_entity_1.SaleHeaders)
+                        .createQueryBuilder("sale")
+                        .leftJoinAndSelect("sale.saleLines", "saleLines")
+                        .leftJoinAndSelect("saleLines.service", "service")
+                        .select(["service.name as item", "SUM(saleLines.quantity) as count"])
+                        .where("sale.txnDate BETWEEN :start AND :end", {
+                        start: startOfMonth,
+                        end: now,
+                    })
+                        .andWhere("sale.isService = :isService", { isService: 0 })
+                        .addGroupBy("service.name")
+                        .orderBy("count", "DESC")
+                        .limit(5)
+                        .getRawMany()];
+            case 3:
+                item = _a.sent();
+                return [4 /*yield*/, dataSource
+                        .getRepository(sale_header_entity_1.SaleHeaders)
+                        .createQueryBuilder("sale")
+                        .leftJoinAndSelect("sale.saleLines", "saleLines")
+                        .leftJoinAndSelect("saleLines.service", "service")
+                        .select(["service.name as item", "SUM(saleLines.quantity) as count"])
+                        .where("sale.txnDate BETWEEN :start AND :end", {
+                        start: startOfMonth,
+                        end: now,
+                    })
+                        .andWhere("sale.isService = :isService", { isService: 1 })
+                        .addGroupBy("service.name")
+                        .orderBy("count", "DESC")
+                        .limit(5)
+                        .getRawMany()];
+            case 4:
+                service = _a.sent();
+                //add colors
+                result.topArtist = artist.map(function (val, index) {
                     return {
                         artist: val.artist,
                         count: Number(val.count),
                         fill: colorArrayArtist_1[index],
                     };
                 });
+                //add colors
+                result.topItems = item.map(function (val, index) {
+                    return {
+                        item: val.item,
+                        count: Number(val.count),
+                        fill: colorArrayItem_1[index],
+                    };
+                });
+                //add colors
+                result.topService = service.map(function (val, index) {
+                    return {
+                        item: val.item,
+                        count: Number(val.count),
+                        fill: colorArrayItem_1[index],
+                    };
+                });
                 res.send(result);
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 6];
+            case 5:
                 error_1 = _a.sent();
                 next(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); });
