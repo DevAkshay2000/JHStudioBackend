@@ -145,8 +145,15 @@ var convertWhereObject = function (where) {
                             ? (result[level3Key] = (0, typeorm_1.Not)((0, typeorm_1.In)(level3Value)))
                             : null;
                     }
+                } //11. between
+                else if (key1 === "between") {
+                    for (var _11 = 0, _12 = Object.entries(where["$a"][key1]); _11 < _12.length; _11++) {
+                        var _13 = _12[_11], level3Key = _13[0], level3Value = _13[1];
+                        if (Array.isArray(level3Value) && level3Value.length === 2) {
+                            result[level3Key] = (0, typeorm_1.Between)(level3Value[0], level3Value[1]);
+                        }
+                    }
                 }
-                //11. between
                 //13. null
                 else {
                 }
@@ -159,23 +166,27 @@ var convertWhereObject = function (where) {
     return result;
 };
 var createSelectObject = function (obj, name) {
-    var _a, _b;
+    var _a, _b, _c;
     var selectObj = {};
     var relationObj = {};
     var whereObj = {};
+    var orderObj = {};
     if (obj === null || obj === void 0 ? void 0 : obj.fields) {
         selectObj = obj === null || obj === void 0 ? void 0 : obj.fields;
+    }
+    if (obj === null || obj === void 0 ? void 0 : obj.order) {
+        orderObj = obj === null || obj === void 0 ? void 0 : obj.order;
     }
     if (obj.where) {
         //convert where object here
         whereObj = convertWhereObject(obj.where);
     }
     if (obj === null || obj === void 0 ? void 0 : obj.relations) {
-        for (var _i = 0, _c = obj === null || obj === void 0 ? void 0 : obj.relations; _i < _c.length; _i++) {
-            var relation = _c[_i];
+        for (var _i = 0, _d = obj === null || obj === void 0 ? void 0 : obj.relations; _i < _d.length; _i++) {
+            var relation = _d[_i];
             if (relation.name && (relation === null || relation === void 0 ? void 0 : relation.fields)) {
                 relationObj[relation.name] = true;
-                var _d = createSelectObject(relation, relation.name), resposelect = _d[0], respoRelation = _d[1], respoWhere = _d[2];
+                var _e = createSelectObject(relation, relation.name), resposelect = _e[0], respoRelation = _e[1], respoWhere = _e[2], respoOrder = _e[3];
                 //add relation object
                 relationObj[relation.name] = Object.keys(respoRelation).length
                     ? respoRelation
@@ -188,13 +199,17 @@ var createSelectObject = function (obj, name) {
                 if ((_b = Object.keys(respoWhere)) === null || _b === void 0 ? void 0 : _b.length) {
                     whereObj[relation.name] = respoWhere;
                 }
+                //add where object
+                if ((_c = Object.keys(respoOrder)) === null || _c === void 0 ? void 0 : _c.length) {
+                    orderObj[relation.name] = respoOrder;
+                }
             }
         }
     }
-    return [selectObj, relationObj, whereObj];
+    return [selectObj, relationObj, whereObj, orderObj];
 };
 var queryBuilder = function (query, model) { return __awaiter(void 0, void 0, void 0, function () {
-    var appDataSource, entityMetadata, resultMapping, finalFilter, _a, select, relations, where;
+    var appDataSource, entityMetadata, resultMapping, finalFilter, _a, select, relations, where, order;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0: return [4 /*yield*/, (0, dbconfig_1.handler)()];
@@ -210,8 +225,9 @@ var queryBuilder = function (query, model) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, (0, validate_filter_util_1.sanitizeFilterObject)(query, resultMapping)];
             case 2:
                 finalFilter = _b.sent();
-                _a = createSelectObject(finalFilter), select = _a[0], relations = _a[1], where = _a[2];
-                return [2 /*return*/, __assign(__assign(__assign(__assign(__assign({}, (Object.keys(select).length ? { select: select } : {})), (Object.keys(relations).length ? { relations: relations } : {})), (Object.keys(where).length ? { where: where } : {})), (query.skip ? { skip: query.skip } : {})), (query.limit ? { take: query.limit } : {}))];
+                console.log(JSON.stringify(finalFilter));
+                _a = createSelectObject(finalFilter), select = _a[0], relations = _a[1], where = _a[2], order = _a[3];
+                return [2 /*return*/, __assign(__assign(__assign(__assign(__assign(__assign({}, (Object.keys(select).length ? { select: select } : {})), (Object.keys(relations).length ? { relations: relations } : {})), (Object.keys(where).length ? { where: where } : {})), (Object.keys(order).length ? { order: order } : {})), (query.skip ? { skip: query.skip } : {})), (query.limit ? { take: query.limit } : {}))];
         }
     });
 }); };

@@ -74,10 +74,14 @@ const repository = async () => {
                 service: itemResult,
               }
             );
-            await transactionalEntityManager.save(
+            const insTocksaved = await transactionalEntityManager.save(
               ItemAvailable,
               itemAvalableEntry
             );
+            await transactionalEntityManager.save(Services, {
+              ...itemResult,
+              inStock: insTocksaved,
+            });
             respo = itemResult;
           }
         );

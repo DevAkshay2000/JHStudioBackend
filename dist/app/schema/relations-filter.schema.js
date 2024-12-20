@@ -90,9 +90,9 @@ exports.RelationsFilter = {
                         },
                         between: {
                             type: "object",
-                            //   items: { type: "integer" },
-                            //   minItems: 2,
-                            //   maxItems: 2,
+                            // items: { type: "integer" },
+                            // minItems: 2,
+                            // maxItems: 2,
                             //   additionalItems: false, // No additional items beyond specified two
                             nullable: true,
                         },
@@ -109,6 +109,10 @@ exports.RelationsFilter = {
             type: "array",
             nullable: true,
             items: { $ref: "#" },
+        },
+        order: {
+            type: "object",
+            nullable: true,
         },
     },
     required: [],

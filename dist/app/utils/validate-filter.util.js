@@ -179,6 +179,35 @@ var checkModelProperties = function (model, fields) { return __awaiter(void 0, v
         }
     });
 }); };
+//4.filter out malicious properties from order object
+var checkModelOrder = function (model, order) { return __awaiter(void 0, void 0, void 0, function () {
+    var result_2, appDataSource, entityMetadata, modelProperties_2, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                result_2 = {};
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
+            case 1:
+                appDataSource = _a.sent();
+                entityMetadata = appDataSource.getMetadata(model);
+                modelProperties_2 = {};
+                entityMetadata.ownColumns.forEach(function (column) {
+                    modelProperties_2[column.propertyName] = true;
+                });
+                Object.keys(order).map(function (key) {
+                    if (modelProperties_2[key] && ["asc", "desc"].includes(order[key])) {
+                        result_2[key] = order[key];
+                    }
+                });
+                return [2 /*return*/, result_2];
+            case 2:
+                e_3 = _a.sent();
+                throw e_3;
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 //5. checkModelPropertiesWhere
 var checkModelPropertiesWhere = function (model, where) { return __awaiter(void 0, void 0, void 0, function () {
     var result, appDataSource, entityMetadata, modelProperties, _loop_1, _i, _a, _b, level1Key, level1Value;
@@ -214,6 +243,7 @@ var checkModelPropertiesWhere = function (model, where) { return __awaiter(void 
                                 "mte",
                                 "like",
                                 "ilike",
+                                "between"
                             ].includes(level2Key)) {
                                 var level3Result = {};
                                 //get key and values from inner object
@@ -252,14 +282,15 @@ var sanitizeFilterObject = function (filter_1, mapping_1) {
     return __awaiter(void 0, __spreadArray([filter_1, mapping_1], args_1, true), void 0, function (
     // model: T,
     filter, mapping, level) {
-        var processedFields, processedWhere, processedRelations, _a, _b, relation, sanitizedRelation, e_3;
+        var processedFields, processedWhere, processedOrder, processedRelations, _a, _b, relation, sanitizedRelation, e_4;
         if (level === void 0) { level = 1; }
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _c.trys.push([0, 13, , 14]);
+                    _c.trys.push([0, 17, , 18]);
                     processedFields = {};
                     processedWhere = {};
+                    processedOrder = {};
                     if (!filter.fields) return [3 /*break*/, 4];
                     if (!(level === 1)) return [3 /*break*/, 2];
                     return [4 /*yield*/, checkModelProperties(mapping["baseModel"], filter.fields)];
@@ -286,26 +317,39 @@ var sanitizeFilterObject = function (filter_1, mapping_1) {
                     processedWhere = _c.sent();
                     _c.label = 8;
                 case 8:
-                    processedRelations = [];
-                    if (!filter.relations) return [3 /*break*/, 12];
-                    _a = 0, _b = filter.relations;
-                    _c.label = 9;
+                    if (!filter.order) return [3 /*break*/, 12];
+                    if (!(level === 1)) return [3 /*break*/, 10];
+                    return [4 /*yield*/, checkModelOrder(mapping["baseModel"], filter.order)];
                 case 9:
-                    if (!(_a < _b.length)) return [3 /*break*/, 12];
+                    processedOrder = _c.sent();
+                    return [3 /*break*/, 12];
+                case 10:
+                    if (!(filter.name && mapping[filter.name])) return [3 /*break*/, 12];
+                    return [4 /*yield*/, checkModelOrder(mapping[filter.name], filter.order)];
+                case 11:
+                    processedOrder = _c.sent();
+                    _c.label = 12;
+                case 12:
+                    processedRelations = [];
+                    if (!filter.relations) return [3 /*break*/, 16];
+                    _a = 0, _b = filter.relations;
+                    _c.label = 13;
+                case 13:
+                    if (!(_a < _b.length)) return [3 /*break*/, 16];
                     relation = _b[_a];
                     return [4 /*yield*/, (0, exports.sanitizeFilterObject)(relation, mapping, level + 1)];
-                case 10:
+                case 14:
                     sanitizedRelation = _c.sent();
                     processedRelations.push(sanitizedRelation);
-                    _c.label = 11;
-                case 11:
+                    _c.label = 15;
+                case 15:
                     _a++;
-                    return [3 /*break*/, 9];
-                case 12: return [2 /*return*/, __assign(__assign({}, (filter.name ? { name: filter.name } : {})), { fields: processedFields, relations: processedRelations, where: processedWhere })];
-                case 13:
-                    e_3 = _c.sent();
-                    throw e_3;
-                case 14: return [2 /*return*/];
+                    return [3 /*break*/, 13];
+                case 16: return [2 /*return*/, __assign(__assign({}, (filter.name ? { name: filter.name } : {})), { fields: processedFields, relations: processedRelations, where: processedWhere, order: processedOrder })];
+                case 17:
+                    e_4 = _c.sent();
+                    throw e_4;
+                case 18: return [2 /*return*/];
             }
         });
     });

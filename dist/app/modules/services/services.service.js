@@ -93,23 +93,39 @@ var findById = function (id, filter) { return __awaiter(void 0, void 0, void 0, 
 }); };
 //3. create single record
 var create = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var repo, respo, error_3;
+    var repo, duplicate, respo, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 5, , 6]);
                 return [4 /*yield*/, (0, services_repo_1.default)()];
             case 1:
                 repo = _a.sent();
                 return [4 /*yield*/, (0, get_object_code_util_1.generateCode)(15, data)];
             case 2:
                 data = _a.sent();
+                if (!!data.isService) return [3 /*break*/, 4];
+                return [4 /*yield*/, repo.find({
+                        where: {
+                            sku: data.sku,
+                        },
+                    })];
+            case 3:
+                duplicate = _a.sent();
+                if (duplicate.length) {
+                    throw {
+                        message: "Duplicate SKU please check again.: ",
+                        statusCode: 409,
+                    };
+                }
+                _a.label = 4;
+            case 4:
                 respo = repo.create(__assign({}, data));
                 return [2 /*return*/, respo];
-            case 3:
+            case 5:
                 error_3 = _a.sent();
                 throw error_3;
-            case 4: return [2 /*return*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

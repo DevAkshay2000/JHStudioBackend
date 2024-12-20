@@ -5,6 +5,7 @@ import { RelationType } from "../types";
 export const FilterSchema: JSONSchemaType<{
   fields?: object;
   where?: object;
+  order?: object;
   relations?: RelationType[];
 }> = {
   type: "object",
@@ -105,6 +106,10 @@ export const FilterSchema: JSONSchemaType<{
           additionalProperties: false,
         },
       },
+    },
+    order: {
+      type: "object",
+      nullable: true,
     },
     relations: {
       type: "array",

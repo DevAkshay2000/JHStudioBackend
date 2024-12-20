@@ -303,13 +303,11 @@ var createBulk = function (data_1) {
                             idx: index,
                         };
                     });
-                    console.log(itemToQauntityMap_1);
                     //check availabilty
                     data.saleLines.forEach(function (value) {
                         var _a, _b, _c;
                         if (itemToQauntityMap_1[value.service.id]) {
                             if (((_a = itemToQauntityMap_1[value.service.id]) === null || _a === void 0 ? void 0 : _a.quantity) < value.quantity) {
-                                console.log(itemToQauntityMap_1[value.service.id]);
                                 errors_1.push("".concat(itemToQauntityMap_1[value.service.id].name, " is out of stock : available stock is ").concat(((_b = itemToQauntityMap_1[value.service.id]) === null || _b === void 0 ? void 0 : _b.quantity)
                                     ? (_c = itemToQauntityMap_1[value.service.id]) === null || _c === void 0 ? void 0 : _c.quantity
                                     : 0));
@@ -339,7 +337,6 @@ var createBulk = function (data_1) {
                         })];
                 case 5:
                     stockTrack_1 = _a.sent();
-                    console.log("step1");
                     stockTrack_1.forEach(function (val, index) {
                         stockMap_1[val.id] = {
                             id: val.id,
@@ -347,14 +344,11 @@ var createBulk = function (data_1) {
                             aQuanity: val === null || val === void 0 ? void 0 : val.quantityUvailable,
                         };
                     });
-                    console.log("step2");
                     data.saleLines.forEach(function (value) {
                         //1. filter out stock entries for each item
                         var idx = 0;
                         var itmRemain = value.quantity;
                         var uvailableForItem = stockTrack_1.filter(function (val) { return val.service.id === value.service.id; });
-                        // console.log(uvailableForItem);
-                        console.log("step3");
                         while (itmRemain) {
                             //1. update current entry
                             var _uvailableForItem = uvailableForItem[idx];
@@ -381,7 +375,6 @@ var createBulk = function (data_1) {
                             }
                             idx++;
                         }
-                        console.log("step4");
                         //decrease item availabilty
                         if (itemToQauntityMap_1[value.service.id]) {
                             var _itemsAvailable = itemsAvailable_1[itemToQauntityMap_1[value.service.id].idx];
@@ -390,7 +383,6 @@ var createBulk = function (data_1) {
                                 _itemsAvailable;
                         }
                     });
-                    console.log(itemsAvailable_1);
                     data.inventoryLines = inventory_2;
                     //3. start transaction
                     return [4 /*yield*/, dataSource.manager.transaction("SERIALIZABLE", function (transactionalEntityManager) { return __awaiter(void 0, void 0, void 0, function () {

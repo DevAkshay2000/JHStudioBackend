@@ -124,7 +124,7 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                                 itv_1.modifiedDate = data.modifiedDate;
                                 itv_1.quantity = 0;
                                 return [4 /*yield*/, dataSource.manager.transaction("SERIALIZABLE", function (transactionalEntityManager) { return __awaiter(void 0, void 0, void 0, function () {
-                                        var item, itemResult, itemAvalableEntry;
+                                        var item, itemResult, itemAvalableEntry, insTocksaved;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
                                                 case 0:
@@ -135,6 +135,9 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                                                     itemAvalableEntry = transactionalEntityManager.create(item_stocks_entity_1.ItemAvailable, __assign(__assign({}, itv_1), { service: itemResult }));
                                                     return [4 /*yield*/, transactionalEntityManager.save(item_stocks_entity_1.ItemAvailable, itemAvalableEntry)];
                                                 case 2:
+                                                    insTocksaved = _a.sent();
+                                                    return [4 /*yield*/, transactionalEntityManager.save(services_entity_1.Services, __assign(__assign({}, itemResult), { inStock: insTocksaved }))];
+                                                case 3:
                                                     _a.sent();
                                                     respo_1 = itemResult;
                                                     return [2 /*return*/];

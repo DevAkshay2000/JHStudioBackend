@@ -32,6 +32,20 @@ const create = async (data: Services) => {
   try {
     const repo = await repository();
     data = await generateCode(15, data);
+    if (!data.isService) {
+      const duplicate = await repo.find({
+        where: {
+          sku: data.sku,
+        },
+      });
+      if (duplicate.length) {
+        throw {
+          message: "Duplicate SKU please check again.: ",
+          statusCode: 409,
+        };
+      }
+    }
+
     const respo = repo.create({
       ...data,
     });

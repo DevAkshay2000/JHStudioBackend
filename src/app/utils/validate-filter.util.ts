@@ -103,6 +103,32 @@ const checkModelProperties = async <T extends EntityTarget<T>>(
   }
 };
 
+//4.filter out malicious properties from order object
+const checkModelOrder = async <T extends EntityTarget<T>>(
+  model: T,
+  order: object
+): Promise<object> => {
+  try {
+    const result: object = {};
+    //1. get the datasource object
+    const appDataSource = await handler();
+    const entityMetadata = appDataSource.getMetadata(model);
+    //2. get model properties
+    const modelProperties = {};
+    entityMetadata.ownColumns.forEach((column) => {
+      modelProperties[column.propertyName] = true;
+    });
+    Object.keys(order).map((key) => {
+      if (modelProperties[key] && ["asc", "desc"].includes(order[key])) {
+        result[key] = order[key];
+      }
+    });
+    return result;
+  } catch (e) {
+    throw e;
+  }
+};
+
 //5. checkModelPropertiesWhere
 const checkModelPropertiesWhere = async <T extends EntityTarget<T>>(
   model: T,
@@ -138,6 +164,7 @@ const checkModelPropertiesWhere = async <T extends EntityTarget<T>>(
             "mte",
             "like",
             "ilike",
+            "between"
           ].includes(level2Key)
         ) {
           let level3Result = {};
@@ -152,6 +179,7 @@ const checkModelPropertiesWhere = async <T extends EntityTarget<T>>(
           //assign to main object
           level2Result[level2Key] = level3Result;
         } else if (level2Key === "between") {
+
         } else if (level2Key === "isNull") {
         }
       });
@@ -168,6 +196,7 @@ export const sanitizeFilterObject = async <T extends EntityTarget<T>>(
     name?: string;
     fields?: object;
     where?: object;
+    order?: object;
     relations?: RelationType[];
   },
   mapping: {
@@ -178,12 +207,14 @@ export const sanitizeFilterObject = async <T extends EntityTarget<T>>(
   name?: string;
   fields?: object;
   where?: object;
+  order?: object;
   relations?: RelationType[];
 }> => {
   // Process fields
   try {
     let processedFields = {};
     let processedWhere = {};
+    let processedOrder = {};
     if (filter.fields) {
       if (level === 1) {
         processedFields = await checkModelProperties(
@@ -198,7 +229,7 @@ export const sanitizeFilterObject = async <T extends EntityTarget<T>>(
           );
         }
       }
-      //check if the property present inside teh model
+      //check if the property present inside the model
     }
     if (filter.where) {
       if (level === 1) {
@@ -215,12 +246,29 @@ export const sanitizeFilterObject = async <T extends EntityTarget<T>>(
         }
       }
     }
-
+    //check for order object
+    if (filter.order) {
+      if (level === 1) {
+        processedOrder = await checkModelOrder(
+          mapping["baseModel"],
+          filter.order
+        );
+      } else {
+        if (filter.name && mapping[filter.name]) {
+          processedOrder = await checkModelOrder(
+            mapping[filter.name],
+            filter.order
+          );
+        }
+      }
+      //check if the property present inside the model
+    }
     // Process where
     const processedRelations: {
       name?: string;
       fields?: object;
       where?: object;
+      order?: object;
       relations?: RelationType[];
     }[] = [];
 
@@ -240,6 +288,7 @@ export const sanitizeFilterObject = async <T extends EntityTarget<T>>(
       fields: processedFields,
       relations: processedRelations,
       where: processedWhere,
+      order: processedOrder,
     };
   } catch (e) {
     throw e;

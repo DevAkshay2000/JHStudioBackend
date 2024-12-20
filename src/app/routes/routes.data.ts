@@ -11,6 +11,8 @@ import taxesRoutes from "../modules/taxes/taxes.routes";
 import purchaseRoutes from "../modules/purchase-items/purchase.routes";
 import supplierRoutes from "../modules/suppliers/supplier.routes";
 import contactRoutes from "../modules/contacts/contact.routes";
+import dashboardRoute from "../modules/reportroutes/dashboard.route";
+import stockReportRoute from "../modules/reportroutes/stock-report.route";
 
 export const routes: Routes = [
   itemRoute,
@@ -24,5 +26,7 @@ export const routes: Routes = [
   taxesRoutes,
   purchaseRoutes,
   supplierRoutes,
-  contactRoutes
+  contactRoutes,
+  dashboardRoute,
+  stockReportRoute
 ];
