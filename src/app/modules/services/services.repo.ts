@@ -86,8 +86,8 @@ const repository = async () => {
           }
         );
       } else {
-        repo.create(data);
-        respo = await repo.save(respo);
+        const itemResult = repo.create(data);
+        respo = await repo.save(itemResult);
       }
 
       return respo;

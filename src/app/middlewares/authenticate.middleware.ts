@@ -25,10 +25,8 @@ const authenticateToken = (
   // Verify and decode the token
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
-      console.log("errerrerrerrerr", err);
       return res.status(440).json({ message: "401" });
     }
-    console.log(decoded);
     // Attach the decoded data to the request object
     req.user = decoded;
     next();

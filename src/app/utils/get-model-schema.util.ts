@@ -128,7 +128,6 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
             relation?.required &&
             !schemaObject.required.includes(relation.propertyName)
           ) {
-            console.log(relation.propertyName);
             schemaObject.required.push(relation.propertyName);
           }
         }
@@ -144,7 +143,6 @@ export const validateRequestBody = <T extends EntityTarget<T>>(model: T) => {
             relation?.required &&
             !schemaObject.required.includes(relation.propertyName)
           ) {
-            console.log(relation.propertyName);
             schemaObject.required.push(relation.propertyName);
           }
         }

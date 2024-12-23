@@ -5,6 +5,10 @@ var relations_filter_schema_1 = require("./relations-filter.schema");
 exports.FilterSchema = {
     type: "object",
     properties: {
+        name: {
+            type: "string",
+            nullable: true,
+        },
         fields: {
             type: "object",
             nullable: true,
@@ -98,7 +102,7 @@ exports.FilterSchema = {
                             nullable: true,
                         },
                     },
-                    additionalProperties: false,
+                    additionalProperties: true,
                 },
             },
         },

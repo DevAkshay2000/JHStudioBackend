@@ -3,6 +3,7 @@ import { RelationsFilter } from "./relations-filter.schema";
 import { RelationType } from "../types";
 
 export const FilterSchema: JSONSchemaType<{
+  name?: string;
   fields?: object;
   where?: object;
   order?: object;
@@ -10,6 +11,10 @@ export const FilterSchema: JSONSchemaType<{
 }> = {
   type: "object",
   properties: {
+    name: {
+      type: "string",
+      nullable: true,
+    },
     fields: {
       type: "object",
       nullable: true,
@@ -103,7 +108,7 @@ export const FilterSchema: JSONSchemaType<{
               nullable: true,
             },
           },
-          additionalProperties: false,
+          additionalProperties: true,
         },
       },
     },

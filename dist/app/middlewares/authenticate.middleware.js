@@ -20,10 +20,8 @@ var authenticateToken = function (req, res, next) {
     // Verify and decode the token
     jsonwebtoken_1.default.verify(token, secretKey, function (err, decoded) {
         if (err) {
-            console.log("errerrerrerrerr", err);
             return res.status(440).json({ message: "401" });
         }
-        console.log(decoded);
         // Attach the decoded data to the request object
         req.user = decoded;
         next();

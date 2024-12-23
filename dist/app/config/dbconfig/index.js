@@ -66,7 +66,7 @@ var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0
                     //     "../../../build/entities/**/*.{ts,js}",
                     //   ],
                     synchronize: true,
-                    logging: true,
+                    // logging: true,
                     ssl: {
                         rejectUnauthorized: false, // Disables SSL certificate verification
                     },
