@@ -57,7 +57,6 @@ router.get(
     try {
       //take user related data only
       const user: any = req.user;
-      console.log(user);
       if (user.userType) {
         const appDataSource = await handler();
         const repository = appDataSource.getRepository(Menus);

@@ -60,7 +60,7 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
           name: value.service.name,
           quantity: value.quantity,
           unitPrice: value.rate,
-          total: Number(value.amount + value.taxAmount),
+          total: Number(value.amount),
           tax: value.taxAmount,
           taxName: value.tax.name,
         });
@@ -82,7 +82,8 @@ const create = async (data: SaleHeaders, isService: boolean = false) => {
       txnDate: new Date(data.txnDate).toLocaleDateString(),
       txnId: data.code,
       mobile: customer.mobile,
-      subTotal: data.grandTotal,
+      subTotal: data.subTotal,
+      grandTotal: data.grandTotal,
       tax: data.totalTax,
       discount: data.totalDiscount,
       email: customer.email,
@@ -176,7 +177,7 @@ const createBulk = async (data: SaleHeaders, isService: boolean = false) => {
         service: true,
       },
       select: {
-        id:true,
+        id: true,
         quantity: true,
         service: {
           id: true,
@@ -288,7 +289,7 @@ const createBulk = async (data: SaleHeaders, isService: boolean = false) => {
           itemsAvailable[itemToQauntityMap[value.service.id].idx];
         _itemsAvailable = {
           ..._itemsAvailable,
-          id:_itemsAvailable.id,
+          id: _itemsAvailable.id,
           quantity: _itemsAvailable.quantity - value.quantity,
         };
         itemsAvailable[itemToQauntityMap[value.service.id].idx] =

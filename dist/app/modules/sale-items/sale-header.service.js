@@ -140,7 +140,7 @@ var create = function (data_1) {
                                 name: value.service.name,
                                 quantity: value.quantity,
                                 unitPrice: value.rate,
-                                total: Number(value.amount + value.taxAmount),
+                                total: Number(value.amount),
                                 tax: value.taxAmount,
                                 taxName: value.tax.name,
                             });
@@ -161,7 +161,8 @@ var create = function (data_1) {
                             txnDate: new Date(data.txnDate).toLocaleDateString(),
                             txnId: data.code,
                             mobile: customer.mobile,
-                            subTotal: data.grandTotal,
+                            subTotal: data.subTotal,
+                            grandTotal: data.grandTotal,
                             tax: data.totalTax,
                             discount: data.totalDiscount,
                             email: customer.email,
