@@ -127,7 +127,6 @@ router.get("/menu-headers", authenticate_middleware_1.default, function (req, re
             case 0:
                 _c.trys.push([0, 5, , 6]);
                 user = req.user;
-                console.log(user);
                 if (!user.userType) return [3 /*break*/, 3];
                 return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:

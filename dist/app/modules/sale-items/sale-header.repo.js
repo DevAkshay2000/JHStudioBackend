@@ -63,7 +63,6 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                         switch (_a.label) {
                             case 0:
                                 _a.trys.push([0, 2, , 3]);
-                                console.log("inside thus 5");
                                 return [4 /*yield*/, repo.find(option)];
                             case 1: return [2 /*return*/, _a.sent()];
                             case 2:
@@ -125,7 +124,6 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                                 return [2 /*return*/, respo];
                             case 2:
                                 error_4 = _a.sent();
-                                console.log(error_4);
                                 throw error_4;
                             case 3: return [2 /*return*/];
                         }

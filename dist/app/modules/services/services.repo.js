@@ -113,7 +113,7 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                     });
                 }); };
                 create = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-                    var respo_1, itv_1, error_4;
+                    var respo_1, itv_1, itemResult, error_4;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -148,8 +148,8 @@ var repository = function () { return __awaiter(void 0, void 0, void 0, function
                                 _a.sent();
                                 return [3 /*break*/, 4];
                             case 2:
-                                repo.create(data);
-                                return [4 /*yield*/, repo.save(respo_1)];
+                                itemResult = repo.create(data);
+                                return [4 /*yield*/, repo.save(itemResult)];
                             case 3:
                                 respo_1 = _a.sent();
                                 _a.label = 4;

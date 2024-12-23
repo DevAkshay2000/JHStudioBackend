@@ -10,7 +10,6 @@ const repository = async () => {
   //1. find all records
   const find = async (option?: FindManyOptions<SaleHeaders>) => {
     try {
-      console.log("inside thus 5")
       return await repo.find(option);
     } catch (error) {
       throw error;
@@ -57,7 +56,6 @@ const repository = async () => {
       await repo.save(respo);
       return respo;
     } catch (error) {
-      console.log(error)
       throw error;
     }
   };

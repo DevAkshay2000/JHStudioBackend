@@ -13,7 +13,6 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = void 0;
 var errorHandler = function (err, req, res, next) {
-    console.log(err);
     // Default to 500 Internal Server Error if no status code is provided
     var statusCode = err.statusCode || err.status || 500;
     var message = err.message || "Something went wrong!";

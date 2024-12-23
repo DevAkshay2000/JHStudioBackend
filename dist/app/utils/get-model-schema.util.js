@@ -175,7 +175,6 @@ var validateRequestBody = function (model) {
                     //b. make it required
                     if ((relation === null || relation === void 0 ? void 0 : relation.required) &&
                         !schemaObject.required.includes(relation.propertyName)) {
-                        console.log(relation.propertyName);
                         schemaObject.required.push(relation.propertyName);
                     }
                     _a.label = 7;
@@ -191,7 +190,6 @@ var validateRequestBody = function (model) {
                     //b. make it required
                     if ((relation === null || relation === void 0 ? void 0 : relation.required) &&
                         !schemaObject.required.includes(relation.propertyName)) {
-                        console.log(relation.propertyName);
                         schemaObject.required.push(relation.propertyName);
                     }
                     _a.label = 9;
