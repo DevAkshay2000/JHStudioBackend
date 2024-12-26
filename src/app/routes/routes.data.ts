@@ -13,6 +13,7 @@ import supplierRoutes from "../modules/suppliers/supplier.routes";
 import contactRoutes from "../modules/contacts/contact.routes";
 import dashboardRoute from "../modules/reportroutes/dashboard.route";
 import stockReportRoute from "../modules/reportroutes/stock-report.route";
+import profitlossRoute from "../modules/reportroutes/profitloss.route";
 
 export const routes: Routes = [
   itemRoute,
@@ -28,5 +29,6 @@ export const routes: Routes = [
   supplierRoutes,
   contactRoutes,
   dashboardRoute,
-  stockReportRoute
+  stockReportRoute,
+  profitlossRoute
 ];

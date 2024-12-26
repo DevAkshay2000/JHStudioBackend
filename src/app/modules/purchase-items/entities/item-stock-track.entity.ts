@@ -18,6 +18,9 @@ export class ItemsStockTrack {
   @JoinColumn()
   service: Services;
 
+  @Column({ type: "decimal", nullable: true })
+  unitPrice: number;
+
   @Column({ type: "varchar", nullable: true })
   stockNumber: string;
 

@@ -35,60 +35,50 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
-require("reflect-metadata");
-var typeorm_1 = require("typeorm");
-var dotenv_1 = __importDefault(require("dotenv"));
-var path_1 = __importDefault(require("path"));
-var entities_mapping_1 = require("../../mappings/entities.mapping");
-// Load environment variables from .env file
-dotenv_1.default.config({ path: path_1.default.join(__dirname, "../../.env") });
-var appDataSource;
-var initializeDataSource = function () { return __awaiter(void 0, void 0, void 0, function () {
+var express_1 = require("express");
+var routes_types_1 = require("../../routes/routes.types");
+var dbconfig_1 = require("../../config/dbconfig");
+var inventory_lines_entity_1 = require("../sale-items/entities/inventory-lines.entity");
+var report_schema_1 = require("../../schema/report.schema");
+var validateFilterManual_util_1 = require("../../utils/validateFilterManual.util");
+var router = (0, express_1.Router)();
+router.get("/", (0, validateFilterManual_util_1.validateFilterManual)(report_schema_1.ReportSchema), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var query, dataSource, result, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!!appDataSource) return [3 /*break*/, 2];
-                appDataSource = new typeorm_1.DataSource({
-                    type: "postgres",
-                    host: process.env.Host,
-                    port: Number(process.env.port),
-                    username: process.env.User_Name,
-                    password: process.env.Password,
-                    database: process.env.Database,
-                    entities: entities_mapping_1.entities,
-                    //   entities: [
-                    //     "../../../src/entities/index/**/*.{ts,js}",
-                    //     "../../../build/entities/**/*.{ts,js}",
-                    //   ],
-                    synchronize: false,
-                    // logging: true,
-                    ssl: {
-                        rejectUnauthorized: false, // Disables SSL certificate verification
-                    },
-                });
-                return [4 /*yield*/, appDataSource.initialize()];
-            case 1:
-                _a.sent();
-                _a.label = 2;
-            case 2: return [2 /*return*/, appDataSource];
-        }
-    });
-}); };
-var handler = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var dataSource;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, initializeDataSource()];
+                _a.trys.push([0, 3, , 4]);
+                query = req.query.filter ? JSON.parse("".concat(req.query.filter)) : {};
+                return [4 /*yield*/, (0, dbconfig_1.handler)()];
             case 1:
                 dataSource = _a.sent();
-                return [2 /*return*/, dataSource];
+                return [4 /*yield*/, dataSource
+                        .getRepository(inventory_lines_entity_1.InventoryLines)
+                        .createQueryBuilder("il")
+                        .select("itm.stockNumber", "stockNumber")
+                        .addSelect("SUM(il.quantity * sl.unitPrice * -1)", "soldAmount")
+                        .addSelect("SUM(il.quantity * itm.unitPrice * -1)", "purchaseAmount")
+                        .addSelect("SUM((il.quantity * sl.unitPrice * -1) - (il.quantity * itm.unitPrice * -1))", "profit")
+                        .innerJoin("SaleLines", "sl", "sl.txnHeaderId = il.saleId")
+                        .innerJoin("ItemsStockTrack", "itm", "itm.id = il.stockId")
+                        .where("sl.createdDate BETWEEN :start AND :end", {
+                        start: query.where.startDate,
+                        end: query.where.endDate,
+                    })
+                        .groupBy("itm.stockNumber")
+                        .getRawMany()];
+            case 2:
+                result = _a.sent();
+                res.send(result);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                next(error_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
-}); };
-exports.handler = handler;
-//# sourceMappingURL=index.js.map
+}); });
+exports.default = new routes_types_1.Route("/profit-loss-report", router);
+//# sourceMappingURL=profitloss.route.js.map

@@ -119,6 +119,9 @@ export const PurchaseHeadersSchema: any = {
           quantity: {
             type: "integer",
           },
+          unitPrice: {
+            type: "number",
+          },
           costPrice: {
             type: "integer",
           },

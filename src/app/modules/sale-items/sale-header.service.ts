@@ -162,8 +162,18 @@ const createBulk = async (data: SaleHeaders, isService: boolean = false) => {
         idx: number;
       };
     } = {};
+    //get customer data custo
+    let customer = await contactService.findById(data.customer.id);
 
     data.saleLines.forEach((value) => {
+      invoiceItems.push({
+        name: value.service.name,
+        quantity: value.quantity,
+        unitPrice: value.rate,
+        total: Number(value.amount),
+        tax: value.taxAmount,
+        taxName: value.tax.name,
+      });
       itemIds.push(value.service.id);
     });
     // get items available as per item demand
@@ -316,52 +326,20 @@ const createBulk = async (data: SaleHeaders, isService: boolean = false) => {
         result = headerEntryResult;
       }
     );
-    // data.saleLines.forEach((value) => {
-    //   const il = new InventoryLines();
-    //   (il.service = value.service),
-    //     (il.quantity = -value.quantity),
-    //     (il.createdDate = value.createdDate),
-    //     (il.modifiedDate = value.modifiedDate);
-    //   inventory.push(il);
-    //   itemIds.push(value.service.id);
-    //   invoiceItems.push({
-    //     name: value.service.name,
-    //     quantity: value.quantity,
-    //     unitPrice: value.rate,
-    //     total: Number(value.amount + value.taxAmount),
-    //     tax: value.taxAmount,
-    //     taxName: value.tax.name,
-    //   });
-    // });
-    // data.inventoryLines = inventory;
-    //   // create stock elements
-    //   const resultItemStock = await itemStocksService.create(
-    //     inventory,
-    //     itemIds
-    //   );
-    //   const itemStockResponse = itemStocksRepo.create(resultItemStock);
-    //   await itemStocksRepo.save(itemStockResponse);
-    // }
-
-    // const respo = await repo.create({
-    //   ...data,
-    // });
-    // //get customer data custo
-    // const customer = await customerService.findById(data.customer.id);
-
-    // await invoiceMailer({
-    //   customer: customer.name,
-    //   txnDate: new Date(data.txnDate).toLocaleDateString(),
-    //   txnId: data.code,
-    //   mobile: customer.mobile,
-    //   subTotal: data.grandTotal,
-    //   tax: data.totalTax,
-    //   discount: data.totalDiscount,
-    //   email: customer.email,
-    //   itemData: invoiceItems,
-    // });
-    // return respo;
-
+    if (customer.email) {
+      await invoiceMailer({
+        customer: customer.name,
+        txnDate: new Date(data.txnDate).toLocaleDateString(),
+        txnId: data.code,
+        mobile: customer.mobile,
+        subTotal: data.subTotal,
+        grandTotal: data.grandTotal,
+        tax: data.totalTax,
+        discount: data.totalDiscount,
+        email: customer.email,
+        itemData: invoiceItems,
+      });
+    }
     return result;
   } catch (error) {
     throw error;

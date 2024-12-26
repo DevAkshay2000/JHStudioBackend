@@ -18,6 +18,7 @@ var supplier_routes_1 = __importDefault(require("../modules/suppliers/supplier.r
 var contact_routes_1 = __importDefault(require("../modules/contacts/contact.routes"));
 var dashboard_route_1 = __importDefault(require("../modules/reportroutes/dashboard.route"));
 var stock_report_route_1 = __importDefault(require("../modules/reportroutes/stock-report.route"));
+var profitloss_route_1 = __importDefault(require("../modules/reportroutes/profitloss.route"));
 exports.routes = [
     items_routes_1.default,
     general_data_route_1.default,
@@ -32,6 +33,7 @@ exports.routes = [
     supplier_routes_1.default,
     contact_routes_1.default,
     dashboard_route_1.default,
-    stock_report_route_1.default
+    stock_report_route_1.default,
+    profitloss_route_1.default
 ];
 //# sourceMappingURL=routes.data.js.map

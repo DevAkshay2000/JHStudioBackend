@@ -47,6 +47,10 @@ var PurchaseLines = /** @class */ (function () {
         __metadata("design:type", Number)
     ], PurchaseLines.prototype, "costPrice", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "decimal", nullable: true }),
+        __metadata("design:type", Number)
+    ], PurchaseLines.prototype, "unitPrice", void 0);
+    __decorate([
         (0, typeorm_1.Column)({ type: "int", nullable: false }),
         __metadata("design:type", Number)
     ], PurchaseLines.prototype, "quantity", void 0);

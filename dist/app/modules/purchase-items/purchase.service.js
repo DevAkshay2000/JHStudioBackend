@@ -242,7 +242,6 @@ var createBulk = function (data_1) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    console.log("inside thsi fdfdf");
                     return [4 /*yield*/, (0, dbconfig_1.handler)()];
                 case 1:
                     dataSource = _a.sent();
@@ -285,6 +284,7 @@ var createBulk = function (data_1) {
                                             stockInstance.createdDate = value.createdDate;
                                             stockInstance.modifiedDate = value.modifiedDate;
                                             stockInstance.quantityAdded = value.quantity;
+                                            stockInstance.unitPrice = value.unitPrice;
                                             stockInstance.service = value.service;
                                             stockInstance.quantityUvailable = value.quantity;
                                             stockInstance.stockNumber = skuMap_1[value.service.id];
@@ -337,7 +337,6 @@ var createBulk = function (data_1) {
                     return [2 /*return*/, data];
                 case 5:
                     error_6 = _a.sent();
-                    console.log(error_6);
                     throw error_6;
                 case 6: return [2 /*return*/];
             }

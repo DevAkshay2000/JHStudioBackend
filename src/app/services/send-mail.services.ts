@@ -18,9 +18,9 @@ export default async function mailer<
     );
 
     const info = await transporter.sendMail({
-      from: '"Akshay Sutar" <akshaysutarwebsite@gmail.com>', // sender address
+      from: '"JH hair & Beauty Studio" <akshaysutarwebsite@gmail.com>', // sender address
       to: `${data.email}`, // list of receivers
-      subject: "Received New Inquiry from User", // Subject line
+      subject: "🙏😇 Thanks for visiting JH hair & beauty studio.", // Subject line
       // text: "Hello world?", // plain text body
       html: await ejs.renderFile(templatePath, {
         data: {
