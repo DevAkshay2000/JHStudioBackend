@@ -25,6 +25,10 @@ var ItemsStockTrack = /** @class */ (function () {
         __metadata("design:type", services_entity_1.Services)
     ], ItemsStockTrack.prototype, "service", void 0);
     __decorate([
+        (0, typeorm_1.Column)({ type: "decimal", nullable: true }),
+        __metadata("design:type", Number)
+    ], ItemsStockTrack.prototype, "unitPrice", void 0);
+    __decorate([
         (0, typeorm_1.Column)({ type: "varchar", nullable: true }),
         __metadata("design:type", String)
     ], ItemsStockTrack.prototype, "stockNumber", void 0);

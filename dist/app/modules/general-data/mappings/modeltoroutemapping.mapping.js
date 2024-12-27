@@ -12,5 +12,6 @@ exports.routeToEntityMap = {
     "/menus": entities_1.Menus,
     "/item-types": entities_1.DItemType,
     "/contact-types": entities_1.DContactType,
+    "/date-range-types": entities_1.DDateRangeType,
 };
 //# sourceMappingURL=modeltoroutemapping.mapping.js.map

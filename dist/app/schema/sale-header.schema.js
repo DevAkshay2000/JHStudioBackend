@@ -122,6 +122,9 @@ exports.SaleHeadersSchema = {
                     amount: {
                         type: "integer",
                     },
+                    unitPrice: {
+                        type: "number",
+                    },
                     quantity: {
                         type: "integer",
                     },

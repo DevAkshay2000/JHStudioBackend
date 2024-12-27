@@ -121,7 +121,6 @@ const createBulk = async (
   isService: boolean = false
 ) => {
   try {
-    console.log("inside thsi fdfdf")
     const dataSource = await handler();
     data = await generateCode(20, data);
     const itemIds: number[] = [];
@@ -165,6 +164,7 @@ const createBulk = async (
           stockInstance.createdDate = value.createdDate;
           stockInstance.modifiedDate = value.modifiedDate;
           stockInstance.quantityAdded = value.quantity;
+          stockInstance.unitPrice = value.unitPrice;
           stockInstance.service = value.service;
           stockInstance.quantityUvailable = value.quantity;
           stockInstance.stockNumber = skuMap[value.service.id];
@@ -231,7 +231,6 @@ const createBulk = async (
     );
     return data;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

@@ -93,9 +93,9 @@ function invoiceMailer(data) {
                     templatePath = path_1.default.join(__dirname, "../templates", "customerinvoice.template.ejs");
                     _b = (_a = smtpconfig_1.transporter).sendMail;
                     _c = {
-                        from: '"Akshay Sutar" <akshaysutarwebsite@gmail.com>', // sender address
+                        from: '"JH hair & Beauty Studio" <akshaysutarwebsite@gmail.com>', // sender address
                         to: "".concat(data.email), // list of receivers
-                        subject: "Received New Inquiry from User"
+                        subject: "🙏😇 Thanks for visiting JH hair & beauty studio."
                     };
                     return [4 /*yield*/, ejs.renderFile(templatePath, {
                             data: __assign({}, data)

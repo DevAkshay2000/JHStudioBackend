@@ -250,12 +250,12 @@ var createBulk = function (data_1) {
         args_1[_i - 1] = arguments[_i];
     }
     return __awaiter(void 0, __spreadArray([data_1], args_1, true), void 0, function (data, isService) {
-        var repo, dataSource, itemAvailableRepo, itemStockTrack, result_1, invoiceItems, inventory_2, itemIds_1, errors_1, itemToQauntityMap_1, itemsAvailable_1, stockMap_1, stockTrack_1, error_6;
+        var repo, dataSource, itemAvailableRepo, itemStockTrack, result_1, invoiceItems_2, inventory_2, itemIds_1, errors_1, itemToQauntityMap_1, customer, itemsAvailable_1, stockMap_1, stockTrack_1, error_6;
         if (isService === void 0) { isService = false; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 7, , 8]);
+                    _a.trys.push([0, 10, , 11]);
                     return [4 /*yield*/, (0, sale_header_repo_1.default)()];
                 case 1:
                     repo = _a.sent();
@@ -268,12 +268,23 @@ var createBulk = function (data_1) {
                 case 3:
                     data = _a.sent();
                     result_1 = new sale_header_entity_1.SaleHeaders();
-                    invoiceItems = [];
+                    invoiceItems_2 = [];
                     inventory_2 = [];
                     itemIds_1 = [];
                     errors_1 = [];
                     itemToQauntityMap_1 = {};
+                    return [4 /*yield*/, contact_service_1.default.findById(data.customer.id)];
+                case 4:
+                    customer = _a.sent();
                     data.saleLines.forEach(function (value) {
+                        invoiceItems_2.push({
+                            name: value.service.name,
+                            quantity: value.quantity,
+                            unitPrice: value.rate,
+                            total: Number(value.amount),
+                            tax: value.taxAmount,
+                            taxName: value.tax.name,
+                        });
                         itemIds_1.push(value.service.id);
                     });
                     return [4 /*yield*/, itemAvailableRepo.find({
@@ -294,7 +305,7 @@ var createBulk = function (data_1) {
                                 },
                             },
                         })];
-                case 4:
+                case 5:
                     itemsAvailable_1 = _a.sent();
                     //add data to map
                     itemsAvailable_1.forEach(function (val, index) {
@@ -336,7 +347,7 @@ var createBulk = function (data_1) {
                                 service: true,
                             },
                         })];
-                case 5:
+                case 6:
                     stockTrack_1 = _a.sent();
                     stockTrack_1.forEach(function (val, index) {
                         stockMap_1[val.id] = {
@@ -410,57 +421,30 @@ var createBulk = function (data_1) {
                                 }
                             });
                         }); })];
-                case 6:
+                case 7:
                     //3. start transaction
                     _a.sent();
-                    // data.saleLines.forEach((value) => {
-                    //   const il = new InventoryLines();
-                    //   (il.service = value.service),
-                    //     (il.quantity = -value.quantity),
-                    //     (il.createdDate = value.createdDate),
-                    //     (il.modifiedDate = value.modifiedDate);
-                    //   inventory.push(il);
-                    //   itemIds.push(value.service.id);
-                    //   invoiceItems.push({
-                    //     name: value.service.name,
-                    //     quantity: value.quantity,
-                    //     unitPrice: value.rate,
-                    //     total: Number(value.amount + value.taxAmount),
-                    //     tax: value.taxAmount,
-                    //     taxName: value.tax.name,
-                    //   });
-                    // });
-                    // data.inventoryLines = inventory;
-                    //   // create stock elements
-                    //   const resultItemStock = await itemStocksService.create(
-                    //     inventory,
-                    //     itemIds
-                    //   );
-                    //   const itemStockResponse = itemStocksRepo.create(resultItemStock);
-                    //   await itemStocksRepo.save(itemStockResponse);
-                    // }
-                    // const respo = await repo.create({
-                    //   ...data,
-                    // });
-                    // //get customer data custo
-                    // const customer = await customerService.findById(data.customer.id);
-                    // await invoiceMailer({
-                    //   customer: customer.name,
-                    //   txnDate: new Date(data.txnDate).toLocaleDateString(),
-                    //   txnId: data.code,
-                    //   mobile: customer.mobile,
-                    //   subTotal: data.grandTotal,
-                    //   tax: data.totalTax,
-                    //   discount: data.totalDiscount,
-                    //   email: customer.email,
-                    //   itemData: invoiceItems,
-                    // });
-                    // return respo;
-                    return [2 /*return*/, result_1];
-                case 7:
+                    if (!customer.email) return [3 /*break*/, 9];
+                    return [4 /*yield*/, (0, send_invoice_mail_service_1.default)({
+                            customer: customer.name,
+                            txnDate: new Date(data.txnDate).toLocaleDateString(),
+                            txnId: data.code,
+                            mobile: customer.mobile,
+                            subTotal: data.subTotal,
+                            grandTotal: data.grandTotal,
+                            tax: data.totalTax,
+                            discount: data.totalDiscount,
+                            email: customer.email,
+                            itemData: invoiceItems_2,
+                        })];
+                case 8:
+                    _a.sent();
+                    _a.label = 9;
+                case 9: return [2 /*return*/, result_1];
+                case 10:
                     error_6 = _a.sent();
                     throw error_6;
-                case 8: return [2 /*return*/];
+                case 11: return [2 /*return*/];
             }
         });
     });

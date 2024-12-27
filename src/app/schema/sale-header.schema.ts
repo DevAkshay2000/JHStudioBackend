@@ -119,7 +119,9 @@ export const SaleHeadersSchema: any = {
           amount: {
             type: "integer",
           },
-
+          unitPrice: {
+            type: "number",
+          },
           quantity: {
             type: "integer",
           },

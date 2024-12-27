@@ -49,6 +49,7 @@ exports.entities = [
     entities_1.DItemType,
     item_stock_track_entity_1.ItemsStockTrack,
     entities_1.DContactType,
-    contact_entity_1.Contact
+    contact_entity_1.Contact,
+    entities_1.DDateRangeType
 ];
 //# sourceMappingURL=entities.mapping.js.map
