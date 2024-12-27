@@ -23,4 +23,5 @@ __exportStar(require("./d-user-types.entity"), exports);
 __exportStar(require("./menus.entity"), exports);
 __exportStar(require("./d-item-types.entity"), exports);
 __exportStar(require("./dp-contact-types"), exports);
+__exportStar(require("./d-daterange.entity"), exports);
 //# sourceMappingURL=index.js.map

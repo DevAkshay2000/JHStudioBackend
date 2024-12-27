@@ -4,6 +4,7 @@ import {
   City,
   Country,
   DContactType,
+  DDateRangeType,
   DFeatureType,
   DItemType,
   DPaymentType,
@@ -60,5 +61,6 @@ export const entities:
   DItemType,
   ItemsStockTrack,
   DContactType,
-  Contact
+  Contact,
+  DDateRangeType
 ];

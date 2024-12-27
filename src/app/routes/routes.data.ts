@@ -14,6 +14,10 @@ import contactRoutes from "../modules/contacts/contact.routes";
 import dashboardRoute from "../modules/reportroutes/dashboard.route";
 import stockReportRoute from "../modules/reportroutes/stock-report.route";
 import profitlossRoute from "../modules/reportroutes/profitloss.route";
+import saleReportRoute from "../modules/reportroutes/sale-report.route";
+import itemSaleRevenueRoute from "../modules/reportroutes/item-sale-revenue.route";
+import serviceRevenueRoute from "../modules/reportroutes/service-revenue.route";
+
 
 export const routes: Routes = [
   itemRoute,
@@ -30,5 +34,8 @@ export const routes: Routes = [
   contactRoutes,
   dashboardRoute,
   stockReportRoute,
-  profitlossRoute
+  profitlossRoute,
+  saleReportRoute,
+  itemSaleRevenueRoute,
+  serviceRevenueRoute
 ];

@@ -9,6 +9,7 @@ import {
   Menus,
   States,
   DContactType,
+  DDateRangeType,
 } from "../entities";
 
 export const routeToEntityMap: {
@@ -23,4 +24,5 @@ export const routeToEntityMap: {
   "/menus": Menus,
   "/item-types": DItemType,
   "/contact-types": DContactType,
+  "/date-range-types": DDateRangeType,
 };

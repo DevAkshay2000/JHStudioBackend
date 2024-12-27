@@ -17,4 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./dashboard.route"), exports);
 __exportStar(require("./stock-report.route"), exports);
 __exportStar(require("./profitloss.route"), exports);
+__exportStar(require("./sale-report.route"), exports);
+__exportStar(require("./service-revenue.route"), exports);
+__exportStar(require("./item-sale-revenue.route"), exports);
 //# sourceMappingURL=index.js.map

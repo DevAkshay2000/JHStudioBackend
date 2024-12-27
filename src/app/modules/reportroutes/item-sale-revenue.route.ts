@@ -28,16 +28,15 @@ router.get(
       const dataSource = await handler();
 
       const data = await dataSource
-        .getRepository(SaleLines) // Replace 'sale_lines' with your SaleLines entity name
+        .getRepository(SaleLines) // Replace 'sale_lines' with your actual SaleLines entity name
         .createQueryBuilder("sl")
         .select([
-          'sh.code AS "code"', // Use double quotes to maintain camelCase aliasing
-          'sh.txnDate AS "txnDate"',
-          'sc.name AS "serviceName"',
-          'SUM(sl.quantity) AS "totalQuantity"',
-          'SUM(sl.amount) AS "totalAmount"',
-          'AVG(sl.rate) AS "averageRate"',
-          'AVG(sl.unitPrice) AS "averageUnitPrice"',
+          'sc.name AS "name"', // Service name
+          'SUM(sl.quantity) AS "totalQuantity"', // Total quantity
+          'SUM(sl.rate * sl.quantity) AS "totalSaleAmount"', // Total sale amount
+          'SUM(sl.taxAmount) AS "totalTaxAmount"', // Total tax amount
+          'SUM(sl.discountAmount) AS "totalDiscountAmount"', // Total discount amount
+          'SUM(sl.amount) AS "grandTotal"', // Grand total
         ])
         .innerJoin(SaleHeaders, "sh", "sl.txnHeaderId = sh.id")
         .innerJoin(Services, "sc", "sl.serviceId = sc.id")
@@ -46,9 +45,7 @@ router.get(
           start: query.where.startDate,
           end: query.where.endDate,
         })
-        .groupBy("sh.code")
-        .addGroupBy("sh.txnDate")
-        .addGroupBy("sc.name")
+        .groupBy("sc.name")
         .getRawMany();
       res.send(data);
     } catch (error) {
@@ -57,4 +54,4 @@ router.get(
   }
 );
 
-export default new Route("/sale-report", router);
+export default new Route("/item-sale-revenue-report", router);

@@ -56,27 +56,24 @@ router.get("/", (0, validateFilterManual_util_1.validateFilterManual)(report_sch
             case 1:
                 dataSource = _a.sent();
                 return [4 /*yield*/, dataSource
-                        .getRepository(sale_lines_enity_1.SaleLines) // Replace 'sale_lines' with your SaleLines entity name
+                        .getRepository(sale_lines_enity_1.SaleLines) // Replace 'sale_lines' with your actual SaleLines entity name
                         .createQueryBuilder("sl")
                         .select([
-                        'sh.code AS "code"', // Use double quotes to maintain camelCase aliasing
-                        'sh.txnDate AS "txnDate"',
-                        'sc.name AS "serviceName"',
-                        'SUM(sl.quantity) AS "totalQuantity"',
-                        'SUM(sl.amount) AS "totalAmount"',
-                        'AVG(sl.rate) AS "averageRate"',
-                        'AVG(sl.unitPrice) AS "averageUnitPrice"',
+                        'sc.name AS "name"', // Service name
+                        'SUM(sl.quantity) AS "totalQuantity"', // Total quantity
+                        'SUM(sl.rate * sl.quantity) AS "totalSaleAmount"', // Total sale amount
+                        'SUM(sl.taxAmount) AS "totalTaxAmount"', // Total tax amount
+                        'SUM(sl.discountAmount) AS "totalDiscountAmount"', // Total discount amount
+                        'SUM(sl.amount) AS "grandTotal"', // Grand total
                     ])
                         .innerJoin(sale_header_entity_1.SaleHeaders, "sh", "sl.txnHeaderId = sh.id")
                         .innerJoin(services_entity_1.Services, "sc", "sl.serviceId = sc.id")
-                        .where("sh.isService = :isService", { isService: 0 })
+                        .where("sh.isService = :isService", { isService: 1 })
                         .andWhere("sh.txnDate BETWEEN :start AND :end", {
                         start: query.where.startDate,
                         end: query.where.endDate,
                     })
-                        .groupBy("sh.code")
-                        .addGroupBy("sh.txnDate")
-                        .addGroupBy("sc.name")
+                        .groupBy("sc.name")
                         .getRawMany()];
             case 2:
                 data = _a.sent();
@@ -90,5 +87,5 @@ router.get("/", (0, validateFilterManual_util_1.validateFilterManual)(report_sch
         }
     });
 }); });
-exports.default = new routes_types_1.Route("/sale-report", router);
-//# sourceMappingURL=sale-report.route.js.map
+exports.default = new routes_types_1.Route("/service-sale-revenue-report", router);
+//# sourceMappingURL=service-revenue.route.js.map
